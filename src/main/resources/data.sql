@@ -761,7 +761,364 @@ INSERT INTO district (city_id, district_name) VALUES
   (9, 'Tanah Alas');
 
 INSERT INTO district (city_id, district_name) VALUES
-  (10, ''),
+  (10, 'Banda Alam'),
+  (10, 'Birem Bayeun'),
+  (10, 'Darul Aman'),
+  (10, 'Darul Falah'),
+  (10, 'Darul Iksan'),
+  (10, 'Idi Rayeuk'),
+  (10, 'Idi Timur'),
+  (10, 'Idi Tunong'),
+  (10, 'Indra Makmur'),
+  (10, 'Julok'),
+  (10, 'Madat'),
+  (10, 'Nurussalam'),
+  (10, 'Pante Bidari'),
+  (10, 'Peudawa'),
+  (10, 'Peunaron'),
+  (10, 'Peureulak'),
+  (10, 'Peureulak Barat'),
+  (10, 'Peureulak Timur'),
+  (10, 'Rantau Selamat'),
+  (10, 'Ranto Peureulak'),
+  (10, 'SerbaJadi'),
+  (10, 'Simpang Jernih'),
+  (10, 'Simpang Ulim'),
+  (10, 'Sungai Raya');
+
+INSERT INTO district (city_id, district_name) VALUES
+  (11, 'Lhoksukon'),
+  (11, 'Sawang'),
+  (11, 'Syamtalira Bayu'),
+  (11, 'Tanah Pasir'),
+  (11, 'Baktiya'),
+  (11, 'Baktiya Barat'),
+  (11, 'Banda Baro'),
+  (11, 'Cot Girek'),
+  (11, 'Dewantara'),
+  (11, 'Geuredong Pase'),
+  (11, 'Kuta Makmur'),
+  (11, 'Langkahan'),
+  (11, 'Lapang'),
+  (11, 'Matangkuli'),
+  (11, 'MeurahMulia'),
+  (11, 'Muara Batu'),
+  (11, 'Nibong'),
+  (11, 'Nisam'),
+  (11, 'Nisam Antara'),
+  (11, 'Paya Bakong'),
+  (11, 'Pirak Timur'),
+  (11, 'Samudera'),
+  (11, 'Seunuddon'),
+  (11, 'Simpang Kramat'),
+  (11, 'Syamtalira Aron'),
+  (11, 'Tanah Jambo Aye'),
+  (11, 'Tanah Luas');
+
+INSERT INTO district (city_id, district_name) VALUES
+  (12, 'Bandar'),
+  (12, 'Bener Kelipah'),
+  (12, 'Bukit'),
+  (12, 'Gajah Putih'),
+  (12, 'Mesidah'),
+  (12, 'Pertama'),
+  (12, 'Pintu Rime Gayo'),
+  (12, 'Syiah Utama'),
+  (12, 'Timang Gajah'),
+  (12, 'Wih Pesam');
+
+INSERT INTO district (city_id, district_name) VALUES
+  (13, 'Ganda Pura'),
+  (13, 'jangka'),
+  (13, 'Jeumpa'),
+  (13, 'Jeunieb'),
+  (13, 'Juli'),
+  (13, 'Kota Juang'),
+  (13, 'Kuala'),
+  (13, 'Kuta Blang'),
+  (13, 'Makmur'),
+  (13, 'Pandrah'),
+  (13, 'Peudada'),
+  (13, 'Peulimbang'),
+  (13, 'Peusangan'),
+  (13, 'Peusangan Selatan'),
+  (13, 'Peusangan Siblah Krueng'),
+  (13, 'Samalanga'),
+  (13, 'Simpang Mamplam');
+
+INSERT INTO district (city_id, district_name) VALUES
+  (14, 'Blang Jerango'),
+  (14, 'Blang Kejeren'),
+  (14, 'Blang Pegayon'),
+  (14, 'Dabun Gelang'),
+  (14, 'Kuta Panjang'),
+  (14, 'Pantan Cuaca'),
+  (14, 'Pining'),
+  (14, 'Putri Betung'),
+  (14, 'Rikit Gaib'),
+  (14, 'Terangun'),
+  (14, 'Teripe Jaya');
+
+
+INSERT INTO district (city_id, district_name) VALUES
+  (15, 'Beutong'),
+  (15, 'Beutong Ateuh Banggalang'),
+  (15, 'Darul Makmur'),
+  (15, 'Kuala'),
+  (15, 'Kuala Pesisir'),
+  (15, 'Seunagan'),
+  (15, 'Seunagan Timur'),
+  (15, 'Suka Makmue'),
+  (15, 'Tadu Raya'),
+  (15, 'Tripa Makmur');
+
+INSERT INTO district (city_id, district_name) VALUES
+  (16, 'Batee'),
+  (16, 'Delima'),
+  (16, 'Geumpang'),
+  (16, 'Glumpang Baro'),
+  (16, 'Glumpang Tiga'),
+  (16, 'Grong Grong'),
+  (16, 'Indrajaya'),
+  (16, 'KembangTanjong'),
+  (16, 'Keumala'),
+  (16, 'Kota Sigli'),
+  (16, 'Mane'),
+  (16, 'Mila'),
+  (16, 'Muara Tiga'),
+  (16, 'Mutiara'),
+  (16, 'Mutiara Timur'),
+  (16, 'padang Tiji'),
+  (16, 'Peukan Baro'),
+  (16, 'Pidie'),
+  (16, 'Sakti'),
+  (16, 'Simpang Tiga'),
+  (16, 'Tangse'),
+  (16, 'Tiro/Truseb'),
+  (16, 'Titeue');
+
+
+INSERT INTO district (city_id, district_name) VALUES
+  (17, 'Bandar Baru'),
+  (17, 'Bandar Dua'),
+  (17, 'Jangka Buya'),
+  (17, 'Meurah Dua'),
+  (17, 'Meureudu'),
+  (17, 'Panteraja'),
+  (17, 'Trienggadeng'),
+  (17, 'Ulim');
+
+
+INSERT INTO district (city_id, district_name) VALUES
+  (18, 'Alapan'),
+  (18, 'Salang'),
+  (18, 'Simeuleu Barat'),
+  (18, 'Simeuleu Tengah'),
+  (18, 'Simeuleu Timur'),
+  (18, 'Simeuleu Cut'),
+  (18, 'Teluk Dalam'),
+  (18, 'Teupah Barat'),
+  (18, 'Teupah Selatan'),
+  (18, 'Teupah Tengah');
+
+INSERT INTO district (city_id, district_name) VALUES
+  (19, 'Baiturrahman'),
+  (19, 'Banda Raya'),
+  (19, 'Jaya Baru'),
+  (19, 'Kuta Alam'),
+  (19, 'Kuta Raja'),
+  (19, 'Lueng Bata'),
+  (19, 'Meuraxa'),
+  (19, 'Syiah Kuala'),
+  (19, 'Ulee Kareng');
+
+
+INSERT INTO district (city_id, district_name) VALUES
+  (20, 'Langsa Barat'),
+  (20, 'Langsa Baro'),
+  (20, 'Langsa Kota'),
+  (20, 'Langsa Lama'),
+  (20, 'Langsa Timur');
+
+INSERT INTO district (city_id, district_name) VALUES
+  (21, 'Banda Sakti'),
+  (21, 'Blang Mangat'),
+  (21, 'Muara Dua'),
+  (21, 'Muara Satu');
+
+
+INSERT INTO district (city_id, district_name) VALUES
+  (22, 'Sukajaya'),
+  (22, 'Sukakarya');
+
+
+INSERT INTO district (city_id, district_name) VALUES
+  (23, 'Longkib'),
+  (23, 'Penanggalan'),
+  (23, 'Rundeng'),
+  (23, 'Simpang Kiri'),
+  (23, 'Sultan Daulat');
+
+  INSERT INTO district (city_id, district_name) VALUES
+  (24, 'Abiansemal'),
+  (24, 'Kuta'),
+  (24, 'Kuta Selatan'),
+  (24, 'Kuta Utara'),
+  (24, 'Mengwi'),
+  (24, 'Petang');
+
+
+INSERT INTO district (city_id, district_name) VALUES
+  (25, 'Bangli'),
+  (25, 'Kintamani'),
+  (25, 'Susut'),
+  (25, 'Tembuku'),
+
+INSERT INTO district (city_id, district_name) VALUES
+  (26, 'Banjar'),
+  (26, 'Buleleng'),
+  (26, 'Busungbiu'),
+  (26, 'Gerokgak'),
+  (26, 'Kubutambahan'),
+  (26, 'Sawan'),
+  (26, 'Seririt'),
+  (26, 'Sukasada'),
+  (26, 'Tejakula');
+
+
+INSERT INTO district (city_id, district_name) VALUES
+  (27, 'Belah Batuh'),
+  (27, 'Gianyar'),
+  (27, 'Payangan'),
+  (27, 'Sukawati'),
+  (27, 'Tampak Siring'),
+  (27, 'Tegallalang'),
+  (27, 'Ubud');
+
+
+INSERT INTO district (city_id, district_name) VALUES
+  (28, 'Jembrana'),
+  (28, 'Melaya'),
+  (28, 'Mendoyo'),
+  (28, 'Negara'),
+  (28, 'Perkutatan');
+
+
+INSERT INTO district (city_id, district_name) VALUES
+  (29, 'Abang'),
+  (29, 'Bebandem'),
+  (29, 'Karang Asem'),
+  (29, 'Kubu'),
+  (29, 'Manggis'),
+  (29, 'Rendang'),
+  (29, 'Selat'),
+  (29, 'Sidemen');
+
+
+INSERT INTO district (city_id, district_name) VALUES
+  (30, 'Banjarangkan'),
+  (30, 'Dawan'),
+  (30, 'Klungkung'),
+  (30, 'Nusapenida');
+
+INSERT INTO district (city_id, district_name) VALUES
+  (31, 'Baturiti'),
+  (31, 'Kediri'),
+  (31, 'Kerambitan'),
+  (31, 'Marga'),
+  (31, 'Penebel'),
+  (31, 'Pupuan'),
+  (31, 'Salemadeg Barat'),
+  (31, 'Salemadeg Timur'),
+  (31, 'Salemadeg'),
+  (31, 'tabanan');
+
+
+INSERT INTO district (city_id, district_name) VALUES
+  (32, 'Denpasar Barat'),
+  (32, 'Denpasar Selatan'),
+  (32, 'Denpasar Timur'),
+  (32, 'Denpasar Utara');
+
+
+INSERT INTO district (city_id, district_name) VALUES
+  (33, 'Banjarsari'),
+  (33, 'Bayah'),
+  (33, 'Borongmanik'),
+  (33, 'Cibadak'),
+  (33, 'Cibeber'),
+  (33, 'Cigemblong'),
+  (33, 'Cihara'),
+  (33, 'Cijaku'),
+  (33, 'Cikukur'),
+  (33, 'Cileles'),
+  (33, 'Cilograng'),
+  (33, 'Cimarga'),
+  (33, 'Cipanas'),
+  (33, 'Cirinten'),
+  (33, 'Curugbitung'),
+  (33, 'Gunung Kencana'),
+  (33, 'Kalanganyar'),
+  (33, 'Lebakgedong'),
+  (33, 'Leuwidamar'),
+  (33, 'Maja'),
+  (33, 'Malingping'),
+  (33, 'Muncang'),
+  (33, 'Panggarangan'),
+  (33, 'Rangkasbitung'),
+  (33, 'Sajira'),
+  (33, 'Sobang'),
+  (33, 'Wanasalam'),
+  (33, 'Warunggunung');
+
+
+INSERT INTO district (city_id, district_name) VALUES
+  (34, 'Angsana'),
+  (34, 'Banjar'),
+  (34, 'Bojong'),
+  (34, 'Cadasari'),
+  (34, 'Carita'),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, ''),
+  (34, '');
+
+
+
+
+
+  INSERT INTO district (city_id, district_name) VALUES
+  (25, ''),
+  INSERT INTO district (city_id, district_name) VALUES
+  (25, ''),
+
+
 
 INSERT INTO role (role_name) VALUE ('Admin');
 INSERT INTO user_name (user_first_name, user_middle_name, user_last_name) VALUE ('admin', 'cari', 'kado');
