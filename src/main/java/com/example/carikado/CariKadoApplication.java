@@ -32,21 +32,27 @@ public class CariKadoApplication extends SpringBootServletInitializer implements
 
 	@Override
 	public void run(String... strings) throws Exception {
-//		Role role = new Role("Admin");
+		Role role = new Role("Admin");
 //		User user = new User("admin@carikado.com", "$2y$10$ZXBzBg.ET7lwTT41qQr/SOfQ0V56E20bCSH4Jw8W30X.OSsH5MPuW", " ");
-//		UserName userName = new UserName("admin", " ", " ");
-//		UserAddress userAddress = new UserAddress();
-//
-//		user.setCreatedAt(new Date());
-//		user.setStatus(UserStatus.ACTIVE);
-//		user.setRole(role);
-//		user.setUserName(userName);
-//		user.setUserAddress(userAddress);
-//
-//		try {
-//			userService.addUser(user);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		User user = new User("admin@carikado.com", User.base64Encoder("admin"), " ");
+		UserName userName = new UserName("admin", "cari", "kado");
+		UserAddress userAddress = new UserAddress();
+
+		userAddress.setStreet(" ");
+		userAddress.setPostalCode(" ");
+		userAddress.setHamlet(0);
+		userAddress.setNeighbourhood(0);
+
+		user.setCreatedAt(new Date());
+		user.setStatus(UserStatus.ACTIVE);
+		user.setRole(role);
+		user.setUserName(userName);
+		user.setUserAddress(userAddress);
+
+		try {
+			userService.addUser(user);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

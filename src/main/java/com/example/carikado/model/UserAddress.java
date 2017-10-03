@@ -15,9 +15,6 @@ public class UserAddress implements Serializable {
     @Column(name = "user_address_stree")
     private String street;
 
-    @Column(name = "user_address_postal_code")
-    private String postalCode;
-
     @Column(name = "user_address_hamlet")
     private int hamlet;
 
@@ -48,9 +45,8 @@ public class UserAddress implements Serializable {
 
     }
 
-    public UserAddress(String street, String postalCode, int hamlet, int neighbourhood) {
+    public UserAddress(String street, int hamlet, int neighbourhood) {
         this.street = street;
-        this.postalCode = postalCode;
         this.hamlet = hamlet;
         this.neighbourhood = neighbourhood;
     }
@@ -69,14 +65,6 @@ public class UserAddress implements Serializable {
 
     public void setStreet(String street) {
         this.street = street;
-    }
-
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
     }
 
     public int getHamlet() {

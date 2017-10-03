@@ -3,6 +3,7 @@ package com.example.carikado.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -138,5 +139,13 @@ public class User implements Serializable {
 
     public List<GiftInfo> getGiftInfos() {
         return giftInfos;
+    }
+
+    public static String base64Encoder(String s) {
+        return Base64.getEncoder().encodeToString(s.getBytes());
+    }
+
+    public static String base64Decoder(String s) {
+        return new String(Base64.getDecoder().decode(s));
     }
 }

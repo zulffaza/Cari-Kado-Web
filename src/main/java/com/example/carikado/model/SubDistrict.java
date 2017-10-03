@@ -15,6 +15,9 @@ public class SubDistrict implements Serializable {
     @Column(name = "sub_district_name")
     private String name;
 
+    @Column(name = "sub_district_postal_code")
+    private String postalCode;
+
     @ManyToOne
     @JoinColumn(name = "district_id")
     private District district;
@@ -23,8 +26,9 @@ public class SubDistrict implements Serializable {
 
     }
 
-    public SubDistrict(String name) {
+    public SubDistrict(String name, String postalCode) {
         this.name = name;
+        this.postalCode = postalCode;
     }
 
     public int getId() {
@@ -41,6 +45,14 @@ public class SubDistrict implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
 
     public District getDistrict() {
