@@ -761,7 +761,9 @@ INSERT INTO district (city_id, district_name) VALUES
   (9, 'Tanah Alas');
 
 INSERT INTO district (city_id, district_name) VALUES
-  (10, ''),
+  (10, 'Banda Alam'),
+  (10, 'Birem Bayeun'),
+  (10, 'Banda Alam'),
 
 INSERT INTO role (role_name) VALUE ('Admin');
 INSERT INTO user_name (user_first_name, user_middle_name, user_last_name) VALUE ('admin', 'cari', 'kado');
