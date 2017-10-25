@@ -11,14 +11,14 @@ public class District implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "district_id")
+    @Column(name = "district_id", nullable = false)
     private int id;
 
-    @Column(name = "district_name")
+    @Column(name = "district_name", nullable = false)
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "city_id")
+    @JoinColumn(name = "city_id", nullable = false)
     private City city;
 
     @OneToMany(mappedBy = "district")

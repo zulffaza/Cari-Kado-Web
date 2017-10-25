@@ -9,10 +9,10 @@ public class UserAddress implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "user_address_id")
+    @Column(name = "user_address_id", nullable = false)
     private int id;
 
-    @Column(name = "user_address_stree")
+    @Column(name = "user_address_street", nullable = false)
     private String street;
 
     @Column(name = "user_address_hamlet")
@@ -22,23 +22,23 @@ public class UserAddress implements Serializable {
     private int neighbourhood;
 
     @ManyToOne
-    @JoinColumn(name = "country_id")
+    @JoinColumn(name = "country_id", nullable = false)
     private Country country;
 
     @ManyToOne
-    @JoinColumn(name = "province_id")
+    @JoinColumn(name = "province_id", nullable = false)
     private Province province;
 
     @ManyToOne
-    @JoinColumn(name = "city_id")
+    @JoinColumn(name = "city_id", nullable = false)
     private City city;
 
     @ManyToOne
-    @JoinColumn(name = "district_id")
+    @JoinColumn(name = "district_id", nullable = false)
     private District district;
 
     @ManyToOne
-    @JoinColumn(name = "sub_district_id")
+    @JoinColumn(name = "sub_district_id", nullable = false)
     private SubDistrict subDistrict;
 
     public UserAddress() {

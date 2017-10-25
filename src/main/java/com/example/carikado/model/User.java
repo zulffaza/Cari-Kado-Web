@@ -2,8 +2,9 @@ package com.example.carikado.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -13,35 +14,39 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private int id;
 
-    @Column(name = "user_email", unique = true)
+    @Column(name = "user_email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "user_password")
+    @Column(name = "user_password", nullable = false)
     private String password;
 
     @Column(name = "user_phone")
     private String phone;
 
-    @Column(name = "user_created_at")
+    @Column(name = "user_created_at", nullable = false)
     private Date createdAt;
 
-    @Column(name = "user_status")
+    @Column(name = "user_status", nullable = false)
     private UserStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "role_id")
+    @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
     @OneToOne
-    @JoinColumn(name = "user_name_id")
+    @JoinColumn(name = "user_name_id", nullable = false)
     private UserName userName;
 
     @OneToOne
     @JoinColumn(name = "user_address_id")
     private UserAddress userAddress;
+
+    @OneToOne
+    @JoinColumn(name = "user_picture_id", nullable = false)
+    private UserPicture userPicture;
 
     @OneToMany(mappedBy = "user")
     private List<GiftInfo> giftInfos = new ArrayList<>();
@@ -128,6 +133,14 @@ public class User implements Serializable {
         this.userAddress = userAddress;
     }
 
+    public UserPicture getUserPicture() {
+        return userPicture;
+    }
+
+    public void setUserPicture(UserPicture userPicture) {
+        this.userPicture = userPicture;
+    }
+
     public void addGiftInfo(GiftInfo giftInfo) {
         giftInfos.add(giftInfo);
         giftInfo.setUser(this);
@@ -141,11 +154,15 @@ public class User implements Serializable {
         return giftInfos;
     }
 
-    public static String base64Encoder(String s) {
-        return Base64.getEncoder().encodeToString(s.getBytes());
-    }
+    public static String passwordEncoder(String password) throws NoSuchAlgorithmException {
+        StringBuilder stringBuffer = new StringBuilder();
+        MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+        messageDigest.update(password.getBytes());
 
-    public static String base64Decoder(String s) {
-        return new String(Base64.getDecoder().decode(s));
+        byte[] digest = messageDigest.digest();
+        for (byte digestByte : digest)
+            stringBuffer.append(Integer.toString((digestByte & 0xff) + 0x100, 16).substring(1));
+
+        return stringBuffer.toString();
     }
 }

@@ -9,13 +9,13 @@ public class GiftInfoAge implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "gift_info_age_id")
+    @Column(name = "gift_info_age_id", nullable = false)
     private int id;
 
-    @Column(name = "gift_info_age_from")
+    @Column(name = "gift_info_age_from", nullable = false)
     private String from;
 
-    @Column(name = "gift_info_age_to")
+    @Column(name = "gift_info_age_to", nullable = false)
     private String to;
 
     public GiftInfoAge() {

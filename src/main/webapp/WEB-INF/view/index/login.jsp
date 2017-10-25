@@ -10,10 +10,29 @@
 <html>
 <head>
     <title>Login</title>
+
+    <link rel="stylesheet" href="webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="webjars/bootstrap/3.3.7-1/css/bootstrap-theme.min.css"/>
 </head>
 <body>
-    <form:form>
+    <h2>${message}</h2>
+    <form method="post" action="/login">
+        <table>
+            <tr>
+                <td>Email :</td>
+                <td><input name="userEmail" type="email"/></td>
+            </tr>
+            <tr>
+                <td>Password :</td>
+                <td><input name="userPassword" type="password"/></td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="submit" value="Login"/></td>
+            </tr>
+        </table>
+    </form>
 
-    </form:form>
+    <script src="webjars/jquery/1.11.1/jquery.min.js"></script>
+    <script src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
 </body>
 </html>

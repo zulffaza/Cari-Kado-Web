@@ -12,13 +12,13 @@ public class UserName implements Serializable {
     @Column(name = "user_name_id")
     private int id;
 
-    @Column(name = "user_first_name")
+    @Column(name = "user_first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "user_middle_name", nullable = true)
+    @Column(name = "user_middle_name")
     private String middleName;
 
-    @Column(name = "user_last_name")
+    @Column(name = "user_last_name", nullable = false)
     private String lastName;
 
     public UserName() {

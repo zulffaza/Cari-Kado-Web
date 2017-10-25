@@ -9,14 +9,14 @@ public class ChatLines implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "chat_lines_id")
+    @Column(name = "chat_lines_id", nullable = false)
     private int id;
 
-    @Column(name = "chat_lines_text")
+    @Column(name = "chat_lines_text", nullable = false)
     private String text;
 
     @ManyToOne
-    @JoinColumn(name = "chats_id")
+    @JoinColumn(name = "chats_id", nullable = false)
     private Chats chats;
 
     public ChatLines() {

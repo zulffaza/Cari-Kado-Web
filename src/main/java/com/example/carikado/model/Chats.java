@@ -12,20 +12,20 @@ public class Chats implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "chats_id")
+    @Column(name = "chats_id", nullable = false)
     private int id;
 
-    @Column(name = "chats_user_name")
+    @Column(name = "chats_user_name", nullable = false)
     private String userName;
 
-    @Column(name = "chats_user_email")
+    @Column(name = "chats_user_email", nullable = false)
     private String userEmail;
 
-    @Column(name = "chats_created_at")
+    @Column(name = "chats_created_at", nullable = false)
     private Date createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "chats")

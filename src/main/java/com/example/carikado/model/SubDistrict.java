@@ -9,17 +9,17 @@ public class SubDistrict implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "sub_district_id")
+    @Column(name = "sub_district_id", nullable = false)
     private int id;
 
-    @Column(name = "sub_district_name")
+    @Column(name = "sub_district_name", nullable = false)
     private String name;
 
-    @Column(name = "sub_district_postal_code")
+    @Column(name = "sub_district_postal_code", nullable = false)
     private String postalCode;
 
     @ManyToOne
-    @JoinColumn(name = "district_id")
+    @JoinColumn(name = "district_id", nullable = false)
     private District district;
 
     public SubDistrict() {

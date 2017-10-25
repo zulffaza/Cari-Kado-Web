@@ -11,10 +11,10 @@ public class Country implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "country_id")
+    @Column(name = "country_id", nullable = false)
     private int id;
 
-    @Column(name = "country_name")
+    @Column(name = "country_name", nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "country")

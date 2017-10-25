@@ -11,10 +11,10 @@ public class GiftInfoCategory implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "gift_info_category_id")
+    @Column(name = "gift_info_category_id", nullable = false)
     private int id;
 
-    @Column(name = "gift_info_category_name")
+    @Column(name = "gift_info_category_name", nullable = false)
     private String name;
 
     @ManyToMany(mappedBy = "giftInfoCategories")

@@ -11,14 +11,14 @@ public class City implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "city_id")
+    @Column(name = "city_id", nullable = false)
     private int id;
 
-    @Column(name = "city_name")
+    @Column(name = "city_name", nullable = false)
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "province_id")
+    @JoinColumn(name = "province_id", nullable = false)
     private Province province;
 
     @OneToMany(mappedBy = "city")

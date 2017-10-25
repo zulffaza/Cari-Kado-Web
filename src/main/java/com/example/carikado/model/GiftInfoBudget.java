@@ -9,13 +9,13 @@ public class GiftInfoBudget implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "gift_info_budget_id")
+    @Column(name = "gift_info_budget_id", nullable = false)
     private int id;
 
-    @Column(name = "gift_info_budget_from")
+    @Column(name = "gift_info_budget_from", nullable = false)
     private String from;
 
-    @Column(name = "gift_info_budget_to")
+    @Column(name = "gift_info_budget_to", nullable = false)
     private String to;
 
     public GiftInfoBudget() {

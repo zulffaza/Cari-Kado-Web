@@ -12,34 +12,34 @@ public class GiftInfo implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "gift_info_id")
+    @Column(name = "gift_info_id", nullable = false)
     private int id;
 
-    @Column(name = "gift_info_title")
+    @Column(name = "gift_info_title", nullable = false)
     private String title;
 
-    @Column(name = "gift_info_description")
+    @Column(name = "gift_info_description", nullable = false)
     private String description;
 
-    @Column(name = "gift_info_essence")
+    @Column(name = "gift_info_essence", nullable = false)
     private String essence;
 
-    @Column(name = "gift_info_created_at")
+    @Column(name = "gift_info_created_at", nullable = false)
     private Date createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @OneToOne
-    @JoinColumn(name = "gift_info_age_id")
+    @JoinColumn(name = "gift_info_age_id", nullable = false)
     private GiftInfoAge giftInfoAge;
 
     @ManyToMany
     private List<GiftInfoCategory> giftInfoCategories = new ArrayList<>();
 
     @OneToOne
-    @JoinColumn(name = "gift_info_budget_id")
+    @JoinColumn(name = "gift_info_budget_id", nullable = false)
     private GiftInfoBudget giftInfoBudget;
 
     public GiftInfo() {

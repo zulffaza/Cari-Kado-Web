@@ -10,22 +10,22 @@ public class Review implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "review")
+    @Column(name = "review_id", nullable = false)
     private int id;
 
-    @Column(name = "review_name")
+    @Column(name = "review_name", nullable = false)
     private String name;
 
-    @Column(name = "review_email")
+    @Column(name = "review_email", nullable = false)
     private String email;
 
-    @Column(name = "review_comment")
+    @Column(name = "review_comment", nullable = false)
     private String comment;
 
-    @Column(name = "review_rating")
+    @Column(name = "review_rating", nullable = false)
     private int rating;
 
-    @Column(name = "review_created_at")
+    @Column(name = "review_created_at", nullable = false)
     private Date createdAt;
 
     public Review() {

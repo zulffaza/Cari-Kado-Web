@@ -1,14 +1,15 @@
 package com.example.carikado.repository;
 
-import com.example.carikado.model.Role;
-import com.example.carikado.model.User;
+import com.example.carikado.model.GiftInfo;
+import com.example.carikado.model.GiftInfoCategory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
+import java.util.List;
 
-    public User findByEmail(String email);
+@Repository
+public interface GiftInfoRepository extends JpaRepository<GiftInfo, Integer> {
+
 }
