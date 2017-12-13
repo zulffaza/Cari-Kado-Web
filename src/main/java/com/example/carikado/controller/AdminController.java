@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -49,8 +50,10 @@ public class AdminController {
     }
 
     @GetMapping("/dashboard/admin/role/{page}")
-    public String dashboardAdminRole(@PathVariable Integer page, @RequestParam(required = false) Integer pageSize,
-                                     @RequestParam(required = false) Integer sort, HttpSession httpSession,
+    public String dashboardAdminRole(@PathVariable Integer page,
+                                     @RequestParam(required = false) Integer pageSize,
+                                     @RequestParam(required = false) Integer sort,
+                                     HttpSession httpSession,
                                      ModelMap modelMap) {
         String url = BASE_URL + "role";
         User user = (User) httpSession.getAttribute("user");
@@ -60,36 +63,23 @@ public class AdminController {
 
             if (isAdmin) {
                 if (page > 0) {
-                    LOGGER.info(page + "");
-                    LOGGER.info(pageSize + "");
-                    LOGGER.info(sort + "");
-
                     String pageString = String.valueOf(page);
                     String pageSizeString = pageSize != null ? String.valueOf(pageSize) : null;
                     String sortString = sort != null ? String.valueOf(sort) : null;
 
-                    HashMap<String, String> params = new HashMap<>();
+                    UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url);
 
-                    params.put("page", pageString);
-                    params.put("pageSize", pageSizeString);
-                    params.put("sort", sortString);
+                    builder.queryParam("page", pageString);
+                    builder.queryParam("pageSize", pageSizeString);
+                    builder.queryParam("sort", sortString);
 
-                    HttpEntity<HashMap> request = new HttpEntity<>(params);
+                    ResponseEntity<String> response = mRestTemplate.exchange(builder.buildAndExpand().toUriString(),
+                            HttpMethod.GET, null, String.class);
 
-                    ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.POST, request, String.class);
-
-                    LOGGER.info(response.getBody());
-
-//                    ResponseEntity<JsonNode> response = mRestTemplate.exchange(url, HttpMethod.POST, request, JsonNode.class);
                     MyResponse<ArrayList<Role>> myResponse;
                     ArrayList<Role> roles = new ArrayList<>();
-//
+
                     try {
-//                        JsonNode jsonNode = response.getBody();
-//                        myResponse = mObjectMapper.readValue(mObjectMapper.treeAsTokens(jsonNode),
-//                                new TypeReference<MyResponse<ArrayList<Role>>>() {
-//                                });
-//
                         myResponse = mObjectMapper.readValue(response.getBody(), MyResponse.class);
                         roles = myResponse.getData();
                     } catch (IOException e) {
@@ -110,7 +100,7 @@ public class AdminController {
             return "redirect:/login";
     }
 
-    @GetMapping("/dashboard/admin/add/role")
+    @GetMapping("/dashboard/admin/role/add")
     public String dashboardAdminAddRole(HttpSession httpSession, ModelMap modelMap) {
         User user = (User) httpSession.getAttribute("user");
 
@@ -120,8 +110,9 @@ public class AdminController {
             return "redirect:/login";
     }
 
-    @GetMapping("/dashboard/admin/add/role/{roleId}")
-    public String dashboardAdminAddRole(@PathVariable(required = false) Integer roleId, HttpSession httpSession,
+    @GetMapping("/dashboard/admin/role/add/{roleId}")
+    public String dashboardAdminAddRole(@PathVariable(required = false) Integer roleId,
+                                        HttpSession httpSession,
                                         ModelMap modelMap) {
         String url = BASE_URL + "role";
         User user = (User) httpSession.getAttribute("user");
@@ -133,17 +124,13 @@ public class AdminController {
                 if (roleId != null) {
                     url += "/" + roleId;
 
-                    ResponseEntity<JsonNode> response = mRestTemplate.exchange(url, HttpMethod.POST, null,
-                            JsonNode.class);
+                    ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.GET, null,
+                            String.class);
                     MyResponse<Role> myResponse;
                     Role role = null;
 
                     try {
-                        JsonNode jsonNode = response.getBody();
-                        myResponse = mObjectMapper.readValue(mObjectMapper.treeAsTokens(jsonNode),
-                                new TypeReference<MyResponse<Role>>() {
-                                });
-
+                        myResponse = mObjectMapper.readValue(response.getBody(), MyResponse.class);
                         role = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());
@@ -162,7 +149,7 @@ public class AdminController {
             return "redirect:/login";
     }
 
-    @PostMapping("/dashboard/admin/add/role")
+    @PostMapping("/dashboard/admin/role/add")
     public String dashboardAdminAddRole(@RequestParam(name = "roleId", required = false) Integer roleId,
                                         @RequestParam("roleName") String roleName,
                                         HttpSession httpSession, ModelMap modelMap) {
@@ -182,20 +169,17 @@ public class AdminController {
 
                 HttpEntity<HashMap> request = new HttpEntity<>(params);
 
-                ResponseEntity<JsonNode> response = mRestTemplate.exchange(url, HttpMethod.POST, request, JsonNode.class);
+                ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.POST, request, String.class);
                 MyResponse<Integer> myResponse;
                 Integer responseInt = null;
 
                 try {
-                    JsonNode jsonNode = response.getBody();
-                    myResponse = mObjectMapper.readValue(mObjectMapper.treeAsTokens(jsonNode),
-                            new TypeReference<MyResponse<Integer>>() {
-                            });
-
+                    myResponse = mObjectMapper.readValue(response.getBody(), MyResponse.class);
                     responseInt = myResponse.getData();
                 } catch (IOException e) {
                     LOGGER.error(e.getMessage());
                 }
+
                 //TODO menambahkan pengecekan response
 
                 return "redirect:/dashboard/admin";
@@ -205,7 +189,7 @@ public class AdminController {
             return "redirect:/login";
     }
 
-    @GetMapping("/dashboard/admin/delete/role/{roleId}")
+    @GetMapping("/dashboard/admin/role/delete/{roleId}")
     public String dashboardAdminDeleteRole(@PathVariable Integer roleId, HttpSession httpSession, ModelMap modelMap) {
         String url = BASE_URL + "role/";
         User user = (User) httpSession.getAttribute("user");
@@ -217,16 +201,12 @@ public class AdminController {
                 if (roleId != null) {
                     url += roleId;
 
-                    ResponseEntity<JsonNode> response = mRestTemplate.exchange(url, HttpMethod.DELETE, null, JsonNode.class);
+                    ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
                     MyResponse<Integer> myResponse;
                     Integer responseInt = null;
 
                     try {
-                        JsonNode jsonNode = response.getBody();
-                        myResponse = mObjectMapper.readValue(mObjectMapper.treeAsTokens(jsonNode),
-                                new TypeReference<MyResponse<Integer>>() {
-                                });
-
+                        myResponse = mObjectMapper.readValue(response.getBody(), MyResponse.class);
                         responseInt = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());

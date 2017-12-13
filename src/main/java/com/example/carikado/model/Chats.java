@@ -13,7 +13,7 @@ public class Chats implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "chats_id", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "chats_user_name", nullable = false)
     private String userName;
@@ -40,11 +40,11 @@ public class Chats implements Serializable {
         this.userEmail = userEmail;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

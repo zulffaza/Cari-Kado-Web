@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class RoleRESTController {
@@ -34,23 +33,17 @@ public class RoleRESTController {
         mRoleService = roleService;
     }
 
-    @PostMapping("/api/role/all")
+    @GetMapping("/api/role/all")
     public MyResponse<List> findRoles() {
         String message = "Find roles success";
         ArrayList<Role> roles = (ArrayList<Role>) mRoleService.findAll();
         return new MyResponse<>(message, roles);
     }
 
-    @PostMapping("/api/role")
-    public MyResponse<List> findRoles(@RequestBody Map<String, String> params) {
-        Integer pageInt = 0;
-        Integer pageSizeInt = 10;
-        Integer sortInt = null;
-
-        String page = params.get("page");
-        String pageSize = params.get("pageSize");
-        String sort = params.get("sort");
-
+    @GetMapping("/api/role")
+    public MyResponse<List> findRoles(@RequestParam(required = false, defaultValue = "0") Integer page,
+                                      @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                      @RequestParam(required = false) Integer sort) {
         ArrayList<String> properties = new ArrayList<>();
         List<Role> roles = null;
         String message;
@@ -59,20 +52,11 @@ public class RoleRESTController {
         boolean isValid = true;
 
         try {
-            if (page != null)
-                pageInt = Integer.parseInt(page);
+            if (page > 0)
+                page -= 1;
 
-            if (pageSize != null)
-                pageSizeInt = Integer.parseInt(pageSize);
-
-            if (sort != null)
-                sortInt = Integer.parseInt(sort);
-
-            if (pageInt > 0)
-                pageInt -= 1;
-
-            if (pageInt < 0)
-                pageInt = 0;
+            if (page < 0)
+                page = 0;
         } catch (Exception e) {
             isValid = false;
             LOGGER.error(e.getMessage());
@@ -82,28 +66,24 @@ public class RoleRESTController {
             int propertiesIndex = 0;
             int directionIndex = 0;
 
-            if (sortInt != null && sortInt >= 1 && sortInt <= 2)
-                directionIndex = sortInt - 1;
+            if (sort != null && sort >= 1 && sort <= 2)
+                directionIndex = sort - 1;
 
             direction = Sort.Direction.fromString(DIRECTION[directionIndex]);
             properties.add(PROPERTIES[propertiesIndex]);
 
             Sort sortOrder = new Sort(direction, properties);
-            PageRequest pageRequest = new PageRequest(pageInt, pageSizeInt, sortOrder);
+            PageRequest pageRequest = new PageRequest(page, pageSize, sortOrder);
             roles = mRoleService.findAllPageable(pageRequest).getContent();
 
             message = "Find gift info success";
         } else
             message = "Error parsing parameter";
 
-        LOGGER.info(pageInt + "");
-        LOGGER.info(pageSizeInt + "");
-        LOGGER.info(sortInt + "");
-
         return new MyResponse<>(message, roles);
     }
 
-    @PostMapping("/api/role/{roleId}")
+    @GetMapping("/api/role/{roleId}")
     public MyResponse<Role> findRole(@PathVariable Integer roleId) {
         Role role = null;
         String message = "Role not found";

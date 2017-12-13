@@ -12,16 +12,16 @@ public class Province implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "province_id", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "province_name", nullable = false)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "country_id", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "country_id")
     private Country country;
 
-    @OneToMany(mappedBy = "province")
+    @Transient
     private List<City> cities = new ArrayList<>();
 
     public Province() {
@@ -32,11 +32,11 @@ public class Province implements Serializable {
         this.name = name;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

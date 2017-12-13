@@ -13,7 +13,7 @@ public class GiftInfo implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "gift_info_id", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "gift_info_title", nullable = false)
     private String title;
@@ -52,11 +52,11 @@ public class GiftInfo implements Serializable {
         this.essence = essence;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

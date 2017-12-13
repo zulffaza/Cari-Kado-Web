@@ -38,14 +38,14 @@ public class GiftInfoRESTController {
         mGiftInfoService = giftInfoService;
     }
 
-    @PostMapping("/api/giftinfo/all")
+    @GetMapping("/api/giftinfo/all")
     public MyResponse<List> findGiftInfos() {
         String message = "Find gift infos success";
         ArrayList<GiftInfo> giftInfos = (ArrayList<GiftInfo>) mGiftInfoService.findAll();
         return new MyResponse<>(message, giftInfos);
     }
 
-    @PostMapping("/api/giftinfo")
+    @GetMapping("/api/giftinfo")
     public MyResponse<List> findGiftInfos(@RequestBody Map<String, String> params) {
         Integer pageInt = 0;
         Integer pageSizeInt = 10;
@@ -111,8 +111,8 @@ public class GiftInfoRESTController {
         return new MyResponse<>(message, giftInfos);
     }
 
-    @PostMapping("/api/giftinfo/{giftInfoId}")
-    public MyResponse<GiftInfo> findGiftInfo(@PathVariable Integer giftInfoId) {
+    @GetMapping("/api/giftinfo/{giftInfoId}")
+    public MyResponse<GiftInfo> findGiftInfo(@PathVariable Long giftInfoId) {
         GiftInfo giftInfo = null;
         String message = "Gift info not found";
 
@@ -141,7 +141,7 @@ public class GiftInfoRESTController {
     }
 
     @DeleteMapping("/api/giftinfo/{giftInfoId}")
-    public MyResponse<Integer> deleteGiftInfo(@PathVariable Integer giftInfoId) {
+    public MyResponse<Integer> deleteGiftInfo(@PathVariable Long giftInfoId) {
         String message;
         Integer response;
 

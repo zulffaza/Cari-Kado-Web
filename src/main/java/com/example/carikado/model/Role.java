@@ -10,7 +10,7 @@ public class Role implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "role_id", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "role_name", unique = true, nullable = false)
     private String name;
@@ -23,11 +23,11 @@ public class Role implements Serializable {
         this.name = name;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

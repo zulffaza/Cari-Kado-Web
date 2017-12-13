@@ -41,14 +41,14 @@ public class UserRESTController {
         mUserService = userService;
     }
 
-    @PostMapping("/api/user/all")
+    @GetMapping("/api/user/all")
     public MyResponse<List> findUsers() {
         String message = "Find users success";
         ArrayList<User> users = (ArrayList<User>) mUserService.findAll();
         return new MyResponse<>(message, users);
     }
 
-    @PostMapping("/api/user")
+    @GetMapping("/api/user")
     public MyResponse<List> findUsers(@RequestBody Map<String, String> params) {
         Integer pageInt = 0;
         Integer pageSizeInt = 10;
@@ -114,7 +114,7 @@ public class UserRESTController {
         return new MyResponse<>(message, users);
     }
 
-    @PostMapping("/api/user/{userId}")
+    @GetMapping("/api/user/{userId}")
     public MyResponse<User> findUser(@PathVariable Integer userId) {
         User user = null;
         String message = "User not found";

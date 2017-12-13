@@ -10,7 +10,7 @@ public class ChatLines implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "chat_lines_id", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "chat_lines_text", nullable = false)
     private String text;
@@ -27,11 +27,11 @@ public class ChatLines implements Serializable {
         this.text = text;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface GiftInfoRepository extends JpaRepository<GiftInfo, Integer> {
+public interface GiftInfoRepository extends JpaRepository<GiftInfo, Long> {
 
 }

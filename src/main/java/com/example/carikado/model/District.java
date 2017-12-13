@@ -12,16 +12,16 @@ public class District implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "district_id", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "district_name", nullable = false)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "city_id", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "city_id")
     private City city;
 
-    @OneToMany(mappedBy = "district")
+    @Transient
     private List<SubDistrict> subDistricts = new ArrayList<>();
 
     public District() {
@@ -32,11 +32,11 @@ public class District implements Serializable {
         this.name = name;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

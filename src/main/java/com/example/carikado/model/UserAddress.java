@@ -10,16 +10,16 @@ public class UserAddress implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "user_address_id", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "user_address_street", nullable = false)
     private String street;
 
     @Column(name = "user_address_hamlet")
-    private int hamlet;
+    private Integer hamlet;
 
     @Column(name = "user_address_neighbourhood")
-    private int neighbourhood;
+    private Integer neighbourhood;
 
     @ManyToOne
     @JoinColumn(name = "country_id", nullable = false)
@@ -45,17 +45,17 @@ public class UserAddress implements Serializable {
 
     }
 
-    public UserAddress(String street, int hamlet, int neighbourhood) {
+    public UserAddress(String street, Integer hamlet, Integer neighbourhood) {
         this.street = street;
         this.hamlet = hamlet;
         this.neighbourhood = neighbourhood;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -67,19 +67,19 @@ public class UserAddress implements Serializable {
         this.street = street;
     }
 
-    public int getHamlet() {
+    public Integer getHamlet() {
         return hamlet;
     }
 
-    public void setHamlet(int hamlet) {
+    public void setHamlet(Integer hamlet) {
         this.hamlet = hamlet;
     }
 
-    public int getNeighbourhood() {
+    public Integer getNeighbourhood() {
         return neighbourhood;
     }
 
-    public void setNeighbourhood(int neighbourhood) {
+    public void setNeighbourhood(Integer neighbourhood) {
         this.neighbourhood = neighbourhood;
     }
 
