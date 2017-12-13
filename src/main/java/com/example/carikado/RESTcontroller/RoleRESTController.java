@@ -49,36 +49,26 @@ public class RoleRESTController {
         String message;
         Sort.Direction direction;
 
-        boolean isValid = true;
+        if (page > 0)
+            page -= 1;
 
-        try {
-            if (page > 0)
-                page -= 1;
+        if (page < 0)
+            page = 0;
 
-            if (page < 0)
-                page = 0;
-        } catch (Exception e) {
-            isValid = false;
-            LOGGER.error(e.getMessage());
-        }
+        int propertiesIndex = 0;
+        int directionIndex = 0;
 
-        if (isValid) {
-            int propertiesIndex = 0;
-            int directionIndex = 0;
+        if (sort != null && sort >= 1 && sort <= 2)
+            directionIndex = sort - 1;
 
-            if (sort != null && sort >= 1 && sort <= 2)
-                directionIndex = sort - 1;
+        direction = Sort.Direction.fromString(DIRECTION[directionIndex]);
+        properties.add(PROPERTIES[propertiesIndex]);
 
-            direction = Sort.Direction.fromString(DIRECTION[directionIndex]);
-            properties.add(PROPERTIES[propertiesIndex]);
+        Sort sortOrder = new Sort(direction, properties);
+        PageRequest pageRequest = new PageRequest(page, pageSize, sortOrder);
+        roles = mRoleService.findAllPageable(pageRequest).getContent();
 
-            Sort sortOrder = new Sort(direction, properties);
-            PageRequest pageRequest = new PageRequest(page, pageSize, sortOrder);
-            roles = mRoleService.findAllPageable(pageRequest).getContent();
-
-            message = "Find gift info success";
-        } else
-            message = "Error parsing parameter";
+        message = "Find gift info success";
 
         return new MyResponse<>(message, roles);
     }

@@ -3,8 +3,6 @@ package com.example.carikado.controller;
 import com.example.carikado.model.MyResponse;
 import com.example.carikado.model.Role;
 import com.example.carikado.model.User;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
