@@ -12,10 +12,6 @@
     <title>Admin - Role</title>
 </head>
 <body>
-    <h3>${page}</h3>
-    <h3>${pageSize}</h3>
-    <h3>${sort}</h3>
-
     <c:forEach items="${roles}" var="role">
         <h2>${role.name}</h2>
         <a href="/dashboard/admin/delete/role/${role.id}">

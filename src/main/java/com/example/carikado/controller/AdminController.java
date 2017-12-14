@@ -11,11 +11,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpSession;
@@ -51,6 +49,7 @@ public class AdminController {
     public String dashboardAdminRole(@PathVariable Integer page,
                                      @RequestParam(required = false) Integer pageSize,
                                      @RequestParam(required = false) Integer sort,
+                                     @ModelAttribute("message") String message,
                                      HttpSession httpSession,
                                      ModelMap modelMap) {
         String url = BASE_URL + "role";
@@ -84,6 +83,7 @@ public class AdminController {
                         LOGGER.error(e.getMessage());
                     }
 
+                    modelMap.addAttribute("message", message);
                     modelMap.addAttribute("page", pageString);
                     modelMap.addAttribute("pageSize", pageSizeString);
                     modelMap.addAttribute("sort", sortString);
@@ -98,18 +98,96 @@ public class AdminController {
             return "redirect:/login";
     }
 
-    @GetMapping("/dashboard/admin/role/add")
-    public String dashboardAdminAddRole(HttpSession httpSession, ModelMap modelMap) {
+    @GetMapping("/dashboard/admin/user/{page}")
+    public String dashboardAdminUser(@PathVariable Integer page,
+                                     @RequestParam(required = false) Integer pageSize,
+                                     @RequestParam(required = false) Integer sort,
+                                     @ModelAttribute("message") String message,
+                                     HttpSession httpSession,
+                                     ModelMap modelMap) {
+        String url = BASE_URL + "user";
         User user = (User) httpSession.getAttribute("user");
 
-        if (user != null)
+        if (user != null) {
+            boolean isAdmin = user.getRole().getName().equals("Admin");
+
+            if (isAdmin) {
+                if (page > 0) {
+                    String pageString = String.valueOf(page);
+                    String pageSizeString = pageSize != null ? String.valueOf(pageSize) : null;
+                    String sortString = sort != null ? String.valueOf(sort) : null;
+
+                    UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url);
+
+                    builder.queryParam("page", pageString);
+                    builder.queryParam("pageSize", pageSizeString);
+                    builder.queryParam("sort", sortString);
+
+                    ResponseEntity<String> response = mRestTemplate.exchange(builder.buildAndExpand().toUriString(),
+                            HttpMethod.GET, null, String.class);
+
+                    MyResponse<ArrayList<User>> myResponse;
+                    ArrayList<User> users = new ArrayList<>();
+
+                    try {
+                        myResponse = mObjectMapper.readValue(response.getBody(), MyResponse.class);
+                        users = myResponse.getData();
+                    } catch (IOException e) {
+                        LOGGER.error(e.getMessage());
+                    }
+
+                    modelMap.addAttribute("message", message);
+                    modelMap.addAttribute("page", pageString);
+                    modelMap.addAttribute("pageSize", pageSizeString);
+                    modelMap.addAttribute("sort", sortString);
+                    modelMap.addAttribute("users", users);
+
+                    // TODO make read user layout
+
+                    return "admin/role";
+                } else
+                    return "redirect:/dashboard/admin/user/1";
+            } else
+                return "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
+
+    @GetMapping("/dashboard/admin/role/add")
+    public String dashboardAdminAddRole(@ModelAttribute("message") String message,
+                                        @ModelAttribute("role") Role role,
+                                        HttpSession httpSession, ModelMap modelMap) {
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            modelMap.addAttribute("message", message);
+            modelMap.addAttribute("role", role);
+
             return user.getRole().getName().equals("Admin") ? "admin/addRole" : "redirect:/dashboard";
-        else
+        } else
+            return "redirect:/login";
+    }
+
+    @GetMapping("/dashboard/admin/user/add")
+    public String dashboardAdminAddUser(@ModelAttribute("message") String message,
+                                        @ModelAttribute("user") User user,
+                                        HttpSession httpSession, ModelMap modelMap) {
+        User user = (User) httpSession.getAttribute("user");
+
+        // TODO make add user layout
+
+        if (user != null) {
+            modelMap.addAttribute("message", message);
+            modelMap.addAttribute("user", user);
+
+            return user.getRole().getName().equals("Admin") ? "admin/addRole" : "redirect:/dashboard";
+        } else
             return "redirect:/login";
     }
 
     @GetMapping("/dashboard/admin/role/add/{roleId}")
     public String dashboardAdminAddRole(@PathVariable(required = false) Integer roleId,
+                                        @ModelAttribute("message") String message,
                                         HttpSession httpSession,
                                         ModelMap modelMap) {
         String url = BASE_URL + "role";
@@ -135,6 +213,7 @@ public class AdminController {
                     }
 
                     if (role != null) {
+                        modelMap.addAttribute("message", message);
                         modelMap.addAttribute("role", role);
                         return "admin/addRole";
                     } else
@@ -147,10 +226,54 @@ public class AdminController {
             return "redirect:/login";
     }
 
+    @GetMapping("/dashboard/admin/user/add/{userId}")
+    public String dashboardAdminAddUser(@PathVariable(required = false) Integer userId,
+                                        @ModelAttribute("message") String message,
+                                        HttpSession httpSession,
+                                        ModelMap modelMap) {
+        String url = BASE_URL + "user";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            boolean isAdmin = user.getRole().getName().equals("Admin");
+
+            if (isAdmin) {
+                if (userId != null) {
+                    url += "/" + userId;
+
+                    ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.GET, null,
+                            String.class);
+                    MyResponse<User> myResponse;
+                    user = null;
+
+                    try {
+                        myResponse = mObjectMapper.readValue(response.getBody(), MyResponse.class);
+                        user = myResponse.getData();
+                    } catch (IOException e) {
+                        LOGGER.error(e.getMessage());
+                    }
+
+                    if (user != null) {
+                        // TODO make add user layout
+
+                        modelMap.addAttribute("message", message);
+                        modelMap.addAttribute("user", user);
+                        return "admin/addRole";
+                    } else
+                        return "redirect:/dashboard/admin/user/1";
+                } else
+                    return "redirect:/dashboard/admin/user/1";
+            } else
+                return "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
+
     @PostMapping("/dashboard/admin/role/add")
     public String dashboardAdminAddRole(@RequestParam(name = "roleId", required = false) Integer roleId,
                                         @RequestParam("roleName") String roleName,
-                                        HttpSession httpSession, ModelMap modelMap) {
+                                        HttpSession httpSession,
+                                        RedirectAttributes redirectAttributes) {
         String url = BASE_URL + "role/add";
         User user = (User) httpSession.getAttribute("user");
 
@@ -187,8 +310,60 @@ public class AdminController {
             return "redirect:/login";
     }
 
+    @PostMapping("/dashboard/admin/user/add")
+    public String dashboardAdminAddUser(@RequestParam(name = "userId", required = false) Integer userId,
+                                        @RequestParam("userName") String userName,
+                                        HttpSession httpSession,
+                                        RedirectAttributes redirectAttributes) {
+        String url = BASE_URL + "user/add";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            boolean isAdmin = user.getRole().getName().equals("Admin");
+
+            if (isAdmin) {
+                HashMap<String, String> params = new HashMap<>();
+
+                if (userId != null)
+                    params.put("id", String.valueOf(userId));
+
+                params.put("name", userName);
+
+                HttpEntity<HashMap> request = new HttpEntity<>(params);
+
+                ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.POST, request, String.class);
+                MyResponse<Integer> myResponse;
+                Integer responseInt = null;
+                String message;
+
+                try {
+                    myResponse = mObjectMapper.readValue(response.getBody(), MyResponse.class);
+                    responseInt = myResponse.getData();
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage());
+                }
+
+                if (responseInt != null && responseInt == 1) {
+                    message = "Add user success";
+                    redirectAttributes.addAttribute("message", message);
+                } else {
+                    message = responseInt == null ? "Internal server error" : "Add user failed";
+
+                    redirectAttributes.addAttribute("message", message);
+                    redirectAttributes.addAttribute("user", user);
+                }
+
+                return "redirect:/dashboard/admin/user/add";
+            } else
+                return "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
+
     @GetMapping("/dashboard/admin/role/delete/{roleId}")
-    public String dashboardAdminDeleteRole(@PathVariable Integer roleId, HttpSession httpSession, ModelMap modelMap) {
+    public String dashboardAdminDeleteRole(@PathVariable Integer roleId,
+                                           HttpSession httpSession,
+                                           RedirectAttributes redirectAttributes) {
         String url = BASE_URL + "role/";
         User user = (User) httpSession.getAttribute("user");
 
@@ -210,10 +385,49 @@ public class AdminController {
                         LOGGER.error(e.getMessage());
                     }
 
-                    //TODO menambahkan pengecekan response
-                }
+                    String message = responseInt != null && responseInt == 1 ? "Role delete success" : "Role delete failed";
 
-                return "redirect:/dashboard/admin";
+                    redirectAttributes.addAttribute("message", message);
+                    return "redirect:/dashboard/admin/role/1";
+                } else
+                    return "redirect:/dashboard/admin";
+            } else
+                return "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
+
+    @GetMapping("/dashboard/admin/user/delete/{userId}")
+    public String dashboardAdminDeleteUser(@PathVariable Integer userId,
+                                           HttpSession httpSession,
+                                           RedirectAttributes redirectAttributes) {
+        String url = BASE_URL + "user/";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            boolean isAdmin = user.getRole().getName().equals("Admin");
+
+            if (isAdmin) {
+                if (userId != null) {
+                    url += userId;
+
+                    ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
+                    MyResponse<Integer> myResponse;
+                    Integer responseInt = null;
+
+                    try {
+                        myResponse = mObjectMapper.readValue(response.getBody(), MyResponse.class);
+                        responseInt = myResponse.getData();
+                    } catch (IOException e) {
+                        LOGGER.error(e.getMessage());
+                    }
+
+                    String message = responseInt != null && responseInt == 1 ? "User delete success" : "User delete failed";
+
+                    redirectAttributes.addAttribute("message", message);
+                    return "redirect:/dashboard/admin/user/1";
+                } else
+                    return "redirect:/dashboard/admin";
             } else
                 return "redirect:/dashboard";
         } else
