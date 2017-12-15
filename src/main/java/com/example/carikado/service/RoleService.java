@@ -15,9 +15,7 @@ public class RoleService {
     private RoleRepository mRoleRepository;
 
     @Autowired
-    public RoleService(RoleRepository roleRepository) {
-        mRoleRepository = roleRepository;
-    }
+    public RoleService(RoleRepository roleRepository) { mRoleRepository = roleRepository; }
 
     public Integer count() {
         return (int) mRoleRepository.count();
