@@ -54,17 +54,17 @@
                     </a>
                 </div>
 
-                <form method="GET" action="#" accept-charset="UTF-8" role="search" class="navbar-form navbar-right">
-                    <div class="input-group">
-                        <input type="text" name="search" placeholder="Search..." value="" class="form-control">
+                <%--<form method="GET" action="#" accept-charset="UTF-8" role="search" class="navbar-form navbar-right">--%>
+                    <%--<div class="input-group">--%>
+                        <%--<input type="text" name="search" placeholder="Search..." value="" class="form-control">--%>
 
-                        <span class="input-group-btn">
-                            <button type="submit" class="btn btn-default">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </span>
-                    </div>
-                </form>
+                        <%--<span class="input-group-btn">--%>
+                            <%--<button type="submit" class="btn btn-default">--%>
+                                <%--<i class="fa fa-search"></i>--%>
+                            <%--</button>--%>
+                        <%--</span>--%>
+                    <%--</div>--%>
+                <%--</form>--%>
             </div>
 
             <br>
@@ -122,12 +122,14 @@
                     <a href="/dashboard/admin/role/${page}">${page}</a>
                 </li>
 
-                <li>
-                    <a href="#">&rsaquo;</a>
-                </li>
-                <li>
-                    <a href="#">&raquo;</a>
-                </li>
+                <c:if test="${lastPage != page}">
+                    <li>
+                        <a href="/dashboard/admin/role/${page + 1}">&rsaquo;</a>
+                    </li>
+                    <li>
+                        <a href="/dashboard/admin/role/${lastPage}">&raquo;</a>
+                    </li>
+                </c:if>
             </ul>
         </div>
     </body>

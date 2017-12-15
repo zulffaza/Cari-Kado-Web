@@ -6,6 +6,7 @@ import com.example.carikado.service.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -31,6 +32,13 @@ public class RoleRESTController {
     @Autowired
     public RoleRESTController(RoleService roleService) {
         mRoleService = roleService;
+    }
+
+    @GetMapping("/api/role/count/all")
+    public MyResponse<Integer> countRoles() {
+        String message = "Count roles success";
+        Integer count = mRoleService.count();
+        return new MyResponse<>(message, count);
     }
 
     @GetMapping("/api/role/all")
@@ -117,6 +125,9 @@ public class RoleRESTController {
 
                 isDeleted = role == null;
             } catch (EmptyResultDataAccessException e) {
+                isDeleted = false;
+                LOGGER.error(e.getMessage());
+            } catch (DataIntegrityViolationException e) {
                 isDeleted = false;
                 LOGGER.error(e.getMessage());
             }

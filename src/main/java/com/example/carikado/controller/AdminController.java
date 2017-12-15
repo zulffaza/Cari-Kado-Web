@@ -58,8 +58,8 @@ public class AdminController {
 
     @GetMapping("/dashboard/admin/role/{page}")
     public String dashboardAdminRole(@PathVariable Integer page,
-                                     @RequestParam(required = false) Integer pageSize,
-                                     @RequestParam(required = false) Integer sort,
+                                     @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                     @RequestParam(required = false, defaultValue = "1") Integer sort,
                                      @ModelAttribute("message") String message,
                                      HttpSession httpSession,
                                      ModelMap modelMap) {
@@ -82,12 +82,22 @@ public class AdminController {
                 ResponseEntity<String> response = mRestTemplate.exchange(builder.buildAndExpand().toUriString(),
                         HttpMethod.GET, null, String.class);
 
+                ResponseEntity<String> responseCount = mRestTemplate.exchange(BASE_URL + "role/count/all",
+                        HttpMethod.GET, null, String.class);
+
                 MyResponse<ArrayList<Role>> myResponse;
+                MyResponse<Integer> myResponseCount;
+
                 ArrayList<Role> roles = new ArrayList<>();
+                Integer count = null;
 
                 try {
                     myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Role>>>() {});
+                    myResponseCount = mObjectMapper.readValue(responseCount.getBody(), new TypeReference<MyResponse<Integer>>() {});
+
                     roles = myResponse.getData();
+                    count = myResponseCount.getData();
+                    count = (int) Math.ceil((double) count / 10);
                 } catch (IOException e) {
                     LOGGER.error(e.getMessage());
                 }
@@ -95,6 +105,7 @@ public class AdminController {
                 modelMap.addAttribute("user", user);
                 modelMap.addAttribute("message", message);
                 modelMap.addAttribute("page", page);
+                modelMap.addAttribute("lastPage", count);
                 modelMap.addAttribute("pageSize", pageSize);
                 modelMap.addAttribute("sort", sort);
                 modelMap.addAttribute("roles", roles);
