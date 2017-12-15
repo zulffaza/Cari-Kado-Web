@@ -3,6 +3,7 @@ package com.example.carikado.controller;
 import com.example.carikado.model.MyResponse;
 import com.example.carikado.model.Role;
 import com.example.carikado.model.User;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +73,7 @@ public class IndexController {
         User user = null;
 
         try {
-            myResponse = mObjectMapper.readValue(response.getBody(), MyResponse.class);
+            myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<User>>() {});
             user = myResponse.getData();
         } catch (IOException e) {
             myResponse.setMessage("Internal server error");
@@ -114,7 +115,7 @@ public class IndexController {
             ArrayList<Role> roles = new ArrayList<>();
 
             try {
-                myResponse = mObjectMapper.readValue(response.getBody(), MyResponse.class);
+                myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Role>>>() {});
                 roles = myResponse.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());

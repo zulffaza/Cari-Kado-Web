@@ -3,6 +3,7 @@ package com.example.carikado.controller;
 import com.example.carikado.model.MyResponse;
 import com.example.carikado.model.Role;
 import com.example.carikado.model.User;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,16 @@ public class AdminController {
             return "redirect:/login";
     }
 
+    @GetMapping("/dashboard/admin/role")
+    public String dashboardAdminRole(HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null)
+            return user.getRole().getName().equals("Admin") ? "redirect:/dashboard/admin/role/1" : "redirect:/dashboard";
+        else
+            return "redirect:/login";
+    }
+
     @GetMapping("/dashboard/admin/role/{page}")
     public String dashboardAdminRole(@PathVariable Integer page,
                                      @RequestParam(required = false) Integer pageSize,
@@ -59,39 +70,36 @@ public class AdminController {
             boolean isAdmin = user.getRole().getName().equals("Admin");
 
             if (isAdmin) {
-                if (page > 0) {
-                    String pageString = String.valueOf(page);
-                    String pageSizeString = pageSize != null ? String.valueOf(pageSize) : null;
-                    String sortString = sort != null ? String.valueOf(sort) : null;
+                if (page < 0)
+                    page = 1;
 
-                    UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url);
+                UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url);
 
-                    builder.queryParam("page", pageString);
-                    builder.queryParam("pageSize", pageSizeString);
-                    builder.queryParam("sort", sortString);
+                builder.queryParam("page", page);
+                builder.queryParam("pageSize", pageSize);
+                builder.queryParam("sort", sort);
 
-                    ResponseEntity<String> response = mRestTemplate.exchange(builder.buildAndExpand().toUriString(),
-                            HttpMethod.GET, null, String.class);
+                ResponseEntity<String> response = mRestTemplate.exchange(builder.buildAndExpand().toUriString(),
+                        HttpMethod.GET, null, String.class);
 
-                    MyResponse<ArrayList<Role>> myResponse;
-                    ArrayList<Role> roles = new ArrayList<>();
+                MyResponse<ArrayList<Role>> myResponse;
+                ArrayList<Role> roles = new ArrayList<>();
 
-                    try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), MyResponse.class);
-                        roles = myResponse.getData();
-                    } catch (IOException e) {
-                        LOGGER.error(e.getMessage());
-                    }
+                try {
+                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Role>>>() {});
+                    roles = myResponse.getData();
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage());
+                }
 
-                    modelMap.addAttribute("message", message);
-                    modelMap.addAttribute("page", pageString);
-                    modelMap.addAttribute("pageSize", pageSizeString);
-                    modelMap.addAttribute("sort", sortString);
-                    modelMap.addAttribute("roles", roles);
+                modelMap.addAttribute("user", user);
+                modelMap.addAttribute("message", message);
+                modelMap.addAttribute("page", page);
+                modelMap.addAttribute("pageSize", pageSize);
+                modelMap.addAttribute("sort", sort);
+                modelMap.addAttribute("roles", roles);
 
-                    return "admin/role";
-                } else
-                    return "redirect:/dashboard/admin/role/1";
+                return "admin/role";
             } else
                 return "redirect:/dashboard";
         } else
@@ -160,6 +168,7 @@ public class AdminController {
         User user = (User) httpSession.getAttribute("user");
 
         if (user != null) {
+            modelMap.addAttribute("user", user);
             modelMap.addAttribute("message", message);
             modelMap.addAttribute("role", role);
 
@@ -170,15 +179,16 @@ public class AdminController {
 
     @GetMapping("/dashboard/admin/user/add")
     public String dashboardAdminAddUser(@ModelAttribute("message") String message,
-                                        @ModelAttribute("user") User user,
+                                        @ModelAttribute("user") User lastUser,
                                         HttpSession httpSession, ModelMap modelMap) {
         User user = (User) httpSession.getAttribute("user");
 
         // TODO make add user layout
 
         if (user != null) {
-            modelMap.addAttribute("message", message);
             modelMap.addAttribute("user", user);
+            modelMap.addAttribute("message", message);
+            modelMap.addAttribute("lastUser", lastUser);
 
             return user.getRole().getName().equals("Admin") ? "admin/addRole" : "redirect:/dashboard";
         } else
@@ -206,15 +216,17 @@ public class AdminController {
                     Role role = null;
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), MyResponse.class);
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Role>>() {});
                         role = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());
                     }
 
                     if (role != null) {
+                        modelMap.addAttribute("user", user);
                         modelMap.addAttribute("message", message);
                         modelMap.addAttribute("role", role);
+
                         return "admin/addRole";
                     } else
                         return "redirect:/dashboard/admin/role/1";
@@ -283,7 +295,9 @@ public class AdminController {
             if (isAdmin) {
                 HashMap<String, String> params = new HashMap<>();
 
-                if (roleId != null)
+                boolean isEdit = roleId != null;
+
+                if (isEdit)
                     params.put("id", String.valueOf(roleId));
 
                 params.put("name", roleName);
@@ -293,17 +307,37 @@ public class AdminController {
                 ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.POST, request, String.class);
                 MyResponse<Integer> myResponse;
                 Integer responseInt = null;
+                String message = isEdit ? "Edit " : "Add ";
 
                 try {
-                    myResponse = mObjectMapper.readValue(response.getBody(), MyResponse.class);
+                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
                     responseInt = myResponse.getData();
                 } catch (IOException e) {
                     LOGGER.error(e.getMessage());
                 }
 
-                //TODO menambahkan pengecekan response
+                if (responseInt != null && responseInt == 1) {
+                    message += "role success";
 
-                return "redirect:/dashboard/admin";
+                    redirectAttributes.addAttribute("message", message);
+                } else {
+                    if (responseInt == null)
+                        message = "Internal server error";
+                    else
+                        message += "role failed";
+
+                    Role role = new Role(roleName);
+
+                    redirectAttributes.addAttribute("message", message);
+                    redirectAttributes.addAttribute("role", role);
+                }
+
+                String returnString = "redirect:/dashboard/admin/role/add";
+
+                if (isEdit)
+                    returnString += "/" + roleId;
+
+                return returnString;
             } else
                 return "redirect:/dashboard";
         } else

@@ -8,16 +8,127 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<head>
-    <title>Admin - Role</title>
-</head>
-<body>
-    <c:forEach items="${roles}" var="role">
-        <h2>${role.name}</h2>
-        <a href="/dashboard/admin/delete/role/${role.id}">
-            <h3>Hapus</h3>
-        </a>
+    <head>
+        <title>Admin - Role</title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap-theme.min.css" />
+        <link rel="stylesheet" href="/webjars/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="/css/index.css" />
+    </head>
+    <body>
+        <nav class="navbar navbar-fixed-top" style="background: #A91E31;">
+            <div class="container-fluid" style="background: #A91E31;">
+                <div class="navbar-brand">
+                    <img src="/assets/admin/fullicon1.png" width="176" height="47" style="margin:1px">
+                </div>
+                <div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li style="margin: 4px">
+                            <a href="/dashboard/admin">HOME<span class="glyphicon"></span></a>
+                        </li>
+                        <li style="margin: 4px; background-color: #fbcd30;">
+                            <a href="/logout">LOGOUT<span class="glyphicon"></span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
         <br>
-    </c:forEach>
-</body>
+
+        <div class="container-fluid" style="background: #ffffff; margin-top: 120px; margin-left: 20px; margin-right: 20px;">
+            <div class="row">
+                <div class="col-md-6">
+                    <p style="font-size: 35px; color: #66060b;">
+                        <b>${user.userName.firstName} ${user.userName.middleName} ${user.userName.lastName} - <a href="/dashboard/admin/role/1">ROLE</a></b>
+                    </p>
+
+                    <a href="/dashboard/admin/role/add">
+                        <button class="btn btn-success btn-xs" style="width: 80px; height: 30px;">
+                            <i aria-hidden="true" class="fa fa-plus"></i> Tambah
+                        </button>
+                    </a>
+                </div>
+
+                <form method="GET" action="#" accept-charset="UTF-8" role="search" class="navbar-form navbar-right">
+                    <div class="input-group">
+                        <input type="text" name="search" placeholder="Search..." value="" class="form-control">
+
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-default">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+
+            <br>
+
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${roles}" var="role" varStatus="each">
+                            <tr>
+                                <td>
+                                    ${each.index + 1}
+                                </td>
+                                <td>
+                                    ${role.name}
+                                </td>
+                                <td>
+                                    <a href="/dashboard/admin/role/add/${role.id}">
+                                        <button class="btn btn-primary btn-xs" style="width: 70px; height: 28px;">
+                                            <i aria-hidden="true" class="fa fa-pencil-square-o"></i> Update
+                                        </button>
+                                    </a>
+                                    <a href="/dashboard/admin/role/delete/${role.id}">
+                                        <button class="btn btn-danger btn-xs" style="width: 70px; height: 28px;">
+                                            <i aria-hidden="true" class="fa fa-trash-o"></i> Delete
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+
+
+
+            <ul class="pagination">
+
+                <c:if test="${page != 1}">
+                    <li>
+                        <a href="/dashboard/admin/role/1">&laquo;</a>
+                    </li>
+                    <li>
+                        <a href="/dashboard/admin/role/${page - 1}">&lsaquo;</a>
+                    </li>
+                </c:if>
+
+                <li class="active">
+                    <a href="/dashboard/admin/role/${page}">${page}</a>
+                </li>
+
+                <li>
+                    <a href="#">&rsaquo;</a>
+                </li>
+                <li>
+                    <a href="#">&raquo;</a>
+                </li>
+            </ul>
+        </div>
+    </body>
 </html>
