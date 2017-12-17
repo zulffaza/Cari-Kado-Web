@@ -1,4 +1,10 @@
 package com.example.carikado.repository;
 
-public interface ProvinceRepository {
+import com.example.carikado.model.Province;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ProvinceRepository extends JpaRepository<Province, Integer> {
+
 }

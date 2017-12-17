@@ -29,15 +29,11 @@ public class RoleService {
         return mRoleRepository.findAll(pageable);
     }
 
-    public Role findRole(Integer id) {
-        return mRoleRepository.findOne(id);
-    }
+    public Role findRole(Integer id) { return mRoleRepository.findOne(id); }
 
     public Role addRole(Role role) {
         return mRoleRepository.save(role);
     }
 
-    public void deleteRole(Integer id) {
-        mRoleRepository.delete(id);
-    }
+    public void deleteRole(Integer id) { mRoleRepository.delete(id); }
 }

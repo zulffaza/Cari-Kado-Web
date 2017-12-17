@@ -2,14 +2,14 @@
 <%--
   Created by IntelliJ IDEA.
   User: Halimyr8
-  Date: 12/16/2017
-  Time: 2:48 AM
+  Date: 12/18/2017
+  Time: 2:15 AM
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Admin - Country</title>
+    <title>Admin - Province</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -44,10 +44,10 @@
     <div class="row">
         <div class="col-md-6">
             <p style="font-size: 35px; color: #66060b;">
-                <b>${user.userName.firstName} ${user.userName.middleName} ${user.userName.lastName} - <a href="/dashboard/admin/country/1">COUNTRY</a></b>
+                <b>${user.userName.firstName} ${user.userName.middleName} ${user.userName.lastName} - <a href="/dashboard/admin/province/1">PROVINCE</a></b>
             </p>
 
-            <a href="/dashboard/admin/country/add">
+            <a href="/dashboard/admin/province/add">
                 <button class="btn btn-success btn-xs" style="width: 80px; height: 30px;">
                     <i aria-hidden="true" class="fa fa-plus"></i> Tambah
                 </button>
@@ -75,11 +75,12 @@
             <tr>
                 <th>No</th>
                 <th>Negara</th>
+                <th>Provinsi</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-            <c:forEach items="${countries}" var="country" varStatus="each">
+            <c:forEach items="${provinces}" var="province" varStatus="each">
                 <tr>
                     <td>
                             ${each.index + 1}
@@ -88,12 +89,15 @@
                             ${country.name}
                     </td>
                     <td>
-                        <a href="/dashboard/admin/country/add/${country.id}">
+                            ${province.name}
+                    </td>
+                    <td>
+                        <a href="/dashboard/admin/province/add/${province.id}">
                             <button class="btn btn-primary btn-xs" style="width: 70px; height: 28px;">
                                 <i aria-hidden="true" class="fa fa-pencil-square-o"></i> Update
                             </button>
                         </a>
-                        <a href="/dashboard/admin/country/delete/${country.id}">
+                        <a href="/dashboard/admin/province/delete/${province.id}">
                             <button class="btn btn-danger btn-xs" style="width: 70px; height: 28px;">
                                 <i aria-hidden="true" class="fa fa-trash-o"></i> Delete
                             </button>
@@ -111,23 +115,23 @@
 
         <c:if test="${page != 1}">
             <li>
-                <a href="/dashboard/admin/country/1">&laquo;</a>
+                <a href="/dashboard/admin/province/1">&laquo;</a>
             </li>
             <li>
-                <a href="/dashboard/admin/country/${page - 1}">&lsaquo;</a>
+                <a href="/dashboard/admin/province/${page - 1}">&lsaquo;</a>
             </li>
         </c:if>
 
         <li class="active">
-            <a href="/dashboard/admin/country/${page}">${page}</a>
+            <a href="/dashboard/admin/province/${page}">${page}</a>
         </li>
 
         <c:if test="${lastPage != page}">
             <li>
-                <a href="/dashboard/admin/country/${page + 1}">&rsaquo;</a>
+                <a href="/dashboard/admin/province/${page + 1}">&rsaquo;</a>
             </li>
             <li>
-                <a href="/dashboard/admin/country/${lastPage}">&raquo;</a>
+                <a href="/dashboard/admin/province/${lastPage}">&raquo;</a>
             </li>
         </c:if>
     </ul>
