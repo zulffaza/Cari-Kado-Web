@@ -57,10 +57,17 @@
                     </a>
                 </center>
                 <center>
+                    <a href="/dashboard/admin/user/1">
                     <button class="button btn btn-alert menu-dashboard">USER</button>
+                    </a>
                 </center>
                 <center>
+                    <a href="/dashboard/admin/country/1">
                     <button class="button btn btn-alert menu-dashboard">COUNTRY</button>
+                    </a>
+                </center>
+                <center>
+                    <button class="button btn btn-alert menu-dashboard">PROVINCE</button>
                 </center>
                 <center>
                     <button class="button btn btn-alert menu-dashboard">CITY</button>
