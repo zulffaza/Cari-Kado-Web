@@ -13,20 +13,20 @@ import java.util.List;
 @Service("cityService")
 public class CityService {
 
-    private CityRepository cityRepository;
+    private CityRepository mCityRepository;
 
     @Autowired
-    public CityService (CityRepository cityRepository) { cityRepository = cityRepository; }
+    public CityService (CityRepository cityRepository) { mCityRepository = cityRepository; }
 
-    public Integer count() { return (int) cityRepository.count(); }
+    public Integer count() { return (int) mCityRepository.count(); }
 
-    public List<City> findAll() { return cityRepository.findAll(); }
+    public List<City> findAll() { return mCityRepository.findAll(); }
 
-    public Page<City> findAllPageable(Pageable pageable) { return cityRepository.findAll(pageable); }
+    public Page<City> findAllPageable(Pageable pageable) { return mCityRepository.findAll(pageable); }
 
-    public City findCity(Integer id) { return cityRepository.findOne(id); }
+    public City findCity(Integer id) { return mCityRepository.findOne(id); }
 
-    public City addCity(City city) { return cityRepository.save(city); }
+    public City addCity(City city) { return mCityRepository.save(city); }
 
-    public void deleteCity(Integer id) { cityRepository.delete(id); }
+    public void deleteCity(Integer id) { mCityRepository.delete(id); }
 }

@@ -130,8 +130,6 @@ public class ProvinceRESTController {
             message = "Province add failed - Province already exists";
             response = 0;
         } catch (Exception e) {
-            e.printStackTrace();
-
             message = "Province add failed - Internal Server Error";
             response = 0;
         }

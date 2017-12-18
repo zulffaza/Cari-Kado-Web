@@ -72,7 +72,9 @@
                     </a>
                 </center>
                 <center>
-                    <button class="button btn btn-alert menu-dashboard">CITY</button>
+                    <a href="/dashboard/admin/city/1">
+                        <button class="button btn btn-alert menu-dashboard">CITY</button>
+                    </a>
                 </center>
                 <center>
                     <button class="button btn btn-alert menu-dashboard">DISTRICT</button>
