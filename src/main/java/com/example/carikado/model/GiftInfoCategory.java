@@ -17,9 +17,6 @@ public class GiftInfoCategory implements Serializable {
     @Column(name = "gift_info_category_name", nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "giftInfoCategories")
-    private List<GiftInfo> giftInfos = new ArrayList<>();
-
     public GiftInfoCategory() {
 
     }
@@ -42,17 +39,5 @@ public class GiftInfoCategory implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void addGiftInfo(GiftInfo giftInfo) {
-        giftInfos.add(giftInfo);
-    }
-
-    public void removeGiftInfo(GiftInfo giftInfo) {
-        giftInfos.remove(giftInfo);
-    }
-
-    public List<GiftInfo> getGiftInfos() {
-        return giftInfos;
     }
 }

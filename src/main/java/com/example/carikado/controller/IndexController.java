@@ -54,6 +54,16 @@ public class IndexController {
             return "redirect:/dashboard";
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null)
+            httpSession.removeAttribute("user");
+
+        return "redirect:/login";
+    }
+
     @PostMapping("/login")
     public String loginPost(@RequestParam("userEmail") String userEmail,
                             @RequestParam("userPassword") String userPassword,

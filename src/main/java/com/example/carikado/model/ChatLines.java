@@ -15,10 +15,6 @@ public class ChatLines implements Serializable {
     @Column(name = "chat_lines_text", nullable = false)
     private String text;
 
-    @ManyToOne
-    @JoinColumn(name = "chats_id", nullable = false)
-    private Chats chats;
-
     public ChatLines() {
 
     }
@@ -41,13 +37,5 @@ public class ChatLines implements Serializable {
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public Chats getChats() {
-        return chats;
-    }
-
-    public void setChats(Chats chats) {
-        this.chats = chats;
     }
 }

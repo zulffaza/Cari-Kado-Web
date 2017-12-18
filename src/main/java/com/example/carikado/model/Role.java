@@ -45,7 +45,7 @@ public class Role implements Serializable {
             Role role = (Role) obj;
 
             if (role.getId() != 0)
-                return id == role.getId();
+                return id == role.getId().intValue();
             else
                 return name.equals(role.getName());
         } else

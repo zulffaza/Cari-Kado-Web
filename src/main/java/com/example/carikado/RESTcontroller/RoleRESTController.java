@@ -1,6 +1,7 @@
 package com.example.carikado.RESTcontroller;
 
 import com.example.carikado.model.MyResponse;
+import com.example.carikado.model.MyPage;
 import com.example.carikado.model.Role;
 import com.example.carikado.service.RoleService;
 import org.slf4j.Logger;
@@ -8,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
@@ -49,11 +51,11 @@ public class RoleRESTController {
     }
 
     @GetMapping("/api/role")
-    public MyResponse<List> findRoles(@RequestParam(required = false, defaultValue = "0") Integer page,
-                                      @RequestParam(required = false, defaultValue = "10") Integer pageSize,
-                                      @RequestParam(required = false) Integer sort) {
+    public MyResponse<MyPage<List>> findRoles(@RequestParam(required = false, defaultValue = "0") Integer page,
+                                              @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                              @RequestParam(required = false) Integer sort) {
         ArrayList<String> properties = new ArrayList<>();
-        List<Role> roles = null;
+        List<Role> roles;
         String message;
         Sort.Direction direction;
 
@@ -74,11 +76,21 @@ public class RoleRESTController {
 
         Sort sortOrder = new Sort(direction, properties);
         PageRequest pageRequest = new PageRequest(page, pageSize, sortOrder);
-        roles = mRoleService.findAllPageable(pageRequest).getContent();
+        Page<Role> rolePage = mRoleService.findAllPageable(pageRequest);
 
+        roles = rolePage.getContent();
         message = "Find gift info success";
 
-        return new MyResponse<>(message, roles);
+        MyPage<List> myPage = new MyPage<>();
+
+        myPage.setPage(++page);
+        myPage.setLastPage(rolePage.getTotalPages());
+        myPage.setPageSize(pageSize);
+        myPage.setSort(sort == null ? 1 : sort);
+        myPage.setTotalElement(rolePage.getTotalElements());
+        myPage.setData(roles);
+
+        return new MyResponse<>(message, myPage);
     }
 
     @GetMapping("/api/role/{roleId}")
@@ -98,14 +110,37 @@ public class RoleRESTController {
 
     @PostMapping("/api/role/add")
     public MyResponse<Integer> addRole(@RequestBody Role role) {
-        LOGGER.info(role.getId() + "");
-        LOGGER.info(role.getName());
+        String message;
+        int response;
 
-        role = mRoleService.addRole(role);
+        if (role.getId() != null) {
+            long usersCount = mRoleService.countUsers(role.getId());
 
-        boolean isSuccess = role != null;
-        String message = isSuccess ? "Role add success" : "Role add failed";
-        int response = isSuccess ? 1 : 0;
+            if (usersCount == 0) {
+                role = mRoleService.addRole(role);
+
+                boolean isSuccess = role != null;
+                message = isSuccess ? "Role edit success" : "Role edit failed";
+                response = isSuccess ? 1 : 0;
+            } else {
+                message = "Role edit failed - Role in use";
+                response = 0;
+            }
+        } else {
+            try {
+                role = mRoleService.addRole(role);
+
+                boolean isSuccess = role != null;
+                message = isSuccess ? "Role add success" : "Role add failed";
+                response = isSuccess ? 1 : 0;
+            } catch (DataIntegrityViolationException e) {
+                message = "Role add failed - Role already exists";
+                response = 0;
+            } catch (Exception e) {
+                message = "Role add failed - Internal Server Error";
+                response = 0;
+            }
+        }
 
         return new MyResponse<>(message, response);
     }
@@ -116,22 +151,18 @@ public class RoleRESTController {
         Integer response;
 
         if (roleId != null && roleId >= 0) {
-            Role role;
-            boolean isDeleted;
-
             try {
                 mRoleService.deleteRole(roleId);
-                role = mRoleService.findRole(roleId);
-
-                isDeleted = role == null;
+                response = 1;
             } catch (EmptyResultDataAccessException e) {
-                isDeleted = false;
                 LOGGER.error(e.getMessage());
+                response = 0;
             } catch (DataIntegrityViolationException e) {
-                isDeleted = false;
                 LOGGER.error(e.getMessage());
+                response = 0;
             }
 
+            boolean isDeleted = response == 1;
             message = isDeleted ? "Delete role success" : "Delete role failed";
             response = isDeleted ? 1 : 0;
         } else {

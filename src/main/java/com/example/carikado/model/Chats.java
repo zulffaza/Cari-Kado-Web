@@ -28,7 +28,8 @@ public class Chats implements Serializable {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "chats")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "chats_id", nullable = false)
     private List<ChatLines> chatLineses = new ArrayList<>();
 
     public Chats() {
@@ -82,12 +83,10 @@ public class Chats implements Serializable {
 
     public void addChatLines(ChatLines chatLines) {
         chatLineses.add(chatLines);
-        chatLines.setChats(this);
     }
 
     public void removeChatLines(ChatLines chatLines) {
         chatLineses.remove(chatLines);
-        chatLines.setChats(null);
     }
 
     public List<ChatLines> getChatLineses() {

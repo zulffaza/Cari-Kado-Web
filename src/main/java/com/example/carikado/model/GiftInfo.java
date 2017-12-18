@@ -31,14 +31,19 @@ public class GiftInfo implements Serializable {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "gift_info_age_id", nullable = false)
     private GiftInfoAge giftInfoAge;
 
     @ManyToMany
+    @JoinTable(
+            name = "gift_info_categories",
+            joinColumns = @JoinColumn(name = "gift_info_id"),
+            inverseJoinColumns = @JoinColumn(name = "gift_info_category_id")
+    )
     private List<GiftInfoCategory> giftInfoCategories = new ArrayList<>();
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "gift_info_budget_id", nullable = false)
     private GiftInfoBudget giftInfoBudget;
 

@@ -17,7 +17,7 @@ public class Province implements Serializable {
     @Column(name = "province_name", nullable = false)
     private String name;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "country_id")
     private Country country;
 

@@ -1,5 +1,6 @@
 package com.example.carikado.RESTcontroller;
 
+import com.example.carikado.model.MyPage;
 import com.example.carikado.model.MyResponse;
 import com.example.carikado.model.User;
 import com.example.carikado.service.UserService;
@@ -7,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
@@ -49,9 +51,9 @@ public class UserRESTController {
     }
 
     @GetMapping("/api/user")
-    public MyResponse<List> findUsers(@RequestParam(required = false, defaultValue = "0") Integer page,
-                                      @RequestParam(required = false, defaultValue = "10") Integer pageSize,
-                                      @RequestParam(required = false) Integer sort) {
+    public MyResponse<MyPage<List>> findUsers(@RequestParam(required = false, defaultValue = "0") Integer page,
+                                             @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                             @RequestParam(required = false) Integer sort) {
         ArrayList<String> properties = new ArrayList<>();
         List<User> users;
         String message;
@@ -78,11 +80,21 @@ public class UserRESTController {
 
         Sort sortOrder = new Sort(direction, properties);
         PageRequest pageRequest = new PageRequest(page, pageSize, sortOrder);
-        users = mUserService.findAllPageable(pageRequest).getContent();
+        Page<User> userPage = mUserService.findAllPageable(pageRequest);
 
+        users = userPage.getContent();
         message = "Find user success";
 
-        return new MyResponse<>(message, users);
+        MyPage<List> myPage = new MyPage<>();
+
+        myPage.setPage(++page);
+        myPage.setLastPage(userPage.getTotalPages());
+        myPage.setPageSize(pageSize);
+        myPage.setSort(sort == null ? 1 : sort);
+        myPage.setTotalElement(userPage.getTotalElements());
+        myPage.setData(users);
+
+        return new MyResponse<>(message, myPage);
     }
 
     @GetMapping("/api/user/{userId}")

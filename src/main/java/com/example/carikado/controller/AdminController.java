@@ -1,8 +1,6 @@
 package com.example.carikado.controller;
 
-import com.example.carikado.model.MyResponse;
-import com.example.carikado.model.Role;
-import com.example.carikado.model.User;
+import com.example.carikado.model.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -42,7 +40,6 @@ public class AdminController {
 
         if (user != null)
             return user.getRole().getName().equals("Admin") ? "admin/index" : "redirect:/dashboard";
-            //return user.getCountry().getName().equals("Admin") ? "admin/index" : "redirect:/dashboard";
         else
             return "redirect:/login";
     }
@@ -57,15 +54,15 @@ public class AdminController {
             return "redirect:/login";
     }
 
-//    @GetMapping("/dashboard/admin/country")
-//    public String dashboardAdminCountry(HttpSession httpSession) {
-//        User user = (User) httpSession.getAttribute("user");
-//
-//        if (user != null)
-//            return user.getCountry().getName().equals("Admin") ? "redirect:/dashboard/admin/country/1" : "redirect:/dashboard";
-//        else
-//            return "redirect:/login";
-//    }
+    @GetMapping("/dashboard/admin/country")
+    public String dashboardAdminCountry(HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null)
+            return user.getRole().getName().equals("Admin") ? "redirect:/dashboard/admin/country/1" : "redirect:/dashboard";
+        else
+            return "redirect:/login";
+    }
 
     @GetMapping("/dashboard/admin/role/{page}")
     public String dashboardAdminRole(@PathVariable Integer page,
@@ -82,7 +79,7 @@ public class AdminController {
 
             if (isAdmin) {
                 if (page < 0)
-                    page = 1;
+                    return "redirect:/dashboard/admin/role/1";
 
                 UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url);
 
@@ -93,32 +90,26 @@ public class AdminController {
                 ResponseEntity<String> response = mRestTemplate.exchange(builder.buildAndExpand().toUriString(),
                         HttpMethod.GET, null, String.class);
 
-                ResponseEntity<String> responseCount = mRestTemplate.exchange(BASE_URL + "role/count/all",
-                        HttpMethod.GET, null, String.class);
-
-                MyResponse<ArrayList<Role>> myResponse;
-                MyResponse<Integer> myResponseCount;
-
+                MyResponse<MyPage<ArrayList<Role>>> myResponse;
+                MyPage<ArrayList<Role>> myPage = new MyPage<>();
                 ArrayList<Role> roles = new ArrayList<>();
-                Integer count = null;
 
                 try {
-                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Role>>>() {});
-                    myResponseCount = mObjectMapper.readValue(responseCount.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                    myResponse = mObjectMapper.readValue(response.getBody(),
+                            new TypeReference<MyResponse<MyPage<ArrayList<Role>>>>() {});
 
-                    roles = myResponse.getData();
-                    count = myResponseCount.getData();
-                    count = (int) Math.ceil((double) count / 10);
+                    myPage = myResponse.getData();
+                    roles = myPage.getData();
                 } catch (IOException e) {
                     LOGGER.error(e.getMessage());
                 }
 
                 modelMap.addAttribute("user", user);
                 modelMap.addAttribute("message", message);
-                modelMap.addAttribute("page", page);
-                modelMap.addAttribute("lastPage", count);
-                modelMap.addAttribute("pageSize", pageSize);
-                modelMap.addAttribute("sort", sort);
+                modelMap.addAttribute("page", myPage.getPage());
+                modelMap.addAttribute("lastPage", myPage.getLastPage());
+                modelMap.addAttribute("pageSize", myPage.getPageSize());
+                modelMap.addAttribute("sort", myPage.getSort());
                 modelMap.addAttribute("roles", roles);
 
                 return "admin/role";
@@ -128,66 +119,60 @@ public class AdminController {
             return "redirect:/login";
     }
 
-//    @GetMapping("/dashboard/admin/country/{page}")
-//    public String dashboardAdminCountry(@PathVariable Integer page,
-//                                     @RequestParam(required = false, defaultValue = "10") Integer pageSize,
-//                                     @RequestParam(required = false, defaultValue = "1") Integer sort,
-//                                     @ModelAttribute("message") String message,
-//                                     HttpSession httpSession,
-//                                     ModelMap modelMap) {
-//        String url = BASE_URL + "country";
-//        User user = (User) httpSession.getAttribute("user");
-//
-//        if (user != null) {
-//            boolean isAdmin = user.getCountry().getName().equals("Admin");
-//
-//            if (isAdmin) {
-//                if (page < 0)
-//                    page = 1;
-//
-//                UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url);
-//
-//                builder.queryParam("page", page);
-//                builder.queryParam("pageSize", pageSize);
-//                builder.queryParam("sort", sort);
-//
-//                ResponseEntity<String> response = mRestTemplate.exchange(builder.buildAndExpand().toUriString(),
-//                        HttpMethod.GET, null, String.class);
-//
-//                ResponseEntity<String> responseCount = mRestTemplate.exchange(BASE_URL + "country/count/all",
-//                        HttpMethod.GET, null, String.class);
-//
-//                MyResponse<ArrayList<Country>> myResponse;
-//                MyResponse<Integer> myResponseCount;
-//
-//                ArrayList<Country> countries = new ArrayList<>();
-//                Integer count = null;
-//
-//                try {
-//                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {});
-//                    myResponseCount = mObjectMapper.readValue(responseCount.getBody(), new TypeReference<MyResponse<Integer>>() {});
-//
-//                    countries = myResponse.getData();
-//                    count = myResponseCount.getData();
-//                    count = (int) Math.ceil((double) count / 10);
-//                } catch (IOException e) {
-//                    LOGGER.error(e.getMessage());
-//                }
-//
-//                modelMap.addAttribute("user", user);
-//                modelMap.addAttribute("message", message);
-//                modelMap.addAttribute("page", page);
-//                modelMap.addAttribute("lastPage", count);
-//                modelMap.addAttribute("pageSize", pageSize);
-//                modelMap.addAttribute("sort", sort);
-//                modelMap.addAttribute("roles", roles);
-//
-//                return "admin/country";
-//            } else
-//                return "redirect:/dashboard";
-//        } else
-//            return "redirect:/login";
-//    }
+    @GetMapping("/dashboard/admin/country/{page}")
+    public String dashboardAdminCountry(@PathVariable Integer page,
+                                     @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                     @RequestParam(required = false, defaultValue = "1") Integer sort,
+                                     @ModelAttribute("message") String message,
+                                     HttpSession httpSession,
+                                     ModelMap modelMap) {
+        String url = BASE_URL + "country";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            boolean isAdmin = user.getRole().getName().equals("Admin");
+
+            if (isAdmin) {
+                if (page < 0)
+                    return "redirect:/dashboard/admin/country/1";
+
+                UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url);
+
+                builder.queryParam("page", page);
+                builder.queryParam("pageSize", pageSize);
+                builder.queryParam("sort", sort);
+
+                ResponseEntity<String> response = mRestTemplate.exchange(builder.buildAndExpand().toUriString(),
+                        HttpMethod.GET, null, String.class);
+
+                MyResponse<MyPage<ArrayList<Country>>> myResponse;
+                MyPage<ArrayList<Country>> myPage = new MyPage<>();
+                ArrayList<Country> countries = new ArrayList<>();
+
+                try {
+                    myResponse = mObjectMapper.readValue(response.getBody(),
+                            new TypeReference<MyResponse<MyPage<ArrayList<Country>>>>() {});
+
+                    myPage = myResponse.getData();
+                    countries = myPage.getData();
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage());
+                }
+
+                modelMap.addAttribute("user", user);
+                modelMap.addAttribute("message", message);
+                modelMap.addAttribute("page", myPage.getPage());
+                modelMap.addAttribute("lastPage", myPage.getLastPage());
+                modelMap.addAttribute("pageSize", myPage.getPageSize());
+                modelMap.addAttribute("sort", myPage.getSort());
+                modelMap.addAttribute("countries", countries);
+
+                return "admin/country";
+            } else
+                return "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
 
     @GetMapping("/dashboard/admin/user/{page}")
     public String dashboardAdminUser(@PathVariable Integer page,
@@ -221,7 +206,7 @@ public class AdminController {
                     ArrayList<User> users = new ArrayList<>();
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), MyResponse.class);
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<User>>>() {});
                         users = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());
@@ -260,21 +245,21 @@ public class AdminController {
             return "redirect:/login";
     }
 
-//    @GetMapping("/dashboard/admin/country/add")
-//    public String dashboardAdminAddCountry(@ModelAttribute("message") String message,
-//                                        @ModelAttribute("country") Country country,
-//                                        HttpSession httpSession, ModelMap modelMap) {
-//        User user = (User) httpSession.getAttribute("user");
-//
-//        if (user != null) {
-//            modelMap.addAttribute("user", user);
-//            modelMap.addAttribute("message", message);
-//            modelMap.addAttribute("country", country);
-//
-//            return user.getCountry().getName().equals("Admin") ? "admin/addCountry" : "redirect:/dashboard";
-//        } else
-//            return "redirect:/login";
-//    }
+    @GetMapping("/dashboard/admin/country/add")
+    public String dashboardAdminAddCountry(@ModelAttribute("message") String message,
+                                        @ModelAttribute("country") Country country,
+                                        HttpSession httpSession, ModelMap modelMap) {
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            modelMap.addAttribute("user", user);
+            modelMap.addAttribute("message", message);
+            modelMap.addAttribute("country", country);
+
+            return user.getRole().getName().equals("Admin") ? "admin/addCountry" : "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
 
     @GetMapping("/dashboard/admin/user/add")
     public String dashboardAdminAddUser(@ModelAttribute("message") String message,
@@ -337,48 +322,48 @@ public class AdminController {
             return "redirect:/login";
     }
 
-//    @GetMapping("/dashboard/admin/country/add/{countryId}")
-//    public String dashboardAdminAddCountry(@PathVariable(required = false) Integer countryId,
-//                                        @ModelAttribute("message") String message,
-//                                        HttpSession httpSession,
-//                                        ModelMap modelMap) {
-//        String url = BASE_URL + "country";
-//        User user = (User) httpSession.getAttribute("user");
-//
-//        if (user != null) {
-//            boolean isAdmin = user.getCountry().getName().equals("Admin");
-//
-//            if (isAdmin) {
-//                if (roleId != null) {
-//                    url += "/" + countryId;
-//
-//                    ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.GET, null,
-//                            String.class);
-//                    MyResponse<Country> myResponse;
-//                    Country country = null;
-//
-//                    try {
-//                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Country>>() {});
-//                        country = myResponse.getData();
-//                    } catch (IOException e) {
-//                        LOGGER.error(e.getMessage());
-//                    }
-//
-//                    if (country != null) {
-//                        modelMap.addAttribute("user", user);
-//                        modelMap.addAttribute("message", message);
-//                        modelMap.addAttribute("country", country);
-//
-//                        return "admin/addCountry";
-//                    } else
-//                        return "redirect:/dashboard/admin/country/1";
-//                } else
-//                    return "redirect:/dashboard/admin/country/1";
-//            } else
-//                return "redirect:/dashboard";
-//        } else
-//            return "redirect:/login";
-//    }
+    @GetMapping("/dashboard/admin/country/add/{countryId}")
+    public String dashboardAdminAddCountry(@PathVariable(required = false) Integer countryId,
+                                        @ModelAttribute("message") String message,
+                                        HttpSession httpSession,
+                                        ModelMap modelMap) {
+        String url = BASE_URL + "country";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            boolean isAdmin = user.getRole().getName().equals("Admin");
+
+            if (isAdmin) {
+                if (countryId != null) {
+                    url += "/" + countryId;
+
+                    ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.GET, null,
+                            String.class);
+                    MyResponse<Country> myResponse;
+                    Country country = null;
+
+                    try {
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Country>>() {});
+                        country = myResponse.getData();
+                    } catch (IOException e) {
+                        LOGGER.error(e.getMessage());
+                    }
+
+                    if (country != null) {
+                        modelMap.addAttribute("user", user);
+                        modelMap.addAttribute("message", message);
+                        modelMap.addAttribute("country", country);
+
+                        return "admin/addCountry";
+                    } else
+                        return "redirect:/dashboard/admin/country/1";
+                } else
+                    return "redirect:/dashboard/admin/country/1";
+            } else
+                return "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
 
     @GetMapping("/dashboard/admin/user/add/{userId}")
     public String dashboardAdminAddUser(@PathVariable(required = false) Integer userId,
@@ -401,7 +386,7 @@ public class AdminController {
                     user = null;
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), MyResponse.class);
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
                         user = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());
@@ -447,9 +432,9 @@ public class AdminController {
                 HttpEntity<HashMap> request = new HttpEntity<>(params);
 
                 ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.POST, request, String.class);
-                MyResponse<Integer> myResponse;
+                MyResponse<Integer> myResponse = null;
                 Integer responseInt = null;
-                String message = isEdit ? "Edit " : "Add ";
+                String message;
 
                 try {
                     myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
@@ -459,14 +444,12 @@ public class AdminController {
                 }
 
                 if (responseInt != null && responseInt == 1) {
-                    message += "role success";
-
-                    redirectAttributes.addAttribute("message", message);
+                    redirectAttributes.addAttribute("message", myResponse.getMessage());
                 } else {
                     if (responseInt == null)
                         message = "Internal server error";
                     else
-                        message += "role failed";
+                        message = myResponse.getMessage();
 
                     Role role = new Role(roleName);
 
@@ -486,68 +469,66 @@ public class AdminController {
             return "redirect:/login";
     }
 
-//    @PostMapping("/dashboard/admin/country/add")
-//    public String dashboardAdminAddCountry(@RequestParam(name = "countryId", required = false) Integer countryId,
-//                                        @RequestParam("countryName") String countryName,
-//                                        HttpSession httpSession,
-//                                        RedirectAttributes redirectAttributes) {
-//        String url = BASE_URL + "country/add";
-//        User user = (User) httpSession.getAttribute("user");
-//
-//        if (user != null) {
-//            boolean isAdmin = user.getCountry().getName().equals("Admin");
-//
-//            if (isAdmin) {
-//                HashMap<String, String> params = new HashMap<>();
-//
-//                boolean isEdit = countryId != null;
-//
-//                if (isEdit)
-//                    params.put("id", String.valueOf(countryId));
-//
-//                params.put("name", countryName);
-//
-//                HttpEntity<HashMap> request = new HttpEntity<>(params);
-//
-//                ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.POST, request, String.class);
-//                MyResponse<Integer> myResponse;
-//                Integer responseInt = null;
-//                String message = isEdit ? "Edit " : "Add ";
-//
-//                try {
-//                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
-//                    responseInt = myResponse.getData();
-//                } catch (IOException e) {
-//                    LOGGER.error(e.getMessage());
-//                }
-//
-//                if (responseInt != null && responseInt == 1) {
-//                    message += "country success";
-//
-//                    redirectAttributes.addAttribute("message", message);
-//                } else {
-//                    if (responseInt == null)
-//                        message = "Internal server error";
-//                    else
-//                        message += "country failed";
-//
-//                    Country country = new Country(countryName);
-//
-//                    redirectAttributes.addAttribute("message", message);
-//                    redirectAttributes.addAttribute("country", country);
-//                }
-//
-//                String returnString = "redirect:/dashboard/admin/country/add";
-//
-//                if (isEdit)
-//                    returnString += "/" + countryId;
-//
-//                return returnString;
-//            } else
-//                return "redirect:/dashboard";
-//        } else
-//            return "redirect:/login";
-//    }
+    @PostMapping("/dashboard/admin/country/add")
+    public String dashboardAdminAddCountry(@RequestParam(name = "countryId", required = false) Integer countryId,
+                                        @RequestParam("countryName") String countryName,
+                                        HttpSession httpSession,
+                                        RedirectAttributes redirectAttributes) {
+        String url = BASE_URL + "country/add";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            boolean isAdmin = user.getRole().getName().equals("Admin");
+
+            if (isAdmin) {
+                HashMap<String, String> params = new HashMap<>();
+
+                boolean isEdit = countryId != null;
+
+                if (isEdit)
+                    params.put("id", String.valueOf(countryId));
+
+                params.put("name", countryName);
+
+                HttpEntity<HashMap> request = new HttpEntity<>(params);
+
+                ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.POST, request, String.class);
+                MyResponse<Integer> myResponse = null;
+                Integer responseInt = null;
+                String message;
+
+                try {
+                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                    responseInt = myResponse.getData();
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage());
+                }
+
+                if (responseInt != null && responseInt == 1) {
+                    redirectAttributes.addAttribute("message", myResponse.getMessage());
+                } else {
+                    if (responseInt == null)
+                        message = "Internal server error";
+                    else
+                        message = myResponse.getMessage();
+
+                    Country country = new Country(countryName);
+
+                    redirectAttributes.addAttribute("message", message);
+                    redirectAttributes.addAttribute("country", country);
+                }
+
+                String returnString = "redirect:/dashboard/admin/country/add";
+
+                if (isEdit)
+                    returnString += "/" + countryId;
+
+                return returnString;
+            } else
+                return "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
 
     @PostMapping("/dashboard/admin/user/add")
     public String dashboardAdminAddUser(@RequestParam(name = "userId", required = false) Integer userId,
@@ -576,7 +557,7 @@ public class AdminController {
                 String message;
 
                 try {
-                    myResponse = mObjectMapper.readValue(response.getBody(), MyResponse.class);
+                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
                     responseInt = myResponse.getData();
                 } catch (IOException e) {
                     LOGGER.error(e.getMessage());
@@ -618,7 +599,7 @@ public class AdminController {
                     Integer responseInt = null;
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), MyResponse.class);
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
                         responseInt = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());
@@ -636,42 +617,42 @@ public class AdminController {
             return "redirect:/login";
     }
 
-//    @GetMapping("/dashboard/admin/country/delete/{countryId}")
-//    public String dashboardAdminDeleteCountry(@PathVariable Integer countryId,
-//                                           HttpSession httpSession,
-//                                           RedirectAttributes redirectAttributes) {
-//        String url = BASE_URL + "country/";
-//        User user = (User) httpSession.getAttribute("user");
-//
-//        if (user != null) {
-//            boolean isAdmin = user.getCountry().getName().equals("Admin");
-//
-//            if (isAdmin) {
-//                if (countryId != null) {
-//                    url += countryId;
-//
-//                    ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
-//                    MyResponse<Integer> myResponse;
-//                    Integer responseInt = null;
-//
-//                    try {
-//                        myResponse = mObjectMapper.readValue(response.getBody(), MyResponse.class);
-//                        responseInt = myResponse.getData();
-//                    } catch (IOException e) {
-//                        LOGGER.error(e.getMessage());
-//                    }
-//
-//                    String message = responseInt != null && responseInt == 1 ? "Country delete success" : "Country delete failed";
-//
-//                    redirectAttributes.addAttribute("message", message);
-//                    return "redirect:/dashboard/admin/country/1";
-//                } else
-//                    return "redirect:/dashboard/admin";
-//            } else
-//                return "redirect:/dashboard";
-//        } else
-//            return "redirect:/login";
-//    }
+    @GetMapping("/dashboard/admin/country/delete/{countryId}")
+    public String dashboardAdminDeleteCountry(@PathVariable Integer countryId,
+                                           HttpSession httpSession,
+                                           RedirectAttributes redirectAttributes) {
+        String url = BASE_URL + "country/";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            boolean isAdmin = user.getRole().getName().equals("Admin");
+
+            if (isAdmin) {
+                if (countryId != null) {
+                    url += countryId;
+
+                    ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
+                    MyResponse<Integer> myResponse;
+                    Integer responseInt = null;
+
+                    try {
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                        responseInt = myResponse.getData();
+                    } catch (IOException e) {
+                        LOGGER.error(e.getMessage());
+                    }
+
+                    String message = responseInt != null && responseInt == 1 ? "Country delete success" : "Country delete failed";
+
+                    redirectAttributes.addAttribute("message", message);
+                    return "redirect:/dashboard/admin/country/1";
+                } else
+                    return "redirect:/dashboard/admin";
+            } else
+                return "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
 
     @GetMapping("/dashboard/admin/user/delete/{userId}")
     public String dashboardAdminDeleteUser(@PathVariable Integer userId,
@@ -692,7 +673,7 @@ public class AdminController {
                     Integer responseInt = null;
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), MyResponse.class);
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
                         responseInt = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());

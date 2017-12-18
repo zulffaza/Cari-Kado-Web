@@ -21,6 +21,10 @@ public class RoleService {
         return (int) mRoleRepository.count();
     }
 
+    public Integer countUsers(Integer roleId) {
+        return mRoleRepository.countUserByRoleId(roleId);
+    }
+
     public List<Role> findAll() {
         return mRoleRepository.findAll();
     }

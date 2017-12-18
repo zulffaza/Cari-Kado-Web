@@ -17,7 +17,7 @@ public class City implements Serializable {
     @Column(name = "city_name", nullable = false)
     private String name;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "province_id")
     private Province province;
 

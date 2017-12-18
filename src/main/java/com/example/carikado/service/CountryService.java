@@ -12,20 +12,20 @@ import java.util.List;
 @Service("countryService")
 public class CountryService {
 
-    private CountryRepository countryRepository;
+    private CountryRepository mCountryRepository;
 
     @Autowired
-    public CountryService(CountryRepository countryRepository) { countryRepository = countryRepository; }
+    public CountryService(CountryRepository countryRepository) { mCountryRepository = countryRepository; }
 
-    public Integer count() { return (int) countryRepository.count(); }
+    public Integer count() { return (int) mCountryRepository.count(); }
 
-    public List<Country> findAll() { return countryRepository.findAll();}
+    public List<Country> findAll() { return mCountryRepository.findAll();}
 
-    public Page<Country> findAllPageable(Pageable pageable) { return countryRepository.findAll(pageable); }
+    public Page<Country> findAllPageable(Pageable pageable) { return mCountryRepository.findAll(pageable); }
 
-    public Country findCountry(Integer id) { return countryRepository.findOne(id); }
+    public Country findCountry(Integer id) { return mCountryRepository.findOne(id); }
 
-    public Country addCountry(Country country) { return countryRepository.save(country); }
+    public Country addCountry(Country country) { return mCountryRepository.save(country); }
 
-    public void deleteCountry(Integer id) { countryRepository.delete(id); }
+    public void deleteCountry(Integer id) { mCountryRepository.delete(id); }
 }

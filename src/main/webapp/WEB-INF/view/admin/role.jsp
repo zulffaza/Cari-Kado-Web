@@ -42,10 +42,20 @@
 
         <div class="container-fluid" style="background: #ffffff; margin-top: 120px; margin-left: 20px; margin-right: 20px;">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <p style="font-size: 35px; color: #66060b;">
-                        <b>${user.userName.firstName} ${user.userName.middleName} ${user.userName.lastName} - <a href="/dashboard/admin/role/1">ROLE</a></b>
+                        <b>${user.userName.firstName} ${user.userName.middleName} ${user.userName.lastName} - ROLE</b>
                     </p>
+
+                    <hr>
+
+                    <c:if test="${not empty message}">
+                        <div class="alert alert-info">
+                            <strong>Info!</strong> ${message}
+                        </div>
+                    </c:if>
+
+                    <br>
 
                     <a href="/dashboard/admin/role/add">
                         <button class="btn btn-success btn-xs" style="width: 80px; height: 30px;">
@@ -82,7 +92,7 @@
                         <c:forEach items="${roles}" var="role" varStatus="each">
                             <tr>
                                 <td>
-                                    ${each.index + 1}
+                                    ${((page - 1) * 10) + (each.index + 1)}
                                 </td>
                                 <td>
                                     ${role.name}
@@ -105,29 +115,26 @@
                 </table>
             </div>
 
-
-
             <ul class="pagination">
-
                 <c:if test="${page != 1}">
                     <li>
-                        <a href="/dashboard/admin/role/1">&laquo;</a>
+                        <a href="/dashboard/admin/country/1">&laquo; first</a>
                     </li>
                     <li>
-                        <a href="/dashboard/admin/role/${page - 1}">&lsaquo;</a>
+                        <a href="/dashboard/admin/country/${page - 1}">&lsaquo; previous</a>
                     </li>
                 </c:if>
 
                 <li class="active">
-                    <a href="/dashboard/admin/role/${page}">${page}</a>
+                    <a href="/dashboard/admin/country/${page}">${page}</a>
                 </li>
 
                 <c:if test="${lastPage != page}">
                     <li>
-                        <a href="/dashboard/admin/role/${page + 1}">&rsaquo;</a>
+                        <a href="/dashboard/admin/country/${page + 1}">next &rsaquo;</a>
                     </li>
                     <li>
-                        <a href="/dashboard/admin/role/${lastPage}">&raquo;</a>
+                        <a href="/dashboard/admin/country/${lastPage}">last &raquo;</a>
                     </li>
                 </c:if>
             </ul>
