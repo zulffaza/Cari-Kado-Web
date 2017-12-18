@@ -31,7 +31,7 @@ public class GiftInfo implements Serializable {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne
     @JoinColumn(name = "gift_info_age_id", nullable = false)
     private GiftInfoAge giftInfoAge;
 
@@ -43,7 +43,7 @@ public class GiftInfo implements Serializable {
     )
     private List<GiftInfoCategory> giftInfoCategories = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne
     @JoinColumn(name = "gift_info_budget_id", nullable = false)
     private GiftInfoBudget giftInfoBudget;
 

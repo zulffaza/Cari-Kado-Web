@@ -36,15 +36,15 @@ public class User implements Serializable {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne
     @JoinColumn(name = "user_name_id", nullable = false)
     private UserName userName;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne
     @JoinColumn(name = "user_address_id", nullable = false)
     private UserAddress userAddress;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne
     @JoinColumn(name = "user_picture_id")
     private UserPicture userPicture;
 

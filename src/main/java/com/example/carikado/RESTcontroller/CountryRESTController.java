@@ -76,18 +76,18 @@ public class CountryRESTController {
 
         Sort sortOrder = new Sort(direction, properties);
         PageRequest pageRequest = new PageRequest(page, pageSize, sortOrder);
-        Page<Country> rolePage = mCountryService.findAllPageable(pageRequest);
+        Page<Country> countryPage = mCountryService.findAllPageable(pageRequest);
 
-        countries = rolePage.getContent();
+        countries = countryPage.getContent();
         message = "Find countries success";
 
         MyPage<List> myPage = new MyPage<>();
 
         myPage.setPage(++page);
-        myPage.setLastPage(rolePage.getTotalPages());
+        myPage.setLastPage(countryPage.getTotalPages());
         myPage.setPageSize(pageSize);
         myPage.setSort(sort == null ? 1 : sort);
-        myPage.setTotalElement(rolePage.getTotalElements());
+        myPage.setTotalElement(countryPage.getTotalElements());
         myPage.setData(countries);
 
         return new MyResponse<>(message, myPage);

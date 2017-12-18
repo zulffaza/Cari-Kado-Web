@@ -67,7 +67,9 @@
                     </a>
                 </center>
                 <center>
-                    <button class="button btn btn-alert menu-dashboard">PROVINCE</button>
+                    <a href="/dashboard/admin/province/1">
+                        <button class="button btn btn-alert menu-dashboard">PROVINCE</button>
+                    </a>
                 </center>
                 <center>
                     <button class="button btn btn-alert menu-dashboard">CITY</button>

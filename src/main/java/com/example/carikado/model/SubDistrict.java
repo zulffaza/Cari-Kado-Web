@@ -15,7 +15,7 @@ public class SubDistrict implements Serializable {
     @Column(name = "sub_district_name", nullable = false)
     private String name;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "district_id")
     private District district;
 

@@ -28,7 +28,7 @@ public class Chats implements Serializable {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany
     @JoinColumn(name = "chats_id", nullable = false)
     private List<ChatLines> chatLineses = new ArrayList<>();
 

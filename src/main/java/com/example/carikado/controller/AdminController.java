@@ -1,13 +1,12 @@
 package com.example.carikado.controller;
 
 import com.example.carikado.model.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -64,15 +63,15 @@ public class AdminController {
             return "redirect:/login";
     }
 
-//   @GetMapping("/dashboard/admin/province")
-//    public String dashboardAdminProvince(HttpSession httpSession) {
-//        User user = (User) httpSession.getAttribute("user");
-//
-//        if (user != null)
-//            return user.getProvince().getName().equals("Admin") ? "redirect:/dashboard/admin/province/1" : "redirect:/dashboard";
-//        else
-//            return "redirect:/login";
-//    }
+   @GetMapping("/dashboard/admin/province")
+    public String dashboardAdminProvince(HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null)
+            return user.getRole().getName().equals("Admin") ? "redirect:/dashboard/admin/province/1" : "redirect:/dashboard";
+        else
+            return "redirect:/login";
+    }
 
 //   @GetMapping("/dashboard/admin/city")
 //    public String dashboardAdminCity(HttpSession httpSession) {
@@ -194,66 +193,60 @@ public class AdminController {
             return "redirect:/login";
     }
 
-//    @GetMapping("/dashboard/admin/province/{page}")
-//    public String dashboardAdminProvince(@PathVariable Integer page,
-//                                     @RequestParam(required = false, defaultValue = "10") Integer pageSize,
-//                                     @RequestParam(required = false, defaultValue = "1") Integer sort,
-//                                     @ModelAttribute("message") String message,
-//                                     HttpSession httpSession,
-//                                     ModelMap modelMap) {
-//        String url = BASE_URL + "province";
-//        User user = (User) httpSession.getAttribute("user");
-//
-//        if (user != null) {
-//            boolean isAdmin = user.getprovince().getName().equals("Admin");
-//
-//            if (isAdmin) {
-//                if (page < 0)
-//                    page = 1;
-//
-//                UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url);
-//
-//                builder.queryParam("page", page);
-//                builder.queryParam("pageSize", pageSize);
-//                builder.queryParam("sort", sort);
-//
-//                ResponseEntity<String> response = mRestTemplate.exchange(builder.buildAndExpand().toUriString(),
-//                        HttpMethod.GET, null, String.class);
-//
-//                ResponseEntity<String> responseCount = mRestTemplate.exchange(BASE_URL + "country/province/count/all",
-//                        HttpMethod.GET, null, String.class);
-//
-//                MyResponse<ArrayList<Province>> myResponse;
-//                MyResponse<Integer> myResponseCount;
-//
-//                ArrayList<Province> provinces = new ArrayList<>();
-//                Integer count = null;
-//
-//                try {
-//                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {});
-//                    myResponseCount = mObjectMapper.readValue(responseCount.getBody(), new TypeReference<MyResponse<Integer>>() {});
-//
-//                    provinces = myResponse.getData();
-//                    count = myResponseCount.getData();
-//                    count = (int) Math.ceil((double) count / 10);
-//                } catch (IOException e) {
-//                    LOGGER.error(e.getMessage());
-//                }
-//
-//                modelMap.addAttribute("user", user);
-//                modelMap.addAttribute("message", message);
-//                modelMap.addAttribute("page", page);
-//                modelMap.addAttribute("lastPage", count);
-//                modelMap.addAttribute("pageSize", pageSize);
-//                modelMap.addAttribute("sort", sort);
-//                modelMap.addAttribute("provinces", provinces);
-//
-//                return "admin/province";
-//            } else
-//                return "redirect:/dashboard";
-//        } else
-//            return "redirect:/login";
-//    }
+    @GetMapping("/dashboard/admin/province/{page}")
+    public String dashboardAdminProvince(@PathVariable Integer page,
+                                        @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                        @RequestParam(required = false, defaultValue = "1") Integer sort,
+                                        @ModelAttribute("message") String message,
+                                        HttpSession httpSession,
+                                        ModelMap modelMap) {
+        String url = BASE_URL + "province";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            boolean isAdmin = user.getRole().getName().equals("Admin");
+
+            if (isAdmin) {
+                if (page < 0)
+                    return "redirect:/dashboard/admin/province/1";
+
+                UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url);
+
+                builder.queryParam("page", page);
+                builder.queryParam("pageSize", pageSize);
+                builder.queryParam("sort", sort);
+
+                ResponseEntity<String> response = mRestTemplate.exchange(builder.buildAndExpand().toUriString(),
+                        HttpMethod.GET, null, String.class);
+
+                MyResponse<MyPage<ArrayList<Province>>> myResponse;
+                MyPage<ArrayList<Province>> myPage = new MyPage<>();
+                ArrayList<Province> provinces = new ArrayList<>();
+
+                try {
+                    myResponse = mObjectMapper.readValue(response.getBody(),
+                            new TypeReference<MyResponse<MyPage<ArrayList<Province>>>>() {});
+
+                    myPage = myResponse.getData();
+                    provinces = myPage.getData();
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage());
+                }
+
+                modelMap.addAttribute("user", user);
+                modelMap.addAttribute("message", message);
+                modelMap.addAttribute("page", myPage.getPage());
+                modelMap.addAttribute("lastPage", myPage.getLastPage());
+                modelMap.addAttribute("pageSize", myPage.getPageSize());
+                modelMap.addAttribute("sort", myPage.getSort());
+                modelMap.addAttribute("provinces", provinces);
+
+                return "admin/province";
+            } else
+                return "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
 
 //    @GetMapping("/dashboard/admin/city/{page}")
 //    public String dashboardAdminCity(@PathVariable Integer page,
@@ -403,21 +396,36 @@ public class AdminController {
             return "redirect:/login";
     }
 
-//    @GetMapping("/dashboard/admin/province/add")
-//    public String dashboardAdminAddProvince(@ModelAttribute("message") String message,
-//                                        @ModelAttribute("province") Province province,
-//                                        HttpSession httpSession, ModelMap modelMap) {
-//        User user = (User) httpSession.getAttribute("user");
-//
-//        if (user != null) {
-//            modelMap.addAttribute("user", user);
-//            modelMap.addAttribute("message", message);
-//            modelMap.addAttribute("province", province);
-//
-//            return user.getProvince().getName().equals("Admin") ? "admin/addProvince" : "redirect:/dashboard";
-//        } else
-//            return "redirect:/login";
-//    }
+    @GetMapping("/dashboard/admin/province/add")
+    public String dashboardAdminAddProvince(@ModelAttribute("message") String message,
+                                           @ModelAttribute("province") Province province,
+                                           HttpSession httpSession, ModelMap modelMap) {
+        String url = BASE_URL + "country/all";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+            MyResponse<ArrayList<Country>> myResponse;
+            ArrayList<Country> countries = new ArrayList<>();
+
+            try {
+                myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {});
+                countries = myResponse.getData();
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage());
+                message = "Internal server error";
+            }
+
+            modelMap.addAttribute("user", user);
+            modelMap.addAttribute("message", message);
+            modelMap.addAttribute("countries", countries);
+            modelMap.addAttribute("province", province);
+
+            return user.getRole().getName().equals("Admin") ? "admin/addProvince" : "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
 
 //    @GetMapping("/dashboard/admin/city/add")
 //    public String dashboardAdminAddCity(@ModelAttribute("message") String message,
@@ -540,48 +548,63 @@ public class AdminController {
             return "redirect:/login";
     }
 
-//    @GetMapping("/dashboard/admin/province/add/{provinceId}")
-//    public String dashboardAdminAddProvince(@PathVariable(required = false) Integer provinceId,
-//                                        @ModelAttribute("message") String message,
-//                                        HttpSession httpSession,
-//                                        ModelMap modelMap) {
-//        String url = BASE_URL + "province";
-//        User user = (User) httpSession.getAttribute("user");
-//
-//        if (user != null) {
-//            boolean isAdmin = user.getProvince().getName().equals("Admin");
-//
-//            if (isAdmin) {
-//                if (provinceId != null) {
-//                    url += "/" + provinceId;
-//
-//                    ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.GET, null,
-//                            String.class);
-//                    MyResponse<Province> myResponse;
-//                    Province province = null;
-//
-//                    try {
-//                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Province>>() {});
-//                        province = myResponse.getData();
-//                    } catch (IOException e) {
-//                        LOGGER.error(e.getMessage());
-//                    }
-//
-//                    if (country != null) {
-//                        modelMap.addAttribute("user", user);
-//                        modelMap.addAttribute("message", message);
-//                        modelMap.addAttribute("province", province);
-//
-//                        return "admin/addProvince";
-//                    } else
-//                        return "redirect:/dashboard/admin/province/1";
-//                } else
-//                    return "redirect:/dashboard/admin/province/1";
-//            } else
-//                return "redirect:/dashboard";
-//        } else
-//            return "redirect:/login";
-//    }
+    @GetMapping("/dashboard/admin/province/add/{provinceId}")
+    public String dashboardAdminAddProvince(@PathVariable(required = false) Integer provinceId,
+                                        @ModelAttribute("message") String message,
+                                        HttpSession httpSession,
+                                        ModelMap modelMap) {
+        String url = BASE_URL + "province";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            boolean isAdmin = user.getRole().getName().equals("Admin");
+
+            if (isAdmin) {
+                if (provinceId != null) {
+                    url += "/" + provinceId;
+
+                    ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+                    MyResponse<Province> myResponse;
+                    Province province = null;
+
+                    try {
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Province>>() {});
+                        province = myResponse.getData();
+                    } catch (IOException e) {
+                        LOGGER.error(e.getMessage());
+                    }
+
+                    if (province != null) {
+                        url = BASE_URL + "country/all";
+
+                        response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+                        MyResponse<ArrayList<Country>> myResponseCountry;
+                        ArrayList<Country> countries = new ArrayList<>();
+
+                        try {
+                            myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {});
+                            countries = myResponseCountry.getData();
+                        } catch (IOException e) {
+                            LOGGER.error(e.getMessage());
+                            message = "Internal server error";
+                        }
+
+                        modelMap.addAttribute("user", user);
+                        modelMap.addAttribute("message", message);
+                        modelMap.addAttribute("countries", countries);
+                        modelMap.addAttribute("province", province);
+
+                        return "admin/addProvince";
+                    } else
+                        return "redirect:/dashboard/admin/province/1";
+                } else
+                    return "redirect:/dashboard/admin/province/1";
+            } else
+                return "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
 
 
     //    @GetMapping("/dashboard/admin/city/add/{provinceId}")
@@ -683,16 +706,26 @@ public class AdminController {
             boolean isAdmin = user.getRole().getName().equals("Admin");
 
             if (isAdmin) {
-                HashMap<String, String> params = new HashMap<>();
-
                 boolean isEdit = roleId != null;
 
+                Role role = new Role();
+                role.setName(roleName);
+
                 if (isEdit)
-                    params.put("id", String.valueOf(roleId));
+                    role.setId(roleId);
 
-                params.put("name", roleName);
+                HttpHeaders httpHeaders = new HttpHeaders();
+                httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-                HttpEntity<HashMap> request = new HttpEntity<>(params);
+                String requestJson = "";
+
+                try {
+                    requestJson = mObjectMapper.writeValueAsString(role);
+                } catch (JsonProcessingException e) {
+                    LOGGER.error(e.getMessage());
+                }
+
+                HttpEntity<String> request = new HttpEntity<>(requestJson, httpHeaders);
 
                 ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.POST, request, String.class);
                 MyResponse<Integer> myResponse = null;
@@ -714,7 +747,7 @@ public class AdminController {
                     else
                         message = myResponse.getMessage();
 
-                    Role role = new Role(roleName);
+                    role = new Role(roleName);
 
                     redirectAttributes.addAttribute("message", message);
                     redirectAttributes.addAttribute("role", role);
@@ -744,16 +777,26 @@ public class AdminController {
             boolean isAdmin = user.getRole().getName().equals("Admin");
 
             if (isAdmin) {
-                HashMap<String, String> params = new HashMap<>();
-
                 boolean isEdit = countryId != null;
 
+                Country country = new Country();
+                country.setName(countryName);
+
                 if (isEdit)
-                    params.put("id", String.valueOf(countryId));
+                    country.setId(countryId);
 
-                params.put("name", countryName);
+                HttpHeaders httpHeaders = new HttpHeaders();
+                httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-                HttpEntity<HashMap> request = new HttpEntity<>(params);
+                String requestJson = "";
+
+                try {
+                    requestJson = mObjectMapper.writeValueAsString(country);
+                } catch (JsonProcessingException e) {
+                    LOGGER.error(e.getMessage());
+                }
+
+                HttpEntity<String> request = new HttpEntity<>(requestJson, httpHeaders);
 
                 ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.POST, request, String.class);
                 MyResponse<Integer> myResponse = null;
@@ -775,7 +818,7 @@ public class AdminController {
                     else
                         message = myResponse.getMessage();
 
-                    Country country = new Country(countryName);
+                    country = new Country(countryName);
 
                     redirectAttributes.addAttribute("message", message);
                     redirectAttributes.addAttribute("country", country);
@@ -793,68 +836,87 @@ public class AdminController {
             return "redirect:/login";
     }
 
-//    @PostMapping("/dashboard/admin/province/add")
-//    public String dashboardAdminAddProvince(@RequestParam(name = "provinceId", required = false) Integer provinceId,
-//                                        @RequestParam("provinceName") String provinceName,
-//                                        HttpSession httpSession,
-//                                        RedirectAttributes redirectAttributes) {
-//        String url = BASE_URL + "province/add";
-//        User user = (User) httpSession.getAttribute("user");
-//
-//        if (user != null) {
-//            boolean isAdmin = user.getProvince().getName().equals("Admin");
-//
-//            if (isAdmin) {
-//                HashMap<String, String> params = new HashMap<>();
-//
-//                boolean isEdit = provinceId != null;
-//
-//                if (isEdit)
-//                    params.put("id", String.valueOf(provinceId));
-//
-//                params.put("name", provinceName);
-//
-//                HttpEntity<HashMap> request = new HttpEntity<>(params);
-//
-//                ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.POST, request, String.class);
-//                MyResponse<Integer> myResponse;
-//                Integer responseInt = null;
-//                String message = isEdit ? "Edit " : "Add ";
-//
-//                try {
-//                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
-//                    responseInt = myResponse.getData();
-//                } catch (IOException e) {
-//                    LOGGER.error(e.getMessage());
-//                }
-//
-//                if (responseInt != null && responseInt == 1) {
-//                    message += "province success";
-//
-//                    redirectAttributes.addAttribute("message", message);
-//                } else {
-//                    if (responseInt == null)
-//                        message = "Internal server error";
-//                    else
-//                        message += "province failed";
-//
-//                    Province province = new Province(provinceName);
-//
-//                    redirectAttributes.addAttribute("message", message);
-//                    redirectAttributes.addAttribute("province", province);
-//                }
-//
-//                String returnString = "redirect:/dashboard/admin/province/add";
-//
-//                if (isEdit)
-//                    returnString += "/" + provinceId;
-//
-//                return returnString;
-//            } else
-//                return "redirect:/dashboard";
-//        } else
-//            return "redirect:/login";
-//    }
+    @PostMapping("/dashboard/admin/province/add")
+    public String dashboardAdminAddProvince(@RequestParam(name = "provinceId", required = false) Integer provinceId,
+                                        @RequestParam("countryId") Integer countryId,
+                                        @RequestParam("provinceName") String provinceName,
+                                        HttpSession httpSession,
+                                        RedirectAttributes redirectAttributes) {
+        String url = BASE_URL + "province/add";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            boolean isAdmin = user.getRole().getName().equals("Admin");
+
+            if (isAdmin) {
+                boolean isEdit = provinceId != null;
+
+                Province province = new Province();
+                Country country = new Country();
+                country.setId(countryId);
+
+                province.setName(provinceName);
+                province.setCountry(country);
+
+                if (isEdit)
+                    province.setId(provinceId);
+
+                HttpHeaders httpHeaders = new HttpHeaders();
+                httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+                String requestJson = "";
+
+                try {
+                    requestJson = mObjectMapper.writeValueAsString(province);
+                } catch (JsonProcessingException e) {
+                    LOGGER.error(e.getMessage());
+                }
+
+                HttpEntity<String> request = new HttpEntity<>(requestJson, httpHeaders);
+
+                ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.POST, request, String.class);
+                MyResponse<Integer> myResponse;
+                Integer responseInt = null;
+                String message = isEdit ? "Edit " : "Add ";
+
+                try {
+                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                    responseInt = myResponse.getData();
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage());
+                }
+
+                if (responseInt != null && responseInt == 1) {
+                    message += "province success";
+
+                    redirectAttributes.addAttribute("message", message);
+                } else {
+                    if (responseInt == null)
+                        message = "Internal server error";
+                    else
+                        message += "province failed";
+
+                    country = new Country();
+                    province = new Province(provinceName);
+
+                    country.setId(countryId);
+                    province.setCountry(country);
+
+                    redirectAttributes.addAttribute("message", message);
+                    redirectAttributes.addAttribute("province", province);
+                }
+
+                String returnString = "redirect:/dashboard/admin/province/add";
+
+                if (isEdit)
+                    returnString += "/" + provinceId;
+
+                return returnString;
+            } else
+                return "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
 
 //    @PostMapping("/dashboard/admin/city/add")
 //    public String dashboardAdminAddCity(@RequestParam(name = "cityId", required = false) Integer cityId,

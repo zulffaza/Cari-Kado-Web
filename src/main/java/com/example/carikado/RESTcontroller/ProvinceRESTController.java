@@ -1,5 +1,6 @@
 package com.example.carikado.RESTcontroller;
 
+import com.example.carikado.model.MyPage;
 import com.example.carikado.model.MyResponse;
 import com.example.carikado.model.Province;
 import com.example.carikado.service.ProvinceService;
@@ -8,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
@@ -15,44 +17,46 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@RestController
 public class ProvinceRESTController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProvinceRESTController.class);
     private static final String[] PROPERTIES = {
-            "name"
+            "name",
+            "country.name"
     };
     private static final String[] DIRECTION = {
             "asc",
             "desc"
     };
 
-    private ProvinceService provinceService;
+    private ProvinceService mProvinceService;
 
     @Autowired
     public ProvinceRESTController(ProvinceService provinceService) {
-        provinceService = provinceService;
+        mProvinceService = provinceService;
     }
 
     @GetMapping("/api/province/count/all")
     public MyResponse<Integer> countProvinces() {
         String message = "Count provinces success";
-        Integer count = provinceService.count();
+        Integer count = mProvinceService.count();
         return new MyResponse<>(message, count);
     }
 
     @GetMapping("/api/province/all")
     public MyResponse<List> findProvinces() {
         String message = "Find provinces success";
-        ArrayList<Province> provinces = (ArrayList<Province>) provinceService.findAll();
+        ArrayList<Province> provinces = (ArrayList<Province>) mProvinceService.findAll();
         return new MyResponse<>(message, provinces);
     }
 
     @GetMapping("/api/province")
-    public MyResponse<List> findProvinces(@RequestParam(required = false, defaultValue = "0") Integer page,
-                                      @RequestParam(required = false, defaultValue = "10") Integer pageSize,
-                                      @RequestParam(required = false) Integer sort) {
+    public MyResponse<MyPage<List>> findProvinces(@RequestParam(required = false, defaultValue = "0") Integer page,
+                                                 @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                                 @RequestParam(required = false) Integer sort) {
         ArrayList<String> properties = new ArrayList<>();
-        List<Province> provinces = null;
+        List<Province> provinces;
         String message;
         Sort.Direction direction;
 
@@ -65,19 +69,33 @@ public class ProvinceRESTController {
         int propertiesIndex = 0;
         int directionIndex = 0;
 
-        if (sort != null && sort >= 1 && sort <= 2)
-            directionIndex = sort - 1;
+        if (sort != null && sort >= 1 && sort <= 4) {
+            boolean isPrime = sort % 2 == 0;
+            directionIndex = isPrime ? 1 : 0;
+
+            propertiesIndex = (int) (Math.ceil((double) sort / 2) - 1);
+        }
 
         direction = Sort.Direction.fromString(DIRECTION[directionIndex]);
         properties.add(PROPERTIES[propertiesIndex]);
 
         Sort sortOrder = new Sort(direction, properties);
         PageRequest pageRequest = new PageRequest(page, pageSize, sortOrder);
-        provinces = provinceService.findAllPageable(pageRequest).getContent();
+        Page<Province> provincePage = mProvinceService.findAllPageable(pageRequest);
 
-        message = "Find gift info success";
+        provinces = provincePage.getContent();
+        message = "Find provinces success";
 
-        return new MyResponse<>(message, provinces);
+        MyPage<List> myPage = new MyPage<>();
+
+        myPage.setPage(++page);
+        myPage.setLastPage(provincePage.getTotalPages());
+        myPage.setPageSize(pageSize);
+        myPage.setSort(sort == null ? 1 : sort);
+        myPage.setTotalElement(provincePage.getTotalElements());
+        myPage.setData(provinces);
+
+        return new MyResponse<>(message, myPage);
     }
 
     @GetMapping("/api/province/{provinceId}")
@@ -86,7 +104,7 @@ public class ProvinceRESTController {
         String message = "Province not found";
 
         if (provinceId != null && provinceId >= 0) {
-            province = provinceService.findProvince(provinceId);
+            province = mProvinceService.findProvince(provinceId);
 
             if (province != null)
                 message = "Find province success";
@@ -97,14 +115,26 @@ public class ProvinceRESTController {
 
     @PostMapping("/api/province/add")
     public MyResponse<Integer> addProvince(@RequestBody Province province) {
-        LOGGER.info(province.getId() + "");
-        LOGGER.info(province.getName());
+        String message = "Province ";
+        int response;
 
-        province = provinceService.addProvince(province);
+        try {
+            message += province.getId() != null ? "edit " : "add ";
 
-        boolean isSuccess = province != null;
-        String message = isSuccess ? "Province add success" : "Province add failed";
-        int response = isSuccess ? 1 : 0;
+            province = mProvinceService.addProvince(province);
+
+            boolean isSuccess = province != null;
+            message += isSuccess ? "success" : "failed";
+            response = isSuccess ? 1 : 0;
+        } catch (DataIntegrityViolationException e) {
+            message = "Province add failed - Province already exists";
+            response = 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            message = "Province add failed - Internal Server Error";
+            response = 0;
+        }
 
         return new MyResponse<>(message, response);
     }
@@ -115,22 +145,18 @@ public class ProvinceRESTController {
         Integer response;
 
         if (provinceId != null && provinceId >= 0) {
-            Province province;
-            boolean isDeleted;
-
             try {
-                provinceService.deleteProvince(provinceId);
-                province = provinceService.findProvince(provinceId);
-
-                isDeleted = province == null;
+                mProvinceService.deleteProvince(provinceId);
+                response = 1;
             } catch (EmptyResultDataAccessException e) {
-                isDeleted = false;
                 LOGGER.error(e.getMessage());
+                response = 0;
             } catch (DataIntegrityViolationException e) {
-                isDeleted = false;
                 LOGGER.error(e.getMessage());
+                response = 0;
             }
 
+            boolean isDeleted = response == 1;
             message = isDeleted ? "Delete province success" : "Delete province failed";
             response = isDeleted ? 1 : 0;
         } else {

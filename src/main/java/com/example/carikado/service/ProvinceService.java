@@ -1,6 +1,5 @@
 package com.example.carikado.service;
 
-
 import com.example.carikado.model.Province;
 import com.example.carikado.repository.ProvinceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,21 +12,35 @@ import java.util.List;
 @Service("provinceService")
 public class ProvinceService {
 
-    private ProvinceRepository provinceRepository;
+    private ProvinceRepository mProvinceRepository;
 
     @Autowired
-    public ProvinceService (ProvinceRepository provinceRepository) { provinceRepository = provinceRepository; }
+    public ProvinceService(ProvinceRepository provinceRepository) {
+        mProvinceRepository = provinceRepository;
+    }
 
-    public Integer count() { return (int) provinceRepository.count(); }
+    public Integer count() {
+        return (int) mProvinceRepository.count();
+    }
 
-    public List<Province> findAll() { return provinceRepository.findAll(); }
+    public List<Province> findAll() {
+        return mProvinceRepository.findAll();
+    }
 
-    public Page<Province> findAllPageable(Pageable pageable) { return provinceRepository.findAll(pageable); }
+    public Page<Province> findAllPageable(Pageable pageable) {
+        return mProvinceRepository.findAll(pageable);
+    }
 
-    public Province findProvince(Integer id) { return provinceRepository.findOne(id); }
+    public Province findProvince(Integer id) {
+        return mProvinceRepository.findOne(id);
+    }
 
-    public Province addProvince(Province province) { return provinceRepository.save(province); }
+    public Province addProvince(Province province) {
+        return mProvinceRepository.save(province);
+    }
 
-    public void deleteProvince(Integer id) { provinceRepository.delete(id); }
+    public void deleteProvince(Integer id) {
+        mProvinceRepository.delete(id);
+    }
 
 }
