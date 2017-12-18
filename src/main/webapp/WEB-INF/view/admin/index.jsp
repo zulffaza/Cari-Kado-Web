@@ -77,10 +77,14 @@
                     </a>
                 </center>
                 <center>
-                    <button class="button btn btn-alert menu-dashboard">DISTRICT</button>
+                    <a href="/dashboard/admin/district/1">
+                        <button class="button btn btn-alert menu-dashboard">DISTRICT</button>
+                    </a>
                 </center>
                 <center>
-                    <button class="button btn btn-alert menu-dashboard">SUB DISTRICT</button>
+                    <a href="/dashboard/admin/sub-district/1">
+                        <button class="button btn btn-alert menu-dashboard">SUB DISTRICT</button>
+                    </a>
                 </center>
             </div>
         </div>

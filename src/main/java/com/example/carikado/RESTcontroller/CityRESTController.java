@@ -165,5 +165,4 @@ public class CityRESTController {
 
         return new MyResponse<>(message, response);
     }
-
 }

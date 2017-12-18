@@ -90,24 +90,24 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${provinces}" var="province" varStatus="each">
+                    <c:forEach items="${provinces}" var="city" varStatus="each">
                         <tr>
                             <td>
                                     ${((page - 1) * 10) + each.index + 1}
                             </td>
                             <td>
-                                    ${province.country.name}
+                                    ${city.country.name}
                             </td>
                             <td>
-                                    ${province.name}
+                                    ${city.name}
                             </td>
                             <td>
-                                <a href="/dashboard/admin/province/add/${province.id}">
+                                <a href="/dashboard/admin/province/add/${city.id}">
                                     <button class="btn btn-primary btn-xs" style="width: 70px; height: 28px;">
                                         <i aria-hidden="true" class="fa fa-pencil-square-o"></i> Update
                                     </button>
                                 </a>
-                                <a href="/dashboard/admin/province/delete/${province.id}">
+                                <a href="/dashboard/admin/province/delete/${city.id}">
                                     <button class="btn btn-danger btn-xs" style="width: 70px; height: 28px;">
                                         <i aria-hidden="true" class="fa fa-trash-o"></i> Delete
                                     </button>

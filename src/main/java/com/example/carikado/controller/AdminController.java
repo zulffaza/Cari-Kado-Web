@@ -83,6 +83,26 @@ public class AdminController {
             return "redirect:/login";
     }
 
+    @GetMapping("/dashboard/admin/district")
+    public String dashboardAdminDistrict(HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null)
+            return user.getRole().getName().equals("Admin") ? "redirect:/dashboard/admin/district/1" : "redirect:/dashboard";
+        else
+            return "redirect:/login";
+    }
+
+    @GetMapping("/dashboard/admin/sub-district")
+    public String dashboardAdminSubDistrict(HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null)
+            return user.getRole().getName().equals("Admin") ? "redirect:/dashboard/admin/sub-district/1" : "redirect:/dashboard";
+        else
+            return "redirect:/login";
+    }
+
     @GetMapping("/dashboard/admin/role/{page}")
     public String dashboardAdminRole(@PathVariable Integer page,
                                      @RequestParam(required = false, defaultValue = "10") Integer pageSize,
@@ -303,6 +323,116 @@ public class AdminController {
             return "redirect:/login";
     }
 
+    @GetMapping("/dashboard/admin/district/{page}")
+    public String dashboardAdminDistrict(@PathVariable Integer page,
+                                     @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                     @RequestParam(required = false, defaultValue = "1") Integer sort,
+                                     @ModelAttribute("message") String message,
+                                     HttpSession httpSession,
+                                     ModelMap modelMap) {
+        String url = BASE_URL + "district";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            boolean isAdmin = user.getRole().getName().equals("Admin");
+
+            if (isAdmin) {
+                if (page < 0)
+                    return "redirect:/dashboard/admin/district/1";
+
+                UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url);
+
+                builder.queryParam("page", page);
+                builder.queryParam("pageSize", pageSize);
+                builder.queryParam("sort", sort);
+
+                ResponseEntity<String> response = mRestTemplate.exchange(builder.buildAndExpand().toUriString(),
+                        HttpMethod.GET, null, String.class);
+
+                MyResponse<MyPage<ArrayList<District>>> myResponse;
+                MyPage<ArrayList<District>> myPage = new MyPage<>();
+                ArrayList<District> districts = new ArrayList<>();
+
+                try {
+                    myResponse = mObjectMapper.readValue(response.getBody(),
+                            new TypeReference<MyResponse<MyPage<ArrayList<District>>>>() {});
+
+                    myPage = myResponse.getData();
+                    districts = myPage.getData();
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage());
+                }
+
+                modelMap.addAttribute("user", user);
+                modelMap.addAttribute("message", message);
+                modelMap.addAttribute("page", myPage.getPage());
+                modelMap.addAttribute("lastPage", myPage.getLastPage());
+                modelMap.addAttribute("pageSize", myPage.getPageSize());
+                modelMap.addAttribute("sort", myPage.getSort());
+                modelMap.addAttribute("districts", districts);
+
+                return "admin/district";
+            } else
+                return "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
+
+    @GetMapping("/dashboard/admin/sub-district/{page}")
+    public String dashboardAdminSubDistrict(@PathVariable Integer page,
+                                         @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                         @RequestParam(required = false, defaultValue = "1") Integer sort,
+                                         @ModelAttribute("message") String message,
+                                         HttpSession httpSession,
+                                         ModelMap modelMap) {
+        String url = BASE_URL + "sub-district";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            boolean isAdmin = user.getRole().getName().equals("Admin");
+
+            if (isAdmin) {
+                if (page < 0)
+                    return "redirect:/dashboard/admin/sub-district/1";
+
+                UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url);
+
+                builder.queryParam("page", page);
+                builder.queryParam("pageSize", pageSize);
+                builder.queryParam("sort", sort);
+
+                ResponseEntity<String> response = mRestTemplate.exchange(builder.buildAndExpand().toUriString(),
+                        HttpMethod.GET, null, String.class);
+
+                MyResponse<MyPage<ArrayList<SubDistrict>>> myResponse;
+                MyPage<ArrayList<SubDistrict>> myPage = new MyPage<>();
+                ArrayList<SubDistrict> subDistricts = new ArrayList<>();
+
+                try {
+                    myResponse = mObjectMapper.readValue(response.getBody(),
+                            new TypeReference<MyResponse<MyPage<ArrayList<SubDistrict>>>>() {});
+
+                    myPage = myResponse.getData();
+                    subDistricts = myPage.getData();
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage());
+                }
+
+                modelMap.addAttribute("user", user);
+                modelMap.addAttribute("message", message);
+                modelMap.addAttribute("page", myPage.getPage());
+                modelMap.addAttribute("lastPage", myPage.getLastPage());
+                modelMap.addAttribute("pageSize", myPage.getPageSize());
+                modelMap.addAttribute("sort", myPage.getSort());
+                modelMap.addAttribute("subDistricts", subDistricts);
+
+                return "admin/subDistrict";
+            } else
+                return "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
+
     @GetMapping("/dashboard/admin/user/{page}")
     public String dashboardAdminUser(@PathVariable Integer page,
                                      @RequestParam(required = false) Integer pageSize,
@@ -452,6 +582,67 @@ public class AdminController {
             return "redirect:/login";
     }
 
+    @GetMapping("/dashboard/admin/district/add")
+    public String dashboardAdminAddDistrict(@ModelAttribute("message") String message,
+                                        @ModelAttribute("district") District district,
+                                        HttpSession httpSession, ModelMap modelMap) {
+        String url = BASE_URL + "city/all";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+            MyResponse<ArrayList<City>> myResponse;
+            ArrayList<City> cities = new ArrayList<>();
+
+            try {
+                myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<City>>>() {});
+                cities = myResponse.getData();
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage());
+                message = "Internal server error";
+            }
+
+            modelMap.addAttribute("user", user);
+            modelMap.addAttribute("message", message);
+            modelMap.addAttribute("cities", cities);
+            modelMap.addAttribute("district", district);
+
+            return user.getRole().getName().equals("Admin") ? "admin/addDistrict" : "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
+
+    @GetMapping("/dashboard/admin/sub-district/add")
+    public String dashboardAdminAddSubDistrict(@ModelAttribute("message") String message,
+                                            @ModelAttribute("subDistrict") SubDistrict subDistrict,
+                                            HttpSession httpSession, ModelMap modelMap) {
+        String url = BASE_URL + "district/all";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+            MyResponse<ArrayList<District>> myResponse;
+            ArrayList<District> districts = new ArrayList<>();
+
+            try {
+                myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<District>>>() {});
+                districts = myResponse.getData();
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage());
+                message = "Internal server error";
+            }
+
+            modelMap.addAttribute("user", user);
+            modelMap.addAttribute("message", message);
+            modelMap.addAttribute("districts", districts);
+            modelMap.addAttribute("subDistrict", subDistrict);
+
+            return user.getRole().getName().equals("Admin") ? "admin/addSubDistrict" : "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
 
     @GetMapping("/dashboard/admin/user/add")
     public String dashboardAdminAddUser(@ModelAttribute("message") String message,
@@ -674,6 +865,123 @@ public class AdminController {
             return "redirect:/login";
     }
 
+    @GetMapping("/dashboard/admin/district/add/{districtId}")
+    public String dashboardAdminAddDistrict(@PathVariable(required = false) Integer districtId,
+                                        @ModelAttribute("message") String message,
+                                        HttpSession httpSession,
+                                        ModelMap modelMap) {
+        String url = BASE_URL + "district";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            boolean isAdmin = user.getRole().getName().equals("Admin");
+
+            if (isAdmin) {
+                if (districtId != null) {
+                    url += "/" + districtId;
+
+                    ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.GET, null,
+                            String.class);
+                    MyResponse<District> myResponse;
+                    District district = null;
+
+                    try {
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<District>>() {});
+                        district = myResponse.getData();
+                    } catch (IOException e) {
+                        LOGGER.error(e.getMessage());
+                    }
+
+                    if (district != null) {
+                        url = BASE_URL + "city/all";
+
+                        response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+                        MyResponse<ArrayList<City>> myResponseCity;
+                        ArrayList<City> cities = new ArrayList<>();
+
+                        try {
+                            myResponseCity = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<City>>>() {});
+                            cities = myResponseCity.getData();
+                        } catch (IOException e) {
+                            LOGGER.error(e.getMessage());
+                            message = "Internal server error";
+                        }
+
+                        modelMap.addAttribute("user", user);
+                        modelMap.addAttribute("message", message);
+                        modelMap.addAttribute("cities", cities);
+                        modelMap.addAttribute("district", district);
+
+                        return "admin/addDistrict";
+                    } else
+                        return "redirect:/dashboard/admin/district/1";
+                } else
+                    return "redirect:/dashboard/admin/district/1";
+            } else
+                return "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
+
+    @GetMapping("/dashboard/admin/sub-district/add/{subDistrictId}")
+    public String dashboardAdminAddSubDistrict(@PathVariable(required = false) String subDistrictId,
+                                            @ModelAttribute("message") String message,
+                                            HttpSession httpSession,
+                                            ModelMap modelMap) {
+        String url = BASE_URL + "sub-district";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            boolean isAdmin = user.getRole().getName().equals("Admin");
+
+            if (isAdmin) {
+                if (subDistrictId != null) {
+                    url += "/" + subDistrictId;
+
+                    ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.GET, null,
+                            String.class);
+                    MyResponse<SubDistrict> myResponse;
+                    SubDistrict subDistrict = null;
+
+                    try {
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<SubDistrict>>() {});
+                        subDistrict = myResponse.getData();
+                    } catch (IOException e) {
+                        LOGGER.error(e.getMessage());
+                    }
+
+                    if (subDistrict != null) {
+                        url = BASE_URL + "district/all";
+
+                        response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+                        MyResponse<ArrayList<District>> myResponseDistrict;
+                        ArrayList<District> districts = new ArrayList<>();
+
+                        try {
+                            myResponseDistrict = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<District>>>() {});
+                            districts = myResponseDistrict.getData();
+                        } catch (IOException e) {
+                            LOGGER.error(e.getMessage());
+                            message = "Internal server error";
+                        }
+
+                        modelMap.addAttribute("user", user);
+                        modelMap.addAttribute("message", message);
+                        modelMap.addAttribute("districts", districts);
+                        modelMap.addAttribute("subDistrict", subDistrict);
+
+                        return "admin/addSubDistrict";
+                    } else
+                        return "redirect:/dashboard/admin/subDistrict/1";
+                } else
+                    return "redirect:/dashboard/admin/subDistrict/1";
+            } else
+                return "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
 
     @GetMapping("/dashboard/admin/user/add/{userId}")
     public String dashboardAdminAddUser(@PathVariable(required = false) Integer userId,
@@ -1024,6 +1332,170 @@ public class AdminController {
             return "redirect:/login";
     }
 
+    @PostMapping("/dashboard/admin/district/add")
+    public String dashboardAdminAddDistrict(@RequestParam(name = "districtId", required = false) Integer districtId,
+                                        @RequestParam("cityId") Integer cityId,
+                                        @RequestParam("districtName") String districtName,
+                                        HttpSession httpSession,
+                                        RedirectAttributes redirectAttributes) {
+        String url = BASE_URL + "district/add";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            boolean isAdmin = user.getRole().getName().equals("Admin");
+
+            if (isAdmin) {
+                boolean isEdit = districtId != null;
+
+                District district = new District();
+                City city = new City();
+                city.setId(cityId);
+
+                district.setName(districtName);
+                district.setCity(city);
+
+                if (isEdit)
+                    district.setId(districtId);
+
+                HttpHeaders httpHeaders = new HttpHeaders();
+                httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+                String requestJson = "";
+
+                try {
+                    requestJson = mObjectMapper.writeValueAsString(district);
+                } catch (JsonProcessingException e) {
+                    LOGGER.error(e.getMessage());
+                }
+
+                HttpEntity<String> request = new HttpEntity<>(requestJson, httpHeaders);
+
+                ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.POST, request, String.class);
+                MyResponse<Integer> myResponse;
+                Integer responseInt = null;
+                String message = isEdit ? "Edit " : "Add ";
+
+                try {
+                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                    responseInt = myResponse.getData();
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage());
+                }
+
+                if (responseInt != null && responseInt == 1) {
+                    message += "district success";
+
+                    redirectAttributes.addAttribute("message", message);
+                } else {
+                    if (responseInt == null)
+                        message = "Internal server error";
+                    else
+                        message += "district failed";
+
+                    city = new City();
+                    district = new District(districtName);
+
+                    city.setId(cityId);
+                    district.setCity(city);
+
+                    redirectAttributes.addAttribute("message", message);
+                    redirectAttributes.addAttribute("district", district);
+                }
+
+                String returnString = "redirect:/dashboard/admin/district/add";
+
+                if (isEdit)
+                    returnString += "/" + districtId;
+
+                return returnString;
+            } else
+                return "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
+
+
+    @PostMapping("/dashboard/admin/sub-district/add")
+    public String dashboardAdminAddSubDistrict(@RequestParam(name = "subDistrictId", required = false) Long subDistrictId,
+                                            @RequestParam("districtId") Integer districtId,
+                                            @RequestParam("subDistrictName") String subDistrictName,
+                                            HttpSession httpSession,
+                                            RedirectAttributes redirectAttributes) {
+        String url = BASE_URL + "sub-district/add";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            boolean isAdmin = user.getRole().getName().equals("Admin");
+
+            if (isAdmin) {
+                boolean isEdit = subDistrictId != null;
+
+                SubDistrict subDistrict = new SubDistrict();
+                District district = new District();
+                district.setId(districtId);
+
+                subDistrict.setName(subDistrictName);
+                subDistrict.setDistrict(district);
+
+                if (isEdit)
+                    subDistrict.setId(subDistrictId);
+
+                HttpHeaders httpHeaders = new HttpHeaders();
+                httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+                String requestJson = "";
+
+                try {
+                    requestJson = mObjectMapper.writeValueAsString(subDistrict);
+                } catch (JsonProcessingException e) {
+                    LOGGER.error(e.getMessage());
+                }
+
+                HttpEntity<String> request = new HttpEntity<>(requestJson, httpHeaders);
+
+                ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.POST, request, String.class);
+                MyResponse<Integer> myResponse;
+                Integer responseInt = null;
+                String message = isEdit ? "Edit " : "Add ";
+
+                try {
+                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                    responseInt = myResponse.getData();
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage());
+                }
+
+                if (responseInt != null && responseInt == 1) {
+                    message += "sub district success";
+
+                    redirectAttributes.addAttribute("message", message);
+                } else {
+                    if (responseInt == null)
+                        message = "Internal server error";
+                    else
+                        message += "sub district failed";
+
+                    district = new District();
+                    subDistrict = new SubDistrict(subDistrictName);
+
+                    district.setId(districtId);
+                    subDistrict.setDistrict(district);
+
+                    redirectAttributes.addAttribute("message", message);
+                    redirectAttributes.addAttribute("subDistrict", subDistrict);
+                }
+
+                String returnString = "redirect:/dashboard/admin/sub-district/add";
+
+                if (isEdit)
+                    returnString += "/" + subDistrictId;
+
+                return returnString;
+            } else
+                return "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
 
     @PostMapping("/dashboard/admin/user/add")
     public String dashboardAdminAddUser(@RequestParam(name = "userId", required = false) Integer userId,
@@ -1149,80 +1621,154 @@ public class AdminController {
             return "redirect:/login";
     }
 
-//    @GetMapping("/dashboard/admin/province/delete/{provinceId}")
-//    public String dashboardAdminDeleteProvince(@PathVariable Integer provinceId,
-//                                           HttpSession httpSession,
-//                                           RedirectAttributes redirectAttributes) {
-//        String url = BASE_URL + "province/";
-//        User user = (User) httpSession.getAttribute("user");
-//
-//        if (user != null) {
-//            boolean isAdmin = user.getProvince().getName().equals("Admin");
-//
-//            if (isAdmin) {
-//                if (provinceId != null) {
-//                    url += provinceId;
-//
-//                    ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
-//                    MyResponse<Integer> myResponse;
-//                    Integer responseInt = null;
-//
-//                    try {
-//                        myResponse = mObjectMapper.readValue(response.getBody(), MyResponse.class);
-//                        responseInt = myResponse.getData();
-//                    } catch (IOException e) {
-//                        LOGGER.error(e.getMessage());
-//                    }
-//
-//                    String message = responseInt != null && responseInt == 1 ? "Province delete success" : "Province delete failed";
-//
-//                    redirectAttributes.addAttribute("message", message);
-//                    return "redirect:/dashboard/admin/province/1";
-//                } else
-//                    return "redirect:/dashboard/admin";
-//            } else
-//                return "redirect:/dashboard";
-//        } else
-//            return "redirect:/login";
-//    }
+    @GetMapping("/dashboard/admin/province/delete/{provinceId}")
+    public String dashboardAdminDeleteProvince(@PathVariable Integer provinceId,
+                                           HttpSession httpSession,
+                                           RedirectAttributes redirectAttributes) {
+        String url = BASE_URL + "province/";
+        User user = (User) httpSession.getAttribute("user");
 
-//    @GetMapping("/dashboard/admin/city/delete/{cityId}")
-//    public String dashboardAdminDeleteCity(@PathVariable Integer cityId,
-//                                           HttpSession httpSession,
-//                                           RedirectAttributes redirectAttributes) {
-//        String url = BASE_URL + "city/";
-//        User user = (User) httpSession.getAttribute("user");
-//
-//        if (user != null) {
-//            boolean isAdmin = user.getCity().getName().equals("Admin");
-//
-//            if (isAdmin) {
-//                if (cityId != null) {
-//                    url += cityId;
-//
-//                    ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
-//                    MyResponse<Integer> myResponse;
-//                    Integer responseInt = null;
-//
-//                    try {
-//                        myResponse = mObjectMapper.readValue(response.getBody(), MyResponse.class);
-//                        responseInt = myResponse.getData();
-//                    } catch (IOException e) {
-//                        LOGGER.error(e.getMessage());
-//                    }
-//
-//                    String message = responseInt != null && responseInt == 1 ? "City delete success" : "City delete failed";
-//
-//                    redirectAttributes.addAttribute("message", message);
-//                    return "redirect:/dashboard/admin/city/1";
-//                } else
-//                    return "redirect:/dashboard/admin";
-//            } else
-//                return "redirect:/dashboard";
-//        } else
-//            return "redirect:/login";
-//    }
+        if (user != null) {
+            boolean isAdmin = user.getRole().getName().equals("Admin");
 
+            if (isAdmin) {
+                if (provinceId != null) {
+                    url += provinceId;
+
+                    ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
+                    MyResponse<Integer> myResponse;
+                    Integer responseInt = null;
+
+                    try {
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                        responseInt = myResponse.getData();
+                    } catch (IOException e) {
+                        LOGGER.error(e.getMessage());
+                    }
+
+                    String message = responseInt != null && responseInt == 1 ? "Province delete success" : "Province delete failed";
+
+                    redirectAttributes.addAttribute("message", message);
+                    return "redirect:/dashboard/admin/province/1";
+                } else
+                    return "redirect:/dashboard/admin";
+            } else
+                return "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
+
+    @GetMapping("/dashboard/admin/city/delete/{cityId}")
+    public String dashboardAdminDeleteCity(@PathVariable Integer cityId,
+                                           HttpSession httpSession,
+                                           RedirectAttributes redirectAttributes) {
+        String url = BASE_URL + "city/";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            boolean isAdmin = user.getRole().getName().equals("Admin");
+
+            if (isAdmin) {
+                if (cityId != null) {
+                    url += cityId;
+
+                    ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
+                    MyResponse<Integer> myResponse;
+                    Integer responseInt = null;
+
+                    try {
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                        responseInt = myResponse.getData();
+                    } catch (IOException e) {
+                        LOGGER.error(e.getMessage());
+                    }
+
+                    String message = responseInt != null && responseInt == 1 ? "City delete success" : "City delete failed";
+
+                    redirectAttributes.addAttribute("message", message);
+                    return "redirect:/dashboard/admin/city/1";
+                } else
+                    return "redirect:/dashboard/admin";
+            } else
+                return "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
+
+    @GetMapping("/dashboard/admin/district/delete/{districtId}")
+    public String dashboardAdminDeleteDistrict(@PathVariable Integer districtId,
+                                           HttpSession httpSession,
+                                           RedirectAttributes redirectAttributes) {
+        String url = BASE_URL + "district/";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            boolean isAdmin = user.getRole().getName().equals("Admin");
+
+            if (isAdmin) {
+                if (districtId != null) {
+                    url += districtId;
+
+                    ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
+                    MyResponse<Integer> myResponse;
+                    Integer responseInt = null;
+
+                    try {
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                        responseInt = myResponse.getData();
+                    } catch (IOException e) {
+                        LOGGER.error(e.getMessage());
+                    }
+
+                    String message = responseInt != null && responseInt == 1 ? "District delete success" : "District delete failed";
+
+                    redirectAttributes.addAttribute("message", message);
+                    return "redirect:/dashboard/admin/district/1";
+                } else
+                    return "redirect:/dashboard/admin";
+            } else
+                return "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
+
+
+    @GetMapping("/dashboard/admin/sub-district/delete/{subDistrictId}")
+    public String dashboardAdminDeleteSubDistrict(@PathVariable String subDistrictId,
+                                               HttpSession httpSession,
+                                               RedirectAttributes redirectAttributes) {
+        String url = BASE_URL + "sub-district/";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            boolean isAdmin = user.getRole().getName().equals("Admin");
+
+            if (isAdmin) {
+                if (subDistrictId != null) {
+                    url += subDistrictId;
+
+                    ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
+                    MyResponse<Integer> myResponse;
+                    Integer responseInt = null;
+
+                    try {
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                        responseInt = myResponse.getData();
+                    } catch (IOException e) {
+                        LOGGER.error(e.getMessage());
+                    }
+
+                    String message = responseInt != null && responseInt == 1 ? "Sub-District delete success" : "Sub-District delete failed";
+
+                    redirectAttributes.addAttribute("message", message);
+                    return "redirect:/dashboard/admin/sub-district/1";
+                } else
+                    return "redirect:/dashboard/admin";
+            } else
+                return "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
 
     @GetMapping("/dashboard/admin/user/delete/{userId}")
     public String dashboardAdminDeleteUser(@PathVariable Integer userId,

@@ -3,19 +3,19 @@
 <%--
   Created by IntelliJ IDEA.
   User: Faza Zulfika P P
-  Date: 10/17/2017
-  Time: 21:44
+  Date: 12/19/2017
+  Time: 03:56
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>
         <c:choose>
-            <c:when test="${empty city.id}">
-                <title>Admin - Add City</title>
+            <c:when test="${empty subDistrict.id}">
+                <title>Admin - Add Sub District</title>
             </c:when>
             <c:otherwise>
-                <title>Admin - Edit City</title>
+                <title>Admin - Edit Sub District</title>
             </c:otherwise>
         </c:choose>
 
@@ -52,7 +52,7 @@
 
         <div class="container">
             <p style="font-size: 35px; color: #66060b;">
-                <b>${user.userName.firstName} ${user.userName.middleName} ${user.userName.lastName} - <a href="/dashboard/admin/city/1">CITY</a></b>
+                <b>${user.userName.firstName} ${user.userName.middleName} ${user.userName.lastName} - <a href="/dashboard/admin/sub-district/1">SUB DISTRICT</a></b>
             </p>
 
             <hr>
@@ -65,20 +65,20 @@
 
             <br>
 
-            <form:form class="form-horizontal" name="addCity" method="post" action="/dashboard/admin/city/add">
-                <input name="cityId" type="number" value="${city.id}" hidden="hidden" />
+            <form:form class="form-horizontal" name="addSubDistrict" method="post" action="/dashboard/admin/sub-district/add">
+                <input name="subDistrictId" type="number" value="${subDistrict.id}" hidden="hidden" />
 
                 <div class="form-group">
-                    <label class="control-label col-sm-2" for="provinces">Provinsi :</label>
+                    <label class="control-label col-sm-2" for="districts">Kecamatan :</label>
                     <div class="col-sm-10">
-                        <select class="form-control" id="provinces" name="provinceId">
-                            <c:forEach items="${provinces}" var="city" varStatus="each">
+                        <select class="form-control" id="districts" name="districtId">
+                            <c:forEach items="${districts}" var="district" varStatus="each">
                                 <c:choose>
-                                    <c:when test="${city.province.id == city.id}">
-                                        <option value="${city.id}" selected="selected">${city.name}</option>
+                                    <c:when test="${subDistrict.district.id == district.id}">
+                                        <option value="${district.id}" selected="selected">${district.name}</option>
                                     </c:when>
                                     <c:otherwise>
-                                        <option value="${city.id}">${city.name}</option>
+                                        <option value="${district.id}">${district.name}</option>
                                     </c:otherwise>
                                 </c:choose>
                             </c:forEach>
@@ -87,16 +87,16 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-sm-2" for="city-name">Name :</label>
+                    <label class="control-label col-sm-2" for="sub-district-name">Name :</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="city-name" name="cityName" placeholder="Enter city name" value="${city.name}" required="required">
+                        <input type="text" class="form-control" id="sub-district-name" name="subDistrictName" placeholder="Enter sub district name" value="${subDistrict.name}" required="required">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <c:choose>
-                            <c:when test="${empty city.id}">
+                            <c:when test="${empty subDistrict.id}">
                                 <button type="submit" class="btn btn-success">Add</button>
                             </c:when>
                             <c:otherwise>

@@ -11,11 +11,11 @@
 <html>
     <head>
         <c:choose>
-            <c:when test="${empty city.id}">
-                <title>Admin - Add City</title>
+            <c:when test="${empty district.id}">
+                <title>Admin - Add District</title>
             </c:when>
             <c:otherwise>
-                <title>Admin - Edit City</title>
+                <title>Admin - Edit District</title>
             </c:otherwise>
         </c:choose>
 
@@ -52,7 +52,7 @@
 
         <div class="container">
             <p style="font-size: 35px; color: #66060b;">
-                <b>${user.userName.firstName} ${user.userName.middleName} ${user.userName.lastName} - <a href="/dashboard/admin/city/1">CITY</a></b>
+                <b>${user.userName.firstName} ${user.userName.middleName} ${user.userName.lastName} - <a href="/dashboard/admin/district/1">DISTRICT</a></b>
             </p>
 
             <hr>
@@ -65,16 +65,16 @@
 
             <br>
 
-            <form:form class="form-horizontal" name="addCity" method="post" action="/dashboard/admin/city/add">
-                <input name="cityId" type="number" value="${city.id}" hidden="hidden" />
+            <form:form class="form-horizontal" name="addDistrict" method="post" action="/dashboard/admin/district/add">
+                <input name="districtId" type="number" value="${district.id}" hidden="hidden" />
 
                 <div class="form-group">
-                    <label class="control-label col-sm-2" for="provinces">Provinsi :</label>
+                    <label class="control-label col-sm-2" for="cities">Kota :</label>
                     <div class="col-sm-10">
-                        <select class="form-control" id="provinces" name="provinceId">
-                            <c:forEach items="${provinces}" var="city" varStatus="each">
+                        <select class="form-control" id="cities" name="cityId">
+                            <c:forEach items="${cities}" var="city" varStatus="each">
                                 <c:choose>
-                                    <c:when test="${city.province.id == city.id}">
+                                    <c:when test="${district.city.id == city.id}">
                                         <option value="${city.id}" selected="selected">${city.name}</option>
                                     </c:when>
                                     <c:otherwise>
@@ -87,16 +87,16 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-sm-2" for="city-name">Name :</label>
+                    <label class="control-label col-sm-2" for="district-name">Name :</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="city-name" name="cityName" placeholder="Enter city name" value="${city.name}" required="required">
+                        <input type="text" class="form-control" id="district-name" name="districtName" placeholder="Enter district name" value="${district.name}" required="required">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <c:choose>
-                            <c:when test="${empty city.id}">
+                            <c:when test="${empty district.id}">
                                 <button type="submit" class="btn btn-success">Add</button>
                             </c:when>
                             <c:otherwise>

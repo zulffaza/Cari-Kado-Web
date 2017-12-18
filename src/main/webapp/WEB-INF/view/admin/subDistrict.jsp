@@ -9,7 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>
-        <title>Admin - City</title>
+        <title>Admin - Sub District</title>
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -44,7 +44,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <p style="font-size: 35px; color: #66060b;">
-                        <b>${user.userName.firstName} ${user.userName.middleName} ${user.userName.lastName} - CITY</b>
+                        <b>${user.userName.firstName} ${user.userName.middleName} ${user.userName.lastName} - SUB DISTRICT</b>
                     </p>
 
                     <hr>
@@ -57,7 +57,7 @@
 
                     <br>
 
-                    <a href="/dashboard/admin/city/add">
+                    <a href="/dashboard/admin/sub-district/add">
                         <button class="btn btn-success btn-xs" style="width: 80px; height: 30px;">
                             <i aria-hidden="true" class="fa fa-plus"></i> Tambah
                         </button>
@@ -84,30 +84,30 @@
                     <thead>
                     <tr>
                         <th>No</th>
-                        <th>Provinsi</th>
-                        <th>Kota</th>
+                        <th>Kecamatan</th>
+                        <th>Kelurahan</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${cities}" var="district" varStatus="each">
+                    <c:forEach items="${subDistricts}" var="district" varStatus="each">
                         <tr>
                             <td>
                                     ${((page - 1) * 10) + each.index + 1}
                             </td>
                             <td>
-                                    ${district.province.name}
+                                    ${district.district.name}
                             </td>
                             <td>
                                     ${district.name}
                             </td>
                             <td>
-                                <a href="/dashboard/admin/city/add/${district.id}">
+                                <a href="/dashboard/admin/sub-district/add/${district.id}">
                                     <button class="btn btn-primary btn-xs" style="width: 70px; height: 28px;">
                                         <i aria-hidden="true" class="fa fa-pencil-square-o"></i> Update
                                     </button>
                                 </a>
-                                <a href="/dashboard/admin/city/delete/${district.id}">
+                                <a href="/dashboard/admin/sub-district/delete/${district.id}">
                                     <button class="btn btn-danger btn-xs" style="width: 70px; height: 28px;">
                                         <i aria-hidden="true" class="fa fa-trash-o"></i> Delete
                                     </button>
@@ -122,23 +122,23 @@
             <ul class="pagination">
                 <c:if test="${page != 1}">
                     <li>
-                        <a href="/dashboard/admin/city/1">&laquo; first</a>
+                        <a href="/dashboard/admin/sub-district/1">&laquo; first</a>
                     </li>
                     <li>
-                        <a href="/dashboard/admin/city/${page - 1}">&lsaquo; previous</a>
+                        <a href="/dashboard/admin/sub-district/${page - 1}">&lsaquo; previous</a>
                     </li>
                 </c:if>
 
                 <li class="active">
-                    <a href="/dashboard/admin/city/${page}">${page}</a>
+                    <a href="/dashboard/admin/sub-district/${page}">${page}</a>
                 </li>
 
                 <c:if test="${lastPage != page}">
                     <li>
-                        <a href="/dashboard/admin/city/${page + 1}">next &rsaquo;</a>
+                        <a href="/dashboard/admin/sub-district/${page + 1}">next &rsaquo;</a>
                     </li>
                     <li>
-                        <a href="/dashboard/admin/city/${lastPage}">last &raquo;</a>
+                        <a href="/dashboard/admin/sub-district/${lastPage}">last &raquo;</a>
                     </li>
                 </c:if>
             </ul>
