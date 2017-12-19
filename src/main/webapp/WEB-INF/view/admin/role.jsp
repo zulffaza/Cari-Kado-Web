@@ -89,28 +89,39 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach items="${roles}" var="review" varStatus="each">
-                            <tr>
-                                <td>
-                                    ${((page - 1) * 10) + (each.index + 1)}
-                                </td>
-                                <td>
-                                    ${review.name}
-                                </td>
-                                <td>
-                                    <a href="/dashboard/admin/role/add/${review.id}">
-                                        <button class="btn btn-primary btn-xs" style="width: 70px; height: 28px;">
-                                            <i aria-hidden="true" class="fa fa-pencil-square-o"></i> Update
-                                        </button>
-                                    </a>
-                                    <a href="/dashboard/admin/role/delete/${review.id}">
-                                        <button class="btn btn-danger btn-xs" style="width: 70px; height: 28px;">
-                                            <i aria-hidden="true" class="fa fa-trash-o"></i> Delete
-                                        </button>
-                                    </a>
-                                </td>
-                            </tr>
-                        </c:forEach>
+                        <c:choose>
+                            <c:when test="${empty roles}">
+                                <tr>
+                                    <td colspan="3">
+                                        Tidak ada data
+                                    </td>
+                                </tr>
+                            </c:when>
+                            <c:otherwise>
+                                <c:forEach items="${roles}" var="review" varStatus="each">
+                                    <tr>
+                                        <td>
+                                            ${((page - 1) * 10) + (each.index + 1)}
+                                        </td>
+                                        <td>
+                                            ${review.name}
+                                        </td>
+                                        <td>
+                                            <a href="/dashboard/admin/role/add/${review.id}">
+                                                <button class="btn btn-primary btn-xs" style="width: 70px; height: 28px;">
+                                                    <i aria-hidden="true" class="fa fa-pencil-square-o"></i> Update
+                                                </button>
+                                            </a>
+                                            <a href="/dashboard/admin/role/delete/${review.id}">
+                                                <button class="btn btn-danger btn-xs" style="width: 70px; height: 28px;">
+                                                    <i aria-hidden="true" class="fa fa-trash-o"></i> Delete
+                                                </button>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>
                     </tbody>
                 </table>
             </div>

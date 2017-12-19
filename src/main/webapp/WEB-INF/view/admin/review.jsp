@@ -84,30 +84,41 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach items="${reviews}" var="review" varStatus="each">
-                            <tr>
-                                <td>
-                                    ${((page - 1) * 10) + (each.index + 1)}
-                                </td>
-                                <td>
-                                    ${review.createdAt}
-                                </td>
-                                <td>
-                                    ${review.name}
-                                </td>
-                                <td>
-                                    ${review.email}
-                                </td>
-                                <td>
-                                    ${review.comment}
-                                </td>
-                                <td>
-                                    <c:forEach var="i" begin="1" end="${review.rating}">
-                                        <span class="fa fa-star checked"></span>
-                                    </c:forEach>
-                                </td>
-                            </tr>
-                        </c:forEach>
+                        <c:choose>
+                            <c:when test="${empty reviews}">
+                                <tr>
+                                    <td colspan="6">
+                                        Tidak ada data
+                                    </td>
+                                </tr>
+                            </c:when>
+                            <c:otherwise>
+                                <c:forEach items="${reviews}" var="review" varStatus="each">
+                                    <tr>
+                                        <td>
+                                            ${((page - 1) * 10) + (each.index + 1)}
+                                        </td>
+                                        <td>
+                                            ${review.createdAt}
+                                        </td>
+                                        <td>
+                                            ${review.name}
+                                        </td>
+                                        <td>
+                                            ${review.email}
+                                        </td>
+                                        <td>
+                                            ${review.comment}
+                                        </td>
+                                        <td>
+                                            <c:forEach var="i" begin="1" end="${review.rating}">
+                                                <span class="fa fa-star checked"></span>
+                                            </c:forEach>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>
                     </tbody>
                 </table>
             </div>

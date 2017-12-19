@@ -92,37 +92,48 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach items="${users}" var="review" varStatus="each">
-                            <tr>
-                                <td>
-                                    ${((page - 1) * 10) + (each.index + 1)}
-                                </td>
-                                <td>
-                                    ${review.userName.firstName} ${review.userName.middleName} ${review.userName.lastName}
-                                </td>
-                                <td>
-                                    ${review.email}
-                                </td>
-                                <td>
-                                    ${review.role.name}
-                                </td>
-                                <td>
-                                    ${review.status}
-                                </td>
-                                <td>
-                                    <a href="/dashboard/admin/user/add/${review.id}">
-                                        <button class="btn btn-primary btn-xs" style="width: 70px; height: 28px;">
-                                            <i aria-hidden="true" class="fa fa-info-circle"></i> Detail
-                                        </button>
-                                    </a>
-                                    <a href="/dashboard/admin/user/delete/${review.id}">
-                                        <button class="btn btn-danger btn-xs" style="width: 70px; height: 28px;">
-                                            <i aria-hidden="true" class="fa fa-trash-o"></i> Delete
-                                        </button>
-                                    </a>
-                                </td>
-                            </tr>
-                        </c:forEach>
+                        <c:choose>
+                            <c:when test="${empty users}">
+                                <tr>
+                                    <td colspan="6">
+                                        Tidak ada data
+                                    </td>
+                                </tr>
+                            </c:when>
+                            <c:otherwise>
+                                <c:forEach items="${users}" var="review" varStatus="each">
+                                    <tr>
+                                        <td>
+                                                ${((page - 1) * 10) + (each.index + 1)}
+                                        </td>
+                                        <td>
+                                                ${review.userName.firstName} ${review.userName.middleName} ${review.userName.lastName}
+                                        </td>
+                                        <td>
+                                                ${review.email}
+                                        </td>
+                                        <td>
+                                                ${review.role.name}
+                                        </td>
+                                        <td>
+                                                ${review.status}
+                                        </td>
+                                        <td>
+                                            <a href="/dashboard/admin/user/add/${review.id}">
+                                                <button class="btn btn-primary btn-xs" style="width: 70px; height: 28px;">
+                                                    <i aria-hidden="true" class="fa fa-info-circle"></i> Detail
+                                                </button>
+                                            </a>
+                                            <a href="/dashboard/admin/user/delete/${review.id}">
+                                                <button class="btn btn-danger btn-xs" style="width: 70px; height: 28px;">
+                                                    <i aria-hidden="true" class="fa fa-trash-o"></i> Delete
+                                                </button>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>
                     </tbody>
                 </table>
             </div>

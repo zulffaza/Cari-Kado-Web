@@ -31,7 +31,7 @@ public class GiftInfoService {
         return mGiftInfoRepository.findAll(pageable);
     }
 
-    public GiftInfo findGift(Long id) {
+    public GiftInfo findGiftInfo(Integer id) {
         return mGiftInfoRepository.findOne(id);
     }
 
@@ -39,7 +39,7 @@ public class GiftInfoService {
         return mGiftInfoRepository.save(giftInfo);
     }
 
-    public void deleteGiftInfo(Long id) {
+    public void deleteGiftInfo(Integer id) {
         mGiftInfoRepository.delete(id);
     }
 }

@@ -82,39 +82,50 @@
             <div class="table-responsive">
                 <table class="table">
                     <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Negara</th>
-                        <th>Provinsi</th>
-                        <th>Actions</th>
-                    </tr>
+                        <tr>
+                            <th>No</th>
+                            <th>Negara</th>
+                            <th>Provinsi</th>
+                            <th>Actions</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${provinces}" var="province" varStatus="each">
-                        <tr>
-                            <td>
-                                    ${((page - 1) * 10) + each.index + 1}
-                            </td>
-                            <td>
-                                    ${province.country.name}
-                            </td>
-                            <td>
-                                    ${province.name}
-                            </td>
-                            <td>
-                                <a href="/dashboard/admin/province/add/${province.id}">
-                                    <button class="btn btn-primary btn-xs" style="width: 70px; height: 28px;">
-                                        <i aria-hidden="true" class="fa fa-pencil-square-o"></i> Update
-                                    </button>
-                                </a>
-                                <a href="/dashboard/admin/province/delete/${province.id}">
-                                    <button class="btn btn-danger btn-xs" style="width: 70px; height: 28px;">
-                                        <i aria-hidden="true" class="fa fa-trash-o"></i> Delete
-                                    </button>
-                                </a>
-                            </td>
-                        </tr>
-                    </c:forEach>
+                        <c:choose>
+                            <c:when test="${empty provinces}">
+                                <tr>
+                                    <td colspan="4">
+                                        Tidak ada data
+                                    </td>
+                                </tr>
+                            </c:when>
+                            <c:otherwise>
+                                <c:forEach items="${provinces}" var="province" varStatus="each">
+                                    <tr>
+                                        <td>
+                                                ${((page - 1) * 10) + each.index + 1}
+                                        </td>
+                                        <td>
+                                                ${province.country.name}
+                                        </td>
+                                        <td>
+                                                ${province.name}
+                                        </td>
+                                        <td>
+                                            <a href="/dashboard/admin/province/add/${province.id}">
+                                                <button class="btn btn-primary btn-xs" style="width: 70px; height: 28px;">
+                                                    <i aria-hidden="true" class="fa fa-pencil-square-o"></i> Update
+                                                </button>
+                                            </a>
+                                            <a href="/dashboard/admin/province/delete/${province.id}">
+                                                <button class="btn btn-danger btn-xs" style="width: 70px; height: 28px;">
+                                                    <i aria-hidden="true" class="fa fa-trash-o"></i> Delete
+                                                </button>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>
                     </tbody>
                 </table>
             </div>

@@ -89,28 +89,39 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach items="${countries}" var="country" varStatus="each">
-                            <tr>
-                                <td>
-                                        ${((page - 1) * 10) + each.index + 1}
-                                </td>
-                                <td>
-                                        ${country.name}
-                                </td>
-                                <td>
-                                    <a href="/dashboard/admin/country/add/${country.id}">
-                                        <button class="btn btn-primary btn-xs" style="width: 70px; height: 28px;">
-                                            <i aria-hidden="true" class="fa fa-pencil-square-o"></i> Update
-                                        </button>
-                                    </a>
-                                    <a href="/dashboard/admin/country/delete/${country.id}">
-                                        <button class="btn btn-danger btn-xs" style="width: 70px; height: 28px;">
-                                            <i aria-hidden="true" class="fa fa-trash-o"></i> Delete
-                                        </button>
-                                    </a>
-                                </td>
-                            </tr>
-                        </c:forEach>
+                        <c:choose>
+                            <c:when test="${empty countries}">
+                                <tr>
+                                    <td colspan="3">
+                                        Tidak ada data
+                                    </td>
+                                </tr>
+                            </c:when>
+                            <c:otherwise>
+                                <c:forEach items="${countries}" var="country" varStatus="each">
+                                    <tr>
+                                        <td>
+                                                ${((page - 1) * 10) + each.index + 1}
+                                        </td>
+                                        <td>
+                                                ${country.name}
+                                        </td>
+                                        <td>
+                                            <a href="/dashboard/admin/country/add/${country.id}">
+                                                <button class="btn btn-primary btn-xs" style="width: 70px; height: 28px;">
+                                                    <i aria-hidden="true" class="fa fa-pencil-square-o"></i> Update
+                                                </button>
+                                            </a>
+                                            <a href="/dashboard/admin/country/delete/${country.id}">
+                                                <button class="btn btn-danger btn-xs" style="width: 70px; height: 28px;">
+                                                    <i aria-hidden="true" class="fa fa-trash-o"></i> Delete
+                                                </button>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>
                     </tbody>
                 </table>
             </div>
