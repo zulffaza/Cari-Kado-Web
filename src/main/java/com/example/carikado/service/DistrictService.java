@@ -22,7 +22,7 @@ public class DistrictService {
 
     public Integer count() { return (int) mDistrictRepository.count(); }
 
-    public List<District> findAll() { return mDistrictRepository.findAll(); }
+    public List<District> findAll() { return mDistrictRepository.findAllWithSort(); }
 
     public Page<District> findAllPageable(Pageable pageable) { return mDistrictRepository.findAll(pageable); }
 

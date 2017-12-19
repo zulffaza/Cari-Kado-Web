@@ -25,7 +25,7 @@ public class UserService {
     }
 
     public List<User> findAll() {
-        return mUserRepository.findAll();
+        return mUserRepository.findAllWithSort();
     }
 
     public Page<User> findAllPageable(Pageable pageable) {

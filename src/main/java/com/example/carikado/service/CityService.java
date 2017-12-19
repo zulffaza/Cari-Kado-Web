@@ -20,7 +20,7 @@ public class CityService {
 
     public Integer count() { return (int) mCityRepository.count(); }
 
-    public List<City> findAll() { return mCityRepository.findAll(); }
+    public List<City> findAll() { return mCityRepository.findAllWithSort(); }
 
     public Page<City> findAllPageable(Pageable pageable) { return mCityRepository.findAll(pageable); }
 

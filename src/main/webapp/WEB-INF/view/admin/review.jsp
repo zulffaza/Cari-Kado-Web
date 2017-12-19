@@ -9,7 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>
-        <title>Admin - Role</title>
+        <title>Admin - Review</title>
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -44,7 +44,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <p style="font-size: 35px; color: #66060b;">
-                        <b>${user.userName.firstName} ${user.userName.middleName} ${user.userName.lastName} - ROLE</b>
+                        <b>${user.userName.firstName} ${user.userName.middleName} ${user.userName.lastName} - REVIEW</b>
                     </p>
 
                     <hr>
@@ -54,17 +54,9 @@
                             <strong>Info!</strong> ${message}
                         </div>
                     </c:if>
-
-                    <br>
-
-                    <a href="/dashboard/admin/role/add">
-                        <button class="btn btn-success btn-xs" style="width: 80px; height: 30px;">
-                            <i aria-hidden="true" class="fa fa-plus"></i> Tambah
-                        </button>
-                    </a>
                 </div>
 
-                <%--<form method="GET" action="#" accept-charset="UTF-8" role="search" class="navbar-form navbar-right">--%>
+                <%--<form method="GET" action="#" accept-charset="UTF-8" review="search" class="navbar-form navbar-right">--%>
                     <%--<div class="input-group">--%>
                         <%--<input type="text" name="search" placeholder="Search..." value="" class="form-control">--%>
 
@@ -84,30 +76,35 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Tanggal</th>
                             <th>Nama</th>
-                            <th>Actions</th>
+                            <th>Email</th>
+                            <th>Komentar</th>
+                            <th>Rating</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach items="${roles}" var="review" varStatus="each">
+                        <c:forEach items="${reviews}" var="review" varStatus="each">
                             <tr>
                                 <td>
                                     ${((page - 1) * 10) + (each.index + 1)}
                                 </td>
                                 <td>
+                                    ${review.createdAt}
+                                </td>
+                                <td>
                                     ${review.name}
                                 </td>
                                 <td>
-                                    <a href="/dashboard/admin/role/add/${review.id}">
-                                        <button class="btn btn-primary btn-xs" style="width: 70px; height: 28px;">
-                                            <i aria-hidden="true" class="fa fa-pencil-square-o"></i> Update
-                                        </button>
-                                    </a>
-                                    <a href="/dashboard/admin/role/delete/${review.id}">
-                                        <button class="btn btn-danger btn-xs" style="width: 70px; height: 28px;">
-                                            <i aria-hidden="true" class="fa fa-trash-o"></i> Delete
-                                        </button>
-                                    </a>
+                                    ${review.email}
+                                </td>
+                                <td>
+                                    ${review.comment}
+                                </td>
+                                <td>
+                                    <c:forEach var="i" begin="1" end="${review.rating}">
+                                        <span class="fa fa-star checked"></span>
+                                    </c:forEach>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -118,23 +115,23 @@
             <ul class="pagination">
                 <c:if test="${page != 1}">
                     <li>
-                        <a href="/dashboard/admin/role/1">&laquo; first</a>
+                        <a href="/dashboard/admin/review/1">&laquo; first</a>
                     </li>
                     <li>
-                        <a href="/dashboard/admin/role/${page - 1}">&lsaquo; previous</a>
+                        <a href="/dashboard/admin/review/${page - 1}">&lsaquo; previous</a>
                     </li>
                 </c:if>
 
                 <li class="active">
-                    <a href="/dashboard/admin/role/${page}">${page}</a>
+                    <a href="/dashboard/admin/review/${page}">${page}</a>
                 </li>
 
                 <c:if test="${lastPage != page}">
                     <li>
-                        <a href="/dashboard/admin/role/${page + 1}">next &rsaquo;</a>
+                        <a href="/dashboard/admin/review/${page + 1}">next &rsaquo;</a>
                     </li>
                     <li>
-                        <a href="/dashboard/admin/role/${lastPage}">last &raquo;</a>
+                        <a href="/dashboard/admin/review/${lastPage}">last &raquo;</a>
                     </li>
                 </c:if>
             </ul>

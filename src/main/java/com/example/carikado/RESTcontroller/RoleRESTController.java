@@ -79,7 +79,7 @@ public class RoleRESTController {
         Page<Role> rolePage = mRoleService.findAllPageable(pageRequest);
 
         roles = rolePage.getContent();
-        message = "Find gift info success";
+        message = "Find role success";
 
         MyPage<List> myPage = new MyPage<>();
 

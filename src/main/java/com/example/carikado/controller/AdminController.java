@@ -17,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 @Controller
@@ -99,6 +100,16 @@ public class AdminController {
 
         if (user != null)
             return user.getRole().getName().equals("Admin") ? "redirect:/dashboard/admin/sub-district/1" : "redirect:/dashboard";
+        else
+            return "redirect:/login";
+    }
+
+    @GetMapping("/dashboard/admin/user")
+    public String dashboardAdminUser(HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null)
+            return user.getRole().getName().equals("Admin") ? "redirect:/dashboard/admin/user/1" : "redirect:/dashboard";
         else
             return "redirect:/login";
     }
@@ -447,41 +458,96 @@ public class AdminController {
             boolean isAdmin = user.getRole().getName().equals("Admin");
 
             if (isAdmin) {
-                if (page > 0) {
-                    String pageString = String.valueOf(page);
-                    String pageSizeString = pageSize != null ? String.valueOf(pageSize) : null;
-                    String sortString = sort != null ? String.valueOf(sort) : null;
-
-                    UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url);
-
-                    builder.queryParam("page", pageString);
-                    builder.queryParam("pageSize", pageSizeString);
-                    builder.queryParam("sort", sortString);
-
-                    ResponseEntity<String> response = mRestTemplate.exchange(builder.buildAndExpand().toUriString(),
-                            HttpMethod.GET, null, String.class);
-
-                    MyResponse<ArrayList<User>> myResponse;
-                    ArrayList<User> users = new ArrayList<>();
-
-                    try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<User>>>() {});
-                        users = myResponse.getData();
-                    } catch (IOException e) {
-                        LOGGER.error(e.getMessage());
-                    }
-
-                    modelMap.addAttribute("message", message);
-                    modelMap.addAttribute("page", pageString);
-                    modelMap.addAttribute("pageSize", pageSizeString);
-                    modelMap.addAttribute("sort", sortString);
-                    modelMap.addAttribute("users", users);
-
-                    // TODO make read user layout
-
-                    return "admin/role";
-                } else
+                if (page < 0)
                     return "redirect:/dashboard/admin/user/1";
+
+                UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url);
+
+                builder.queryParam("page", page);
+                builder.queryParam("pageSize", pageSize);
+                builder.queryParam("sort", sort);
+
+                ResponseEntity<String> response = mRestTemplate.exchange(builder.buildAndExpand().toUriString(),
+                        HttpMethod.GET, null, String.class);
+
+                MyResponse<MyPage<ArrayList<User>>> myResponse;
+                MyPage<ArrayList<User>> myPage = new MyPage<>();
+                ArrayList<User> users = new ArrayList<>();
+
+                try {
+                    myResponse = mObjectMapper.readValue(response.getBody(),
+                            new TypeReference<MyResponse<MyPage<ArrayList<User>>>>() {});
+
+                    myPage = myResponse.getData();
+                    users = myPage.getData();
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage());
+                }
+
+                modelMap.addAttribute("user", user);
+                modelMap.addAttribute("message", message);
+                modelMap.addAttribute("page", myPage.getPage());
+                modelMap.addAttribute("lastPage", myPage.getLastPage());
+                modelMap.addAttribute("pageSize", myPage.getPageSize());
+                modelMap.addAttribute("sort", myPage.getSort());
+                modelMap.addAttribute("users", users);
+
+                return "admin/user";
+            } else
+                return "redirect:/dashboard";
+        } else
+            return "redirect:/login";
+    }
+
+    @GetMapping("/dashboard/admin/review/{page}")
+    public String dashboardAdminReview(@PathVariable Integer page,
+                                     @RequestParam(required = false) Integer pageSize,
+                                     @RequestParam(required = false) Integer sort,
+                                     @ModelAttribute("message") String message,
+                                     HttpSession httpSession,
+                                     ModelMap modelMap) {
+        String url = BASE_URL + "review";
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null) {
+            boolean isAdmin = user.getRole().getName().equals("Admin");
+
+            if (isAdmin) {
+                if (page < 0)
+                    return "redirect:/dashboard/admin/review/1";
+
+                UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url);
+
+                builder.queryParam("page", page);
+                builder.queryParam("pageSize", pageSize);
+                builder.queryParam("sort", sort);
+
+                ResponseEntity<String> response = mRestTemplate.exchange(builder.buildAndExpand().toUriString(),
+                        HttpMethod.GET, null, String.class);
+
+                MyResponse<MyPage<ArrayList<Review>>> myResponse;
+                MyPage<ArrayList<Review>> myPage = new MyPage<>();
+                ArrayList<Review> reviews = new ArrayList<>();
+
+                try {
+                    myResponse = mObjectMapper.readValue(response.getBody(),
+                            new TypeReference<MyResponse<MyPage<ArrayList<Review>>>>() {});
+
+                    myPage = myResponse.getData();
+                    reviews = myPage.getData();
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage());
+                }
+
+                modelMap.addAttribute("user", user);
+                modelMap.addAttribute("message", message);
+                modelMap.addAttribute("page", myPage.getPage());
+                modelMap.addAttribute("lastPage", myPage.getLastPage());
+                modelMap.addAttribute("pageSize", myPage.getPageSize());
+                modelMap.addAttribute("sort", myPage.getSort());
+                modelMap.addAttribute("reviews", reviews);
+
+                return "admin/review";
             } else
                 return "redirect:/dashboard";
         } else
@@ -646,18 +712,112 @@ public class AdminController {
 
     @GetMapping("/dashboard/admin/user/add")
     public String dashboardAdminAddUser(@ModelAttribute("message") String message,
-                                        @ModelAttribute("user") User lastUser,
+                                        @ModelAttribute("user") User userModel,
                                         HttpSession httpSession, ModelMap modelMap) {
+        String url;
+        ResponseEntity<String> response;
+
         User user = (User) httpSession.getAttribute("user");
 
-        // TODO make add user layout
-
         if (user != null) {
+            url = BASE_URL + "country/all";
+            response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+            MyResponse<ArrayList<Country>> myResponseCountry;
+            ArrayList<Country> countries = new ArrayList<>();
+
+            try {
+                myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {});
+                countries = myResponseCountry.getData();
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage());
+                message = "Internal server error";
+            }
+
+            url = BASE_URL + "province/all";
+            response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+            MyResponse<ArrayList<Province>> myResponseProvince;
+            ArrayList<Province> provinces = new ArrayList<>();
+
+            try {
+                myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {});
+                provinces = myResponseProvince.getData();
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage());
+                message = "Internal server error";
+            }
+
+            url = BASE_URL + "city/all";
+            response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+            MyResponse<ArrayList<City>> myResponseCity;
+            ArrayList<City> cities = new ArrayList<>();
+
+            try {
+                myResponseCity = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<City>>>() {});
+                cities = myResponseCity.getData();
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage());
+                message = "Internal server error";
+            }
+
+            url = BASE_URL + "district/all";
+            response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+            MyResponse<ArrayList<District>> myResponseDistrict;
+            ArrayList<District> districts = new ArrayList<>();
+
+            try {
+                myResponseDistrict = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<District>>>() {});
+                districts = myResponseDistrict.getData();
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage());
+                message = "Internal server error";
+            }
+
+            url = BASE_URL + "sub-district/all";
+            response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+            MyResponse<ArrayList<SubDistrict>> myResponseSubDistrict;
+            ArrayList<SubDistrict> subDistricts = new ArrayList<>();
+
+            try {
+                myResponseSubDistrict = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<SubDistrict>>>() {});
+                subDistricts = myResponseSubDistrict.getData();
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage());
+                message = "Internal server error";
+            }
+
+            url = BASE_URL + "role/all";
+            response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+            MyResponse<ArrayList<Role>> myResponseRole;
+            ArrayList<Role> roles = new ArrayList<>();
+
+            try {
+                myResponseRole = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Role>>>() {});
+                roles = myResponseRole.getData();
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage());
+                message = "Internal server error";
+            }
+
+            ArrayList<UserStatus> userStatuses = new ArrayList<>(Arrays.asList(UserStatus.values()));
+
             modelMap.addAttribute("user", user);
             modelMap.addAttribute("message", message);
-            modelMap.addAttribute("lastUser", lastUser);
+            modelMap.addAttribute("countries", countries);
+            modelMap.addAttribute("provinces", provinces);
+            modelMap.addAttribute("cities", cities);
+            modelMap.addAttribute("districts", districts);
+            modelMap.addAttribute("subDistricts", subDistricts);
+            modelMap.addAttribute("roles", roles);
+            modelMap.addAttribute("userStatuses", userStatuses);
+            modelMap.addAttribute("userModel", userModel);
 
-            return user.getRole().getName().equals("Admin") ? "admin/addRole" : "redirect:/dashboard";
+            return user.getRole().getName().equals("Admin") ? "admin/addUser" : "redirect:/dashboard";
         } else
             return "redirect:/login";
     }

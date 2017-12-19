@@ -19,7 +19,7 @@ public class CountryService {
 
     public Integer count() { return (int) mCountryRepository.count(); }
 
-    public List<Country> findAll() { return mCountryRepository.findAll();}
+    public List<Country> findAll() { return mCountryRepository.findAllWithSort();}
 
     public Page<Country> findAllPageable(Pageable pageable) { return mCountryRepository.findAll(pageable); }
 

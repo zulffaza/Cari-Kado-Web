@@ -24,7 +24,7 @@ public class GiftInfoService {
     }
 
     public List<GiftInfo> findAll() {
-        return mGiftInfoRepository.findAll();
+        return mGiftInfoRepository.findAllWithSort();
     }
 
     public Page<GiftInfo> findAllPageable(Pageable pageable) {

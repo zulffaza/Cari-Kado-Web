@@ -26,7 +26,7 @@ public class RoleService {
     }
 
     public List<Role> findAll() {
-        return mRoleRepository.findAll();
+        return mRoleRepository.findAllWithSort();
     }
 
     public Page<Role> findAllPageable(Pageable pageable) {

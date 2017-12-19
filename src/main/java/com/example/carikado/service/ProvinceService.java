@@ -24,7 +24,7 @@ public class ProvinceService {
     }
 
     public List<Province> findAll() {
-        return mProvinceRepository.findAll();
+        return mProvinceRepository.findAllWithSort();
     }
 
     public Page<Province> findAllPageable(Pageable pageable) {

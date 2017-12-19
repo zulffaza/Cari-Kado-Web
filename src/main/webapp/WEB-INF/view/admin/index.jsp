@@ -62,6 +62,11 @@
                     </a>
                 </center>
                 <center>
+                    <a href="/dashboard/admin/review/1">
+                        <button class="button btn btn-alert menu-dashboard">REVIEW</button>
+                    </a>
+                </center>
+                <center>
                     <a href="/dashboard/admin/country/1">
                         <button class="button btn btn-alert menu-dashboard">COUNTRY</button>
                     </a>

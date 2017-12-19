@@ -1,15 +1,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
-  User: Halimyr8
-  Date: 12/18/2017
-  Time: 2:15 AM
+  User: Faza Zulfika P P
+  Date: 10/17/2017
+  Time: 19:50
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>
-        <title>Admin - Province</title>
+        <title>Admin - User</title>
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -44,7 +44,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <p style="font-size: 35px; color: #66060b;">
-                        <b>${user.userName.firstName} ${user.userName.middleName} ${user.userName.lastName} - PROVINCE</b>
+                        <b>${user.userName.firstName} ${user.userName.middleName} ${user.userName.lastName} - USER</b>
                     </p>
 
                     <hr>
@@ -57,7 +57,7 @@
 
                     <br>
 
-                    <a href="/dashboard/admin/province/add">
+                    <a href="/dashboard/admin/user/add">
                         <button class="btn btn-success btn-xs" style="width: 80px; height: 30px;">
                             <i aria-hidden="true" class="fa fa-plus"></i> Tambah
                         </button>
@@ -65,15 +65,15 @@
                 </div>
 
                 <%--<form method="GET" action="#" accept-charset="UTF-8" role="search" class="navbar-form navbar-right">--%>
-                <%--<div class="input-group">--%>
-                <%--<input type="text" name="search" placeholder="Search..." value="" class="form-control">--%>
+                    <%--<div class="input-group">--%>
+                        <%--<input type="text" name="search" placeholder="Search..." value="" class="form-control">--%>
 
-                <%--<span class="input-group-btn">--%>
-                <%--<button type="submit" class="btn btn-default">--%>
-                <%--<i class="fa fa-search"></i>--%>
-                <%--</button>--%>
-                <%--</span>--%>
-                <%--</div>--%>
+                        <%--<span class="input-group-btn">--%>
+                            <%--<button type="submit" class="btn btn-default">--%>
+                                <%--<i class="fa fa-search"></i>--%>
+                            <%--</button>--%>
+                        <%--</span>--%>
+                    <%--</div>--%>
                 <%--</form>--%>
             </div>
 
@@ -82,39 +82,47 @@
             <div class="table-responsive">
                 <table class="table">
                     <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Negara</th>
-                        <th>Provinsi</th>
-                        <th>Actions</th>
-                    </tr>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${provinces}" var="province" varStatus="each">
-                        <tr>
-                            <td>
-                                    ${((page - 1) * 10) + each.index + 1}
-                            </td>
-                            <td>
-                                    ${province.country.name}
-                            </td>
-                            <td>
-                                    ${province.name}
-                            </td>
-                            <td>
-                                <a href="/dashboard/admin/province/add/${province.id}">
-                                    <button class="btn btn-primary btn-xs" style="width: 70px; height: 28px;">
-                                        <i aria-hidden="true" class="fa fa-pencil-square-o"></i> Update
-                                    </button>
-                                </a>
-                                <a href="/dashboard/admin/province/delete/${province.id}">
-                                    <button class="btn btn-danger btn-xs" style="width: 70px; height: 28px;">
-                                        <i aria-hidden="true" class="fa fa-trash-o"></i> Delete
-                                    </button>
-                                </a>
-                            </td>
-                        </tr>
-                    </c:forEach>
+                        <c:forEach items="${users}" var="review" varStatus="each">
+                            <tr>
+                                <td>
+                                    ${((page - 1) * 10) + (each.index + 1)}
+                                </td>
+                                <td>
+                                    ${review.userName.firstName} ${review.userName.middleName} ${review.userName.lastName}
+                                </td>
+                                <td>
+                                    ${review.email}
+                                </td>
+                                <td>
+                                    ${review.role.name}
+                                </td>
+                                <td>
+                                    ${review.status}
+                                </td>
+                                <td>
+                                    <a href="/dashboard/admin/user/add/${review.id}">
+                                        <button class="btn btn-primary btn-xs" style="width: 70px; height: 28px;">
+                                            <i aria-hidden="true" class="fa fa-info-circle"></i> Detail
+                                        </button>
+                                    </a>
+                                    <a href="/dashboard/admin/user/delete/${review.id}">
+                                        <button class="btn btn-danger btn-xs" style="width: 70px; height: 28px;">
+                                            <i aria-hidden="true" class="fa fa-trash-o"></i> Delete
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
+                        </c:forEach>
                     </tbody>
                 </table>
             </div>
@@ -122,23 +130,23 @@
             <ul class="pagination">
                 <c:if test="${page != 1}">
                     <li>
-                        <a href="/dashboard/admin/province/1">&laquo; first</a>
+                        <a href="/dashboard/admin/user/1">&laquo; first</a>
                     </li>
                     <li>
-                        <a href="/dashboard/admin/province/${page - 1}">&lsaquo; previous</a>
+                        <a href="/dashboard/admin/user/${page - 1}">&lsaquo; previous</a>
                     </li>
                 </c:if>
 
                 <li class="active">
-                    <a href="/dashboard/admin/province/${page}">${page}</a>
+                    <a href="/dashboard/admin/user/${page}">${page}</a>
                 </li>
 
                 <c:if test="${lastPage != page}">
                     <li>
-                        <a href="/dashboard/admin/province/${page + 1}">next &rsaquo;</a>
+                        <a href="/dashboard/admin/user/${page + 1}">next &rsaquo;</a>
                     </li>
                     <li>
-                        <a href="/dashboard/admin/province/${lastPage}">last &raquo;</a>
+                        <a href="/dashboard/admin/user/${lastPage}">last &raquo;</a>
                     </li>
                 </c:if>
             </ul>

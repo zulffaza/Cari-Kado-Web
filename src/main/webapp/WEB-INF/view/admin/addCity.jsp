@@ -72,13 +72,13 @@
                     <label class="control-label col-sm-2" for="provinces">Provinsi :</label>
                     <div class="col-sm-10">
                         <select class="form-control" id="provinces" name="provinceId">
-                            <c:forEach items="${provinces}" var="city" varStatus="each">
+                            <c:forEach items="${provinces}" var="province" varStatus="each">
                                 <c:choose>
-                                    <c:when test="${city.province.id == city.id}">
-                                        <option value="${city.id}" selected="selected">${city.name}</option>
+                                    <c:when test="${city.province.id == province.id}">
+                                        <option value="${province.id}" selected="selected">${province.name}</option>
                                     </c:when>
                                     <c:otherwise>
-                                        <option value="${city.id}">${city.name}</option>
+                                        <option value="${province.id}">${province.name}</option>
                                     </c:otherwise>
                                 </c:choose>
                             </c:forEach>

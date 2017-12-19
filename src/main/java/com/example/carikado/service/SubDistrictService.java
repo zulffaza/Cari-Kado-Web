@@ -21,7 +21,7 @@ public class SubDistrictService {
 
     public Integer count() { return (int) mSubDistrictRepository.count(); }
 
-    public List<SubDistrict> findAll() { return mSubDistrictRepository.findAll(); }
+    public List<SubDistrict> findAll() { return mSubDistrictRepository.findAllWithSort(); }
 
     public Page<SubDistrict> findAllPageable(Pageable pageable) { return mSubDistrictRepository.findAll(pageable); }
 
