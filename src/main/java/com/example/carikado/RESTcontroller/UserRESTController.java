@@ -88,7 +88,7 @@ public class UserRESTController {
         MyPage<List> myPage = new MyPage<>();
 
         myPage.setPage(++page);
-        myPage.setLastPage(userPage.getTotalPages());
+        myPage.setLastPage(userPage.getTotalPages() == 0 ? 1 : userPage.getTotalPages());
         myPage.setPageSize(pageSize);
         myPage.setSort(sort == null ? 1 : sort);
         myPage.setTotalElement(userPage.getTotalElements());

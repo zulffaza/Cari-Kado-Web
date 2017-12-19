@@ -89,7 +89,7 @@ public class ProvinceRESTController {
         MyPage<List> myPage = new MyPage<>();
 
         myPage.setPage(++page);
-        myPage.setLastPage(provincePage.getTotalPages());
+        myPage.setLastPage(provincePage.getTotalPages() == 0 ? 1 : provincePage.getTotalPages());
         myPage.setPageSize(pageSize);
         myPage.setSort(sort == null ? 1 : sort);
         myPage.setTotalElement(provincePage.getTotalElements());

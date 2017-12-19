@@ -91,7 +91,7 @@ public class DistrictRESTController {
         MyPage<List> myPage = new MyPage<>();
 
         myPage.setPage(++page);
-        myPage.setLastPage(districtPage.getTotalPages());
+        myPage.setLastPage(districtPage.getTotalPages() == 0 ? 1 : districtPage.getTotalPages());
         myPage.setPageSize(pageSize);
         myPage.setSort(sort == null ? 1 : sort);
         myPage.setTotalElement(districtPage.getTotalElements());

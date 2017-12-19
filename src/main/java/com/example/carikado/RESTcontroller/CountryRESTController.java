@@ -84,7 +84,7 @@ public class CountryRESTController {
         MyPage<List> myPage = new MyPage<>();
 
         myPage.setPage(++page);
-        myPage.setLastPage(countryPage.getTotalPages());
+        myPage.setLastPage(countryPage.getTotalPages() == 0 ? 1 : countryPage.getTotalPages());
         myPage.setPageSize(pageSize);
         myPage.setSort(sort == null ? 1 : sort);
         myPage.setTotalElement(countryPage.getTotalElements());

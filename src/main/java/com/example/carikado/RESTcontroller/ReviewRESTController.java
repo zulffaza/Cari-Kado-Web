@@ -85,7 +85,7 @@ public class ReviewRESTController {
         MyPage<List> myPage = new MyPage<>();
 
         myPage.setPage(++page);
-        myPage.setLastPage(reviewPage.getTotalPages());
+        myPage.setLastPage(reviewPage.getTotalPages() == 0 ? 1 : reviewPage.getTotalPages());
         myPage.setPageSize(pageSize);
         myPage.setSort(sort == null ? 1 : sort);
         myPage.setTotalElement(reviewPage.getTotalElements());

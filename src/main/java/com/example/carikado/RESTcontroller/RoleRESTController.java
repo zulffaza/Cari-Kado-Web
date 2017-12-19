@@ -84,7 +84,7 @@ public class RoleRESTController {
         MyPage<List> myPage = new MyPage<>();
 
         myPage.setPage(++page);
-        myPage.setLastPage(rolePage.getTotalPages());
+        myPage.setLastPage(rolePage.getTotalPages() == 0 ? 1 : rolePage.getTotalPages());
         myPage.setPageSize(pageSize);
         myPage.setSort(sort == null ? 1 : sort);
         myPage.setTotalElement(rolePage.getTotalElements());

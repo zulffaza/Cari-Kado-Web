@@ -84,7 +84,7 @@ public class GiftInfoCategoryRESTController {
         MyPage<List> myPage = new MyPage<>();
 
         myPage.setPage(++page);
-        myPage.setLastPage(giftInfoCategoryPage.getTotalPages());
+        myPage.setLastPage(giftInfoCategoryPage.getTotalPages() == 0 ? 1 : giftInfoCategoryPage.getTotalPages());
         myPage.setPageSize(pageSize);
         myPage.setSort(sort == null ? 1 : sort);
         myPage.setTotalElement(giftInfoCategoryPage.getTotalElements());
