@@ -104,6 +104,7 @@ public class AdminController {
             return "redirect:/login";
     }
 
+
     @GetMapping("/dashboard/admin/user")
     public String dashboardAdminUser(HttpSession httpSession) {
         User user = (User) httpSession.getAttribute("user");
@@ -443,6 +444,7 @@ public class AdminController {
         } else
             return "redirect:/login";
     }
+
 
     @GetMapping("/dashboard/admin/user/{page}")
     public String dashboardAdminUser(@PathVariable Integer page,

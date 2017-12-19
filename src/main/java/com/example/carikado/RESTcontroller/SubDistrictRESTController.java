@@ -93,7 +93,7 @@ public class SubDistrictRESTController {
         MyPage<List> myPage = new MyPage<>();
 
         myPage.setPage(++page);
-        myPage.setLastPage(subDistrictPage.getTotalPages());
+        myPage.setLastPage(subDistrictPage.getTotalPages() == 0 ? 1 : subDistrictPage.getTotalPages());
         myPage.setPageSize(pageSize);
         myPage.setSort(sort == null ? 1 : sort);
         myPage.setTotalElement(subDistrictPage.getTotalElements());

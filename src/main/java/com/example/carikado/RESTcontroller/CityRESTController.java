@@ -90,7 +90,7 @@ public class CityRESTController {
         MyPage<List> myPage = new MyPage<>();
 
         myPage.setPage(++page);
-        myPage.setLastPage(cityPage.getTotalPages());
+        myPage.setLastPage(cityPage.getTotalPages() == 0 ? 1 : cityPage.getTotalPages());
         myPage.setPageSize(pageSize);
         myPage.setSort(sort == null ? 1 : sort);
         myPage.setTotalElement(cityPage.getTotalElements());
