@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 
 @Controller
@@ -1161,21 +1162,114 @@ public class AdminController {
                     ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.GET, null,
                             String.class);
                     MyResponse<User> myResponse;
-                    user = null;
+                    User userModel = null;
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
-                        user = myResponse.getData();
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<User>>() {});
+                        userModel = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());
                     }
 
-                    if (user != null) {
-                        // TODO make add user layout
+                    if (userModel != null) {
+                        url = BASE_URL + "country/all";
+                        response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
 
-                        modelMap.addAttribute("message", message);
+                        MyResponse<ArrayList<Country>> myResponseCountry;
+                        ArrayList<Country> countries = new ArrayList<>();
+
+                        try {
+                            myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {});
+                            countries = myResponseCountry.getData();
+                        } catch (IOException e) {
+                            LOGGER.error(e.getMessage());
+                            message = "Internal server error";
+                        }
+
+                        url = BASE_URL + "province/all";
+                        response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+                        MyResponse<ArrayList<Province>> myResponseProvince;
+                        ArrayList<Province> provinces = new ArrayList<>();
+
+                        try {
+                            myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {});
+                            provinces = myResponseProvince.getData();
+                        } catch (IOException e) {
+                            LOGGER.error(e.getMessage());
+                            message = "Internal server error";
+                        }
+
+                        url = BASE_URL + "city/all";
+                        response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+                        MyResponse<ArrayList<City>> myResponseCity;
+                        ArrayList<City> cities = new ArrayList<>();
+
+                        try {
+                            myResponseCity = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<City>>>() {});
+                            cities = myResponseCity.getData();
+                        } catch (IOException e) {
+                            LOGGER.error(e.getMessage());
+                            message = "Internal server error";
+                        }
+
+                        url = BASE_URL + "district/all";
+                        response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+                        MyResponse<ArrayList<District>> myResponseDistrict;
+                        ArrayList<District> districts = new ArrayList<>();
+
+                        try {
+                            myResponseDistrict = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<District>>>() {});
+                            districts = myResponseDistrict.getData();
+                        } catch (IOException e) {
+                            LOGGER.error(e.getMessage());
+                            message = "Internal server error";
+                        }
+
+                        url = BASE_URL + "sub-district/all";
+                        response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+                        MyResponse<ArrayList<SubDistrict>> myResponseSubDistrict;
+                        ArrayList<SubDistrict> subDistricts = new ArrayList<>();
+
+                        try {
+                            myResponseSubDistrict = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<SubDistrict>>>() {});
+                            subDistricts = myResponseSubDistrict.getData();
+                        } catch (IOException e) {
+                            LOGGER.error(e.getMessage());
+                            message = "Internal server error";
+                        }
+
+                        url = BASE_URL + "role/all";
+                        response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+                        MyResponse<ArrayList<Role>> myResponseRole;
+                        ArrayList<Role> roles = new ArrayList<>();
+
+                        try {
+                            myResponseRole = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Role>>>() {});
+                            roles = myResponseRole.getData();
+                        } catch (IOException e) {
+                            LOGGER.error(e.getMessage());
+                            message = "Internal server error";
+                        }
+
+                        ArrayList<UserStatus> userStatuses = new ArrayList<>(Arrays.asList(UserStatus.values()));
+
                         modelMap.addAttribute("user", user);
-                        return "admin/addRole";
+                        modelMap.addAttribute("message", message);
+                        modelMap.addAttribute("countries", countries);
+                        modelMap.addAttribute("provinces", provinces);
+                        modelMap.addAttribute("cities", cities);
+                        modelMap.addAttribute("districts", districts);
+                        modelMap.addAttribute("subDistricts", subDistricts);
+                        modelMap.addAttribute("roles", roles);
+                        modelMap.addAttribute("userStatuses", userStatuses);
+                        modelMap.addAttribute("userModel", userModel);
+
+                        return "admin/addUser";
                     } else
                         return "redirect:/dashboard/admin/user/1";
                 } else
@@ -1238,8 +1332,6 @@ public class AdminController {
                         message = "Internal server error";
                     else
                         message = myResponse.getMessage();
-
-                    role = new Role(roleName);
 
                     redirectAttributes.addAttribute("message", message);
                     redirectAttributes.addAttribute("role", role);
@@ -1309,8 +1401,6 @@ public class AdminController {
                         message = "Internal server error";
                     else
                         message = myResponse.getMessage();
-
-                    country = new Country(countryName);
 
                     redirectAttributes.addAttribute("message", message);
                     redirectAttributes.addAttribute("country", country);
@@ -1388,12 +1478,6 @@ public class AdminController {
                     else
                         message += "province failed";
 
-                    country = new Country();
-                    province = new Province(provinceName);
-
-                    country.setId(countryId);
-                    province.setCountry(country);
-
                     redirectAttributes.addAttribute("message", message);
                     redirectAttributes.addAttribute("province", province);
                 }
@@ -1470,12 +1554,6 @@ public class AdminController {
                     else
                         message += "city failed";
 
-                    province = new Province();
-                    city = new City(cityName);
-
-                    province.setId(provinceId);
-                    city.setProvince(province);
-
                     redirectAttributes.addAttribute("message", message);
                     redirectAttributes.addAttribute("city", city);
                 }
@@ -1551,12 +1629,6 @@ public class AdminController {
                         message = "Internal server error";
                     else
                         message += "district failed";
-
-                    city = new City();
-                    district = new District(districtName);
-
-                    city.setId(cityId);
-                    district.setCity(city);
 
                     redirectAttributes.addAttribute("message", message);
                     redirectAttributes.addAttribute("district", district);
@@ -1635,12 +1707,6 @@ public class AdminController {
                     else
                         message += "sub district failed";
 
-                    district = new District();
-                    subDistrict = new SubDistrict(subDistrictName);
-
-                    district.setId(districtId);
-                    subDistrict.setDistrict(district);
-
                     redirectAttributes.addAttribute("message", message);
                     redirectAttributes.addAttribute("subDistrict", subDistrict);
                 }
@@ -1659,7 +1725,22 @@ public class AdminController {
 
     @PostMapping("/dashboard/admin/user/add")
     public String dashboardAdminAddUser(@RequestParam(name = "userId", required = false) Integer userId,
-                                        @RequestParam("userName") String userName,
+                                        @RequestParam("userFirstName") String userFirstName,
+                                        @RequestParam("userMiddleName") String userMiddleName,
+                                        @RequestParam("userLastName") String userLastName,
+                                        @RequestParam("userAddressCountryId") Integer userAddressCountryId,
+                                        @RequestParam("userAddressProvinceId") Integer userAddressProvinceId,
+                                        @RequestParam("userAddressCityId") Integer userAddressCityId,
+                                        @RequestParam("userAddressDistrictId") Integer userAddressDistrictId,
+                                        @RequestParam("userAddressSubDistrictId") String userAddressSubDistrictId,
+                                        @RequestParam("userAddressStreet") String userAddressStreet,
+                                        @RequestParam("userAddressHamlet") Integer userAddressHamlet,
+                                        @RequestParam("userAddressNeighbourhood") Integer userAddressNeighbourhood,
+                                        @RequestParam("userEmail") String userEmail,
+                                        @RequestParam("userPassword") String userPassword,
+                                        @RequestParam("userPhone") String userPhone,
+                                        @RequestParam("userRoleId") Integer userRoleId,
+                                        @RequestParam("userStatus") String userStatus,
                                         HttpSession httpSession,
                                         RedirectAttributes redirectAttributes) {
         String url = BASE_URL + "user/add";
@@ -1669,17 +1750,79 @@ public class AdminController {
             boolean isAdmin = user.getRole().getName().equals("Admin");
 
             if (isAdmin) {
-                HashMap<String, String> params = new HashMap<>();
+                boolean isEdit = userId != null;
 
-                if (userId != null)
-                    params.put("id", String.valueOf(userId));
+                User userModel = new User();
 
-                params.put("name", userName);
+                Role role = new Role();
+                role.setId(userRoleId);
 
-                HttpEntity<HashMap> request = new HttpEntity<>(params);
+                UserName userName = new UserName();
+                userName.setFirstName(userFirstName);
+                userName.setMiddleName(userMiddleName);
+                userName.setLastName(userLastName);
+
+                Country country = new Country();
+                country.setId(userAddressCountryId);
+                country.setProvinces(null);
+
+                Province province = new Province();
+                province.setId(userAddressProvinceId);
+                province.setCountry(country);
+                province.setCities(null);
+
+                City city = new City();
+                city.setId(userAddressCityId);
+                city.setProvince(province);
+                city.setDistricts(null);
+
+                District district = new District();
+                district.setId(userAddressDistrictId);
+                district.setCity(city);
+                district.setSubDistricts(null);
+
+                SubDistrict subDistrict = new SubDistrict();
+                subDistrict.setId(Long.valueOf(userAddressSubDistrictId));
+                subDistrict.setDistrict(district);
+
+                UserAddress userAddress = new UserAddress();
+                userAddress.setStreet(userAddressStreet);
+                userAddress.setHamlet(userAddressHamlet);
+                userAddress.setNeighbourhood(userAddressNeighbourhood);
+                userAddress.setCountry(country);
+                userAddress.setProvince(province);
+                userAddress.setCity(city);
+                userAddress.setDistrict(district);
+                userAddress.setSubDistrict(subDistrict);
+
+                userModel.setCreatedAt(new Date());
+                userModel.setEmail(userEmail);
+                userModel.setPhone(userPhone);
+                userModel.setStatus(UserStatus.valueOf(userStatus));
+                userModel.setRole(role);
+                userModel.setUserAddress(userAddress);
+                userModel.setUserName(userName);
+
+                if (isEdit)
+                    userModel.setId(userId);
+                else
+                    userModel.setPassword(userPassword);
+
+                HttpHeaders httpHeaders = new HttpHeaders();
+                httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+                String requestJson = "";
+
+                try {
+                    requestJson = mObjectMapper.writeValueAsString(userModel);
+                } catch (JsonProcessingException e) {
+                    LOGGER.error(e.getMessage());
+                }
+
+                HttpEntity<String> request = new HttpEntity<>(requestJson, httpHeaders);
 
                 ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.POST, request, String.class);
-                MyResponse<Integer> myResponse;
+                MyResponse<Integer> myResponse = null;
                 Integer responseInt = null;
                 String message;
 
@@ -1691,16 +1834,23 @@ public class AdminController {
                 }
 
                 if (responseInt != null && responseInt == 1) {
-                    message = "Add user success";
-                    redirectAttributes.addAttribute("message", message);
+                    redirectAttributes.addAttribute("message", myResponse.getMessage());
                 } else {
-                    message = responseInt == null ? "Internal server error" : "Add user failed";
+                    if (responseInt == null)
+                        message = "Internal server error";
+                    else
+                        message = myResponse.getMessage();
 
                     redirectAttributes.addAttribute("message", message);
-                    redirectAttributes.addAttribute("user", user);
+                    redirectAttributes.addAttribute("user", userModel);
                 }
 
-                return "redirect:/dashboard/admin/user/add";
+                String returnString = "redirect:/dashboard/admin/user/add";
+
+                if (isEdit)
+                    returnString += "/" + userId;
+
+                return returnString;
             } else
                 return "redirect:/dashboard";
         } else
@@ -1922,43 +2072,6 @@ public class AdminController {
 
                     redirectAttributes.addAttribute("message", message);
                     return "redirect:/dashboard/admin/sub-district/1";
-                } else
-                    return "redirect:/dashboard/admin";
-            } else
-                return "redirect:/dashboard";
-        } else
-            return "redirect:/login";
-    }
-
-    @GetMapping("/dashboard/admin/user/delete/{userId}")
-    public String dashboardAdminDeleteUser(@PathVariable Integer userId,
-                                           HttpSession httpSession,
-                                           RedirectAttributes redirectAttributes) {
-        String url = BASE_URL + "user/";
-        User user = (User) httpSession.getAttribute("user");
-
-        if (user != null) {
-            boolean isAdmin = user.getRole().getName().equals("Admin");
-
-            if (isAdmin) {
-                if (userId != null) {
-                    url += userId;
-
-                    ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
-                    MyResponse<Integer> myResponse;
-                    Integer responseInt = null;
-
-                    try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
-                        responseInt = myResponse.getData();
-                    } catch (IOException e) {
-                        LOGGER.error(e.getMessage());
-                    }
-
-                    String message = responseInt != null && responseInt == 1 ? "User delete success" : "User delete failed";
-
-                    redirectAttributes.addAttribute("message", message);
-                    return "redirect:/dashboard/admin/user/1";
                 } else
                     return "redirect:/dashboard/admin";
             } else

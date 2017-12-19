@@ -69,4 +69,8 @@ public class District implements Serializable {
     public List<SubDistrict> getSubDistricts() {
         return subDistricts;
     }
+
+    public void setSubDistricts(List<SubDistrict> subDistricts) {
+        this.subDistricts = subDistricts;
+    }
 }

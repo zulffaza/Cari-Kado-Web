@@ -82,7 +82,7 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="user-middle-name">Middle Name :</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="user-middle-name" name="userMiddleName" placeholder="Enter user middle name" value="${userModel.userName.middle}"
+                        <input type="text" class="form-control" id="user-middle-name" name="userMiddleName" placeholder="Enter user middle name" value="${userModel.userName.middleName}"
                             <c:if test="${not empty userModel.id}">
                                    disabled="disabled"
                             </c:if>
