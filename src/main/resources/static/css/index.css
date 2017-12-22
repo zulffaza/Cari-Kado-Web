@@ -1,26 +1,10 @@
 .container-fluid {
-    background-color: #F18887;
     height: 96px;
 }
 
-.navbar .navbar-nav {
-    display: inline-block;
-    float: none;
-}
-
-.navbar .navbar-inverse {
-    text-align: center;
-    border: none;
-    background: none;
-    border-radius: 0px;
-}
-
-#base_icon {
-    width: 64px;
-    height: 64px;
-}
-
-#base_text {
-    width: 192px;
-    height: 40px;
+.container{
+    style:background;
+    background-color: #ffffff;
+    margin-top: 100px;
+    margin-left: 150px;
 }
