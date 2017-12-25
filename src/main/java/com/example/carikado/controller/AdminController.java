@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 
 @Controller
 public class AdminController {
@@ -621,21 +620,37 @@ public class AdminController {
     }
 
     @GetMapping("/dashboard/admin/city/add")
-    public String dashboardAdminAddCity(@ModelAttribute("message") String message,
+    public String dashboardAdminAddCity(@RequestParam(name = "countryId", defaultValue = "1", required = false) Integer countryId,
+                                        @ModelAttribute("message") String message,
                                         @ModelAttribute("city") City city,
                                         HttpSession httpSession, ModelMap modelMap) {
-        String url = BASE_URL + "province/all";
+        String url;
         User user = (User) httpSession.getAttribute("user");
 
         if (user != null) {
+            url = BASE_URL + "country/all";
             ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
 
-            MyResponse<ArrayList<Province>> myResponse;
+            MyResponse<ArrayList<Country>> myResponseCountry;
+            ArrayList<Country> countries = new ArrayList<>();
+
+            try {
+                myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {});
+                countries = myResponseCountry.getData();
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage());
+                message = "Internal server error";
+            }
+
+            url = BASE_URL + "province/country/" + countryId + "/all";
+            response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+            MyResponse<ArrayList<Province>> myResponseProvince;
             ArrayList<Province> provinces = new ArrayList<>();
 
             try {
-                myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {});
-                provinces = myResponse.getData();
+                myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {});
+                provinces = myResponseProvince.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
                 message = "Internal server error";
@@ -643,6 +658,8 @@ public class AdminController {
 
             modelMap.addAttribute("user", user);
             modelMap.addAttribute("message", message);
+            modelMap.addAttribute("countryId", countryId);
+            modelMap.addAttribute("countries", countries);
             modelMap.addAttribute("provinces", provinces);
             modelMap.addAttribute("city", city);
 
@@ -652,21 +669,55 @@ public class AdminController {
     }
 
     @GetMapping("/dashboard/admin/district/add")
-    public String dashboardAdminAddDistrict(@ModelAttribute("message") String message,
-                                        @ModelAttribute("district") District district,
-                                        HttpSession httpSession, ModelMap modelMap) {
-        String url = BASE_URL + "city/all";
+    public String dashboardAdminAddDistrict(@RequestParam(name = "countryId", defaultValue = "1", required = false) Integer countryId,
+                                            @RequestParam(name = "provinceId", required = false) Integer provinceId,
+                                            @ModelAttribute("message") String message,
+                                            @ModelAttribute("district") District district,
+                                            HttpSession httpSession, ModelMap modelMap) {
+        String url;
         User user = (User) httpSession.getAttribute("user");
 
         if (user != null) {
+            url = BASE_URL + "country/all";
             ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
 
-            MyResponse<ArrayList<City>> myResponse;
+            MyResponse<ArrayList<Country>> myResponseCountry;
+            ArrayList<Country> countries = new ArrayList<>();
+
+            try {
+                myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {});
+                countries = myResponseCountry.getData();
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage());
+                message = "Internal server error";
+            }
+
+            url = BASE_URL + "province/country/" + countryId + "/all";
+            response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+            MyResponse<ArrayList<Province>> myResponseProvince;
+            ArrayList<Province> provinces = new ArrayList<>();
+
+            try {
+                myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {});
+                provinces = myResponseProvince.getData();
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage());
+                message = "Internal server error";
+            }
+
+            if (provinceId == null)
+                provinceId = provinces.get(0).getId();
+
+            url = BASE_URL + "city/province/" + provinceId + "/all";
+            response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+            MyResponse<ArrayList<City>> myResponseCity;
             ArrayList<City> cities = new ArrayList<>();
 
             try {
-                myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<City>>>() {});
-                cities = myResponse.getData();
+                myResponseCity = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<City>>>() {});
+                cities = myResponseCity.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
                 message = "Internal server error";
@@ -674,6 +725,10 @@ public class AdminController {
 
             modelMap.addAttribute("user", user);
             modelMap.addAttribute("message", message);
+            modelMap.addAttribute("countryId", countryId);
+            modelMap.addAttribute("provinceId", provinceId);
+            modelMap.addAttribute("countries", countries);
+            modelMap.addAttribute("provinces", provinces);
             modelMap.addAttribute("cities", cities);
             modelMap.addAttribute("district", district);
 
@@ -683,21 +738,73 @@ public class AdminController {
     }
 
     @GetMapping("/dashboard/admin/sub-district/add")
-    public String dashboardAdminAddSubDistrict(@ModelAttribute("message") String message,
-                                            @ModelAttribute("subDistrict") SubDistrict subDistrict,
-                                            HttpSession httpSession, ModelMap modelMap) {
-        String url = BASE_URL + "district/all";
+    public String dashboardAdminAddSubDistrict(@RequestParam(name = "countryId", defaultValue = "1", required = false) Integer countryId,
+                                               @RequestParam(name = "provinceId", required = false) Integer provinceId,
+                                               @RequestParam(name = "cityId", required = false) Integer cityId,
+                                               @ModelAttribute("message") String message,
+                                               @ModelAttribute("subDistrict") SubDistrict subDistrict,
+                                               HttpSession httpSession, ModelMap modelMap) {
+        String url;
         User user = (User) httpSession.getAttribute("user");
 
         if (user != null) {
+            url = BASE_URL + "country/all";
             ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
 
-            MyResponse<ArrayList<District>> myResponse;
+            MyResponse<ArrayList<Country>> myResponseCountry;
+            ArrayList<Country> countries = new ArrayList<>();
+
+            try {
+                myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {});
+                countries = myResponseCountry.getData();
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage());
+                message = "Internal server error";
+            }
+
+            url = BASE_URL + "province/country/" + countryId + "/all";
+            response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+            MyResponse<ArrayList<Province>> myResponseProvince;
+            ArrayList<Province> provinces = new ArrayList<>();
+
+            try {
+                myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {});
+                provinces = myResponseProvince.getData();
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage());
+                message = "Internal server error";
+            }
+
+            if (provinceId == null)
+                provinceId = provinces.get(0).getId();
+
+            url = BASE_URL + "city/province/" + provinceId + "/all";
+            response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+            MyResponse<ArrayList<City>> myResponseCity;
+            ArrayList<City> cities = new ArrayList<>();
+
+            try {
+                myResponseCity = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<City>>>() {});
+                cities = myResponseCity.getData();
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage());
+                message = "Internal server error";
+            }
+
+            if (cityId == null)
+                cityId = cities.get(0).getId();
+
+            url = BASE_URL + "district/city/" + cityId + "/all";
+            response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+            MyResponse<ArrayList<District>> myResponseDistrict;
             ArrayList<District> districts = new ArrayList<>();
 
             try {
-                myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<District>>>() {});
-                districts = myResponse.getData();
+                myResponseDistrict = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<District>>>() {});
+                districts = myResponseDistrict.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
                 message = "Internal server error";
@@ -705,6 +812,12 @@ public class AdminController {
 
             modelMap.addAttribute("user", user);
             modelMap.addAttribute("message", message);
+            modelMap.addAttribute("countryId", countryId);
+            modelMap.addAttribute("provinceId", provinceId);
+            modelMap.addAttribute("cityId", cityId);
+            modelMap.addAttribute("countries", countries);
+            modelMap.addAttribute("provinces", provinces);
+            modelMap.addAttribute("cities", cities);
             modelMap.addAttribute("districts", districts);
             modelMap.addAttribute("subDistrict", subDistrict);
 
@@ -714,7 +827,11 @@ public class AdminController {
     }
 
     @GetMapping("/dashboard/admin/user/add")
-    public String dashboardAdminAddUser(@ModelAttribute("message") String message,
+    public String dashboardAdminAddUser(@RequestParam(name = "countryId", defaultValue = "1", required = false) Integer countryId,
+                                        @RequestParam(name = "provinceId", required = false) Integer provinceId,
+                                        @RequestParam(name = "cityId", required = false) Integer cityId,
+                                        @RequestParam(name = "districtId", required = false) Integer districtId,
+                                        @ModelAttribute("message") String message,
                                         @ModelAttribute("user") User userModel,
                                         HttpSession httpSession, ModelMap modelMap) {
         String url;
@@ -737,7 +854,7 @@ public class AdminController {
                 message = "Internal server error";
             }
 
-            url = BASE_URL + "province/all";
+            url = BASE_URL + "province/country/" + countryId + "/all";
             response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
 
             MyResponse<ArrayList<Province>> myResponseProvince;
@@ -751,7 +868,10 @@ public class AdminController {
                 message = "Internal server error";
             }
 
-            url = BASE_URL + "city/all";
+            if (provinceId == null)
+                provinceId = provinces.get(0).getId();
+
+            url = BASE_URL + "city/province/" + provinceId + "/all";
             response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
 
             MyResponse<ArrayList<City>> myResponseCity;
@@ -765,7 +885,10 @@ public class AdminController {
                 message = "Internal server error";
             }
 
-            url = BASE_URL + "district/all";
+            if (cityId == null)
+                cityId = cities.get(0).getId();
+
+            url = BASE_URL + "district/city/" + cityId + "/all";
             response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
 
             MyResponse<ArrayList<District>> myResponseDistrict;
@@ -779,7 +902,10 @@ public class AdminController {
                 message = "Internal server error";
             }
 
-            url = BASE_URL + "sub-district/all";
+            if (districtId == null)
+                districtId = districts.get(0).getId();
+
+            url = BASE_URL + "sub-district/district/" + districtId + "/all";
             response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
 
             MyResponse<ArrayList<SubDistrict>> myResponseSubDistrict;
@@ -811,6 +937,10 @@ public class AdminController {
 
             modelMap.addAttribute("user", user);
             modelMap.addAttribute("message", message);
+            modelMap.addAttribute("countryId", countryId);
+            modelMap.addAttribute("provinceId", provinceId);
+            modelMap.addAttribute("cityId", cityId);
+            modelMap.addAttribute("districtId", districtId);
             modelMap.addAttribute("countries", countries);
             modelMap.addAttribute("provinces", provinces);
             modelMap.addAttribute("cities", cities);
@@ -971,6 +1101,7 @@ public class AdminController {
 
     @GetMapping("/dashboard/admin/city/add/{cityId}")
     public String dashboardAdminAddCity(@PathVariable(required = false) Integer cityId,
+                                        @RequestParam(name = "countryId", required = false) Integer countryId,
                                         @ModelAttribute("message") String message,
                                         HttpSession httpSession,
                                         ModelMap modelMap) {
@@ -997,8 +1128,24 @@ public class AdminController {
                     }
 
                     if (city != null) {
-                        url = BASE_URL + "province/all";
+                        url = BASE_URL + "country/all";
+                        response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
 
+                        MyResponse<ArrayList<Country>> myResponseCountry;
+                        ArrayList<Country> countries = new ArrayList<>();
+
+                        try {
+                            myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {});
+                            countries = myResponseCountry.getData();
+                        } catch (IOException e) {
+                            LOGGER.error(e.getMessage());
+                            message = "Internal server error";
+                        }
+
+                        if (countryId == null)
+                            countryId = city.getProvince().getCountry().getId();
+
+                        url = BASE_URL + "province/country/" + countryId + "/all";
                         response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
 
                         MyResponse<ArrayList<Province>> myResponseProvince;
@@ -1014,6 +1161,8 @@ public class AdminController {
 
                         modelMap.addAttribute("user", user);
                         modelMap.addAttribute("message", message);
+                        modelMap.addAttribute("countryId", countryId);
+                        modelMap.addAttribute("countries", countries);
                         modelMap.addAttribute("provinces", provinces);
                         modelMap.addAttribute("city", city);
 
@@ -1030,9 +1179,11 @@ public class AdminController {
 
     @GetMapping("/dashboard/admin/district/add/{districtId}")
     public String dashboardAdminAddDistrict(@PathVariable(required = false) Integer districtId,
-                                        @ModelAttribute("message") String message,
-                                        HttpSession httpSession,
-                                        ModelMap modelMap) {
+                                            @RequestParam(name = "countryId", required = false) Integer countryId,
+                                            @RequestParam(name = "provinceId", required = false) Integer provinceId,
+                                            @ModelAttribute("message") String message,
+                                            HttpSession httpSession,
+                                            ModelMap modelMap) {
         String url = BASE_URL + "district";
         User user = (User) httpSession.getAttribute("user");
 
@@ -1056,8 +1207,44 @@ public class AdminController {
                     }
 
                     if (district != null) {
-                        url = BASE_URL + "city/all";
+                        url = BASE_URL + "country/all";
+                        response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
 
+                        MyResponse<ArrayList<Country>> myResponseCountry;
+                        ArrayList<Country> countries = new ArrayList<>();
+
+                        try {
+                            myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {});
+                            countries = myResponseCountry.getData();
+                        } catch (IOException e) {
+                            LOGGER.error(e.getMessage());
+                            message = "Internal server error";
+                        }
+
+                        if (countryId == null)
+                            countryId = district.getCity().getProvince().getCountry().getId();
+
+                        url = BASE_URL + "province/country/" + countryId + "/all";
+                        response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+                        MyResponse<ArrayList<Province>> myResponseProvince;
+                        ArrayList<Province> provinces = new ArrayList<>();
+
+                        try {
+                            myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {});
+                            provinces = myResponseProvince.getData();
+                        } catch (IOException e) {
+                            LOGGER.error(e.getMessage());
+                            message = "Internal server error";
+                        }
+
+                        if (provinceId == null) {
+                            provinceId = countryId.equals(district.getCity().getProvince().getCountry().getId()) ?
+                                    district.getCity().getProvince().getId() :
+                                    provinces.size() != 0 ? provinces.get(0).getId() : 0;
+                        }
+
+                        url = BASE_URL + "city/province/" + provinceId + "/all";
                         response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
 
                         MyResponse<ArrayList<City>> myResponseCity;
@@ -1073,6 +1260,10 @@ public class AdminController {
 
                         modelMap.addAttribute("user", user);
                         modelMap.addAttribute("message", message);
+                        modelMap.addAttribute("countryId", countryId);
+                        modelMap.addAttribute("provinceId", provinceId);
+                        modelMap.addAttribute("countries", countries);
+                        modelMap.addAttribute("provinces", provinces);
                         modelMap.addAttribute("cities", cities);
                         modelMap.addAttribute("district", district);
 
@@ -1089,9 +1280,12 @@ public class AdminController {
 
     @GetMapping("/dashboard/admin/sub-district/add/{subDistrictId}")
     public String dashboardAdminAddSubDistrict(@PathVariable(required = false) String subDistrictId,
-                                            @ModelAttribute("message") String message,
-                                            HttpSession httpSession,
-                                            ModelMap modelMap) {
+                                               @RequestParam(name = "countryId", required = false) Integer countryId,
+                                               @RequestParam(name = "provinceId", required = false) Integer provinceId,
+                                               @RequestParam(name = "cityId", required = false) Integer cityId,
+                                               @ModelAttribute("message") String message,
+                                               HttpSession httpSession,
+                                               ModelMap modelMap) {
         String url = BASE_URL + "sub-district";
         User user = (User) httpSession.getAttribute("user");
 
@@ -1115,8 +1309,64 @@ public class AdminController {
                     }
 
                     if (subDistrict != null) {
-                        url = BASE_URL + "district/all";
+                        url = BASE_URL + "country/all";
+                        response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
 
+                        MyResponse<ArrayList<Country>> myResponseCountry;
+                        ArrayList<Country> countries = new ArrayList<>();
+
+                        try {
+                            myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {});
+                            countries = myResponseCountry.getData();
+                        } catch (IOException e) {
+                            LOGGER.error(e.getMessage());
+                            message = "Internal server error";
+                        }
+
+                        if (countryId == null)
+                            countryId = subDistrict.getDistrict().getCity().getProvince().getCountry().getId();
+
+                        url = BASE_URL + "province/country/" + countryId + "/all";
+                        response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+                        MyResponse<ArrayList<Province>> myResponseProvince;
+                        ArrayList<Province> provinces = new ArrayList<>();
+
+                        try {
+                            myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {});
+                            provinces = myResponseProvince.getData();
+                        } catch (IOException e) {
+                            LOGGER.error(e.getMessage());
+                            message = "Internal server error";
+                        }
+
+                        if (provinceId == null) {
+                            provinceId = countryId.equals(subDistrict.getDistrict().getCity().getProvince().getCountry().getId()) ?
+                                    subDistrict.getDistrict().getCity().getProvince().getId() :
+                                    provinces.size() != 0 ? provinces.get(0).getId() : 0;
+                        }
+
+                        url = BASE_URL + "city/province/" + provinceId + "/all";
+                        response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+
+                        MyResponse<ArrayList<City>> myResponseCity;
+                        ArrayList<City> cities = new ArrayList<>();
+
+                        try {
+                            myResponseCity = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<City>>>() {});
+                            cities = myResponseCity.getData();
+                        } catch (IOException e) {
+                            LOGGER.error(e.getMessage());
+                            message = "Internal server error";
+                        }
+
+                        if (cityId == null) {
+                            cityId = provinceId.equals(subDistrict.getDistrict().getCity().getProvince().getId()) ?
+                                    subDistrict.getDistrict().getCity().getId() :
+                                    cities.size() != 0 ? cities.get(0).getId() : 0;
+                        }
+
+                        url = BASE_URL + "district/city/" + cityId + "/all";
                         response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
 
                         MyResponse<ArrayList<District>> myResponseDistrict;
@@ -1132,6 +1382,12 @@ public class AdminController {
 
                         modelMap.addAttribute("user", user);
                         modelMap.addAttribute("message", message);
+                        modelMap.addAttribute("countryId", countryId);
+                        modelMap.addAttribute("provinceId", provinceId);
+                        modelMap.addAttribute("cityId", cityId);
+                        modelMap.addAttribute("countries", countries);
+                        modelMap.addAttribute("provinces", provinces);
+                        modelMap.addAttribute("cities", cities);
                         modelMap.addAttribute("districts", districts);
                         modelMap.addAttribute("subDistrict", subDistrict);
 
@@ -1148,6 +1404,10 @@ public class AdminController {
 
     @GetMapping("/dashboard/admin/user/add/{userId}")
     public String dashboardAdminAddUser(@PathVariable(required = false) Integer userId,
+                                        @RequestParam(name = "countryId", defaultValue = "1", required = false) Integer countryId,
+                                        @RequestParam(name = "provinceId", required = false) Integer provinceId,
+                                        @RequestParam(name = "cityId", required = false) Integer cityId,
+                                        @RequestParam(name = "districtId", required = false) Integer districtId,
                                         @ModelAttribute("message") String message,
                                         HttpSession httpSession,
                                         ModelMap modelMap) {
@@ -1188,7 +1448,10 @@ public class AdminController {
                             message = "Internal server error";
                         }
 
-                        url = BASE_URL + "province/all";
+                        if (countryId == null)
+                            countryId = userModel.getUserAddress().getCountry().getId();
+
+                        url = BASE_URL + "province/country/" + countryId + "/all";
                         response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
 
                         MyResponse<ArrayList<Province>> myResponseProvince;
@@ -1202,7 +1465,10 @@ public class AdminController {
                             message = "Internal server error";
                         }
 
-                        url = BASE_URL + "city/all";
+                        if (provinceId == null)
+                            provinceId = userModel.getUserAddress().getProvince().getId();
+
+                        url = BASE_URL + "city/province/" + provinceId + "/all";
                         response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
 
                         MyResponse<ArrayList<City>> myResponseCity;
@@ -1216,7 +1482,10 @@ public class AdminController {
                             message = "Internal server error";
                         }
 
-                        url = BASE_URL + "district/all";
+                        if (cityId == null)
+                            cityId = userModel.getUserAddress().getCity().getId();
+
+                        url = BASE_URL + "district/city/" + cityId + "/all";
                         response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
 
                         MyResponse<ArrayList<District>> myResponseDistrict;
@@ -1230,7 +1499,10 @@ public class AdminController {
                             message = "Internal server error";
                         }
 
-                        url = BASE_URL + "sub-district/all";
+                        if (districtId == null)
+                            districtId = userModel.getUserAddress().getDistrict().getId();
+
+                        url = BASE_URL + "sub-district/district/" + districtId + "/all";
                         response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
 
                         MyResponse<ArrayList<SubDistrict>> myResponseSubDistrict;
@@ -1262,6 +1534,10 @@ public class AdminController {
 
                         modelMap.addAttribute("user", user);
                         modelMap.addAttribute("message", message);
+                        modelMap.addAttribute("countryId", countryId);
+                        modelMap.addAttribute("provinceId", provinceId);
+                        modelMap.addAttribute("cityId", cityId);
+                        modelMap.addAttribute("districtId", districtId);
                         modelMap.addAttribute("countries", countries);
                         modelMap.addAttribute("provinces", provinces);
                         modelMap.addAttribute("cities", cities);
@@ -1727,6 +2003,8 @@ public class AdminController {
 
     @PostMapping("/dashboard/admin/user/add")
     public String dashboardAdminAddUser(@RequestParam(name = "userId", required = false) Integer userId,
+                                        @RequestParam(name = "userNameId", required = false) Integer userNameId,
+                                        @RequestParam(name = "userAddressId", required = false) Integer userAddressId,
                                         @RequestParam("userFirstName") String userFirstName,
                                         @RequestParam("userMiddleName") String userMiddleName,
                                         @RequestParam("userLastName") String userLastName,
@@ -1770,17 +2048,14 @@ public class AdminController {
 
                 Province province = new Province();
                 province.setId(userAddressProvinceId);
-                province.setCountry(country);
                 province.setCities(null);
 
                 City city = new City();
                 city.setId(userAddressCityId);
-                city.setProvince(province);
                 city.setDistricts(null);
 
                 District district = new District();
                 district.setId(userAddressDistrictId);
-                district.setCity(city);
                 district.setSubDistricts(null);
 
                 SubDistrict subDistrict = new SubDistrict();
@@ -1800,15 +2075,17 @@ public class AdminController {
                 userModel.setCreatedAt(new Date());
                 userModel.setEmail(userEmail);
                 userModel.setPhone(userPhone);
+                userModel.setPassword(userPassword);
                 userModel.setStatus(UserStatus.valueOf(userStatus));
                 userModel.setRole(role);
                 userModel.setUserAddress(userAddress);
                 userModel.setUserName(userName);
 
-                if (isEdit)
+                if (isEdit) {
                     userModel.setId(userId);
-                else
-                    userModel.setPassword(userPassword);
+                    userModel.getUserName().setId(userNameId);
+                    userModel.getUserAddress().setId(userAddressId);
+                }
 
                 HttpHeaders httpHeaders = new HttpHeaders();
                 httpHeaders.setContentType(MediaType.APPLICATION_JSON);

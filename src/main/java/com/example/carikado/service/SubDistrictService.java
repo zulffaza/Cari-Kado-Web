@@ -23,6 +23,10 @@ public class SubDistrictService {
 
     public List<SubDistrict> findAll() { return mSubDistrictRepository.findAllWithSort(); }
 
+    public List<SubDistrict> findAll(Integer districtId) {
+        return mSubDistrictRepository.findAllByDistrictId(districtId);
+    }
+
     public Page<SubDistrict> findAllPageable(Pageable pageable) { return mSubDistrictRepository.findAll(pageable); }
 
     public SubDistrict findSubDistrict(Long id) { return mSubDistrictRepository.findOne(id); }

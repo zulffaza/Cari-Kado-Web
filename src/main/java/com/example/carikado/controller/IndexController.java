@@ -3,6 +3,7 @@ package com.example.carikado.controller;
 import com.example.carikado.model.MyResponse;
 import com.example.carikado.model.Role;
 import com.example.carikado.model.User;
+import com.example.carikado.model.UserStatus;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -90,13 +91,14 @@ public class IndexController {
             LOGGER.error(e.getMessage());
         }
 
-        if (user == null) {
-            redirectAttributes.addFlashAttribute("message", myResponse.getMessage());
-            return "redirect:/login";
-        } else {
+        if (user != null && user.getStatus().equals(UserStatus.ACTIVE)) {
             httpSession.setAttribute("user", user);
             return "redirect:/dashboard";
         }
+
+        String message = user != null ? "User is not allowed to login" : myResponse.getMessage();
+        redirectAttributes.addFlashAttribute("message", message);
+        return "redirect:/login";
     }
 
     @GetMapping("/error")

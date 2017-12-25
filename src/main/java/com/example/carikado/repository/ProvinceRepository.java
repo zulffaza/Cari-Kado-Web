@@ -10,6 +10,8 @@ import java.util.List;
 @Repository
 public interface ProvinceRepository extends JpaRepository<Province, Integer> {
 
+    public List<Province> findAllByCountryId(Integer countryId);
+
     @Query("select p from Province p order by p.name")
     public List<Province> findAllWithSort();
 }

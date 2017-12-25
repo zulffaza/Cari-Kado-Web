@@ -69,16 +69,52 @@
                 <input name="districtId" type="number" value="${district.id}" hidden="hidden" />
 
                 <div class="form-group">
-                    <label class="control-label col-sm-2" for="cities">Kota :</label>
+                    <label class="control-label col-sm-2" for="countries">Negara :</label>
                     <div class="col-sm-10">
-                        <select class="form-control" id="cities" name="cityId">
-                            <c:forEach items="${cities}" var="province" varStatus="each">
+                        <select class="form-control" id="countries" name="countryId" onchange="onCountriesChange(${district.id})">
+                            <c:forEach items="${countries}" var="country" varStatus="each">
                                 <c:choose>
-                                    <c:when test="${district.city.id == province.id}">
+                                    <c:when test="${countryId == country.id}">
+                                        <option value="${country.id}" selected="selected">${country.name}</option>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <option value="${country.id}">${country.name}</option>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="provinces">Provinsi :</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="provinces" name="provinceId" onchange="onProvincesChange(${district.id})">
+                            <c:forEach items="${provinces}" var="province" varStatus="each">
+                                <c:choose>
+                                    <c:when test="${provinceId == province.id}">
                                         <option value="${province.id}" selected="selected">${province.name}</option>
                                     </c:when>
                                     <c:otherwise>
                                         <option value="${province.id}">${province.name}</option>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="cities">Kota :</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="cities" name="cityId">
+                            <c:forEach items="${cities}" var="city" varStatus="each">
+                                <c:choose>
+                                    <c:when test="${district.city.id == city.id}">
+                                        <option value="${city.id}" selected="selected">${city.name}</option>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <option value="${city.id}">${city.name}</option>
                                     </c:otherwise>
                                 </c:choose>
                             </c:forEach>
@@ -96,11 +132,20 @@
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <c:choose>
-                            <c:when test="${empty district.id}">
-                                <button type="submit" class="btn btn-success">Add</button>
+                            <c:when test="${empty countries || empty provinces || empty cities}">
+                                <div class="alert alert-warning">
+                                    Tidak dapat menambahkan kecamatan baru
+                                </div>
                             </c:when>
                             <c:otherwise>
-                                <button type="submit" class="btn btn-success">Edit</button>
+                                <c:choose>
+                                    <c:when test="${empty district.id}">
+                                        <button type="submit" class="btn btn-success">Add</button>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <button type="submit" class="btn btn-success">Edit</button>
+                                    </c:otherwise>
+                                </c:choose>
                             </c:otherwise>
                         </c:choose>
                     </div>
@@ -110,5 +155,6 @@
 
         <script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
         <script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+        <script src="/js/admin/addDistrict.js"></script>
     </body>
 </html>

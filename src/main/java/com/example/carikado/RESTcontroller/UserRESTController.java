@@ -1,8 +1,8 @@
 package com.example.carikado.RESTcontroller;
 
-import com.example.carikado.model.MyPage;
-import com.example.carikado.model.MyResponse;
-import com.example.carikado.model.User;
+import com.example.carikado.model.*;
+import com.example.carikado.service.UserAddressService;
+import com.example.carikado.service.UserNameService;
 import com.example.carikado.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,10 +37,15 @@ public class UserRESTController {
             "desc"
     };
 
+    private UserAddressService mUserAddressService;
+    private UserNameService mUserNameService;
     private UserService mUserService;
 
     @Autowired
-    public UserRESTController(UserService userService) {
+    public UserRESTController(UserAddressService userAddressService, UserNameService userNameService,
+                              UserService userService) {
+        mUserAddressService = userAddressService;
+        mUserNameService = userNameService;
         mUserService = userService;
     }
 
@@ -112,15 +118,33 @@ public class UserRESTController {
         return new MyResponse<>(message, user);
     }
 
+    @Transactional
     @PostMapping("/api/user/add")
     public MyResponse<Integer> addUser(@RequestBody User user) {
         if (user.getCreatedAt() == null)
             user.setCreatedAt(new Date());
 
-        user = mUserService.addUser(user);
+        boolean isEdit = user.getId() != null;
+        String message = "User " + (isEdit ? "edit " : "add ");
+
+        try {
+            if (!isEdit) {
+                UserName userName = mUserNameService.addUserName(user.getUserName());
+                UserAddress userAddress = mUserAddressService.addUserAddress(user.getUserAddress());
+
+                user.setUserName(userName);
+                user.setUserAddress(userAddress);
+                user.setPassword(User.passwordEncoder(user.getPassword()));
+            }
+
+            user = mUserService.addUser(user);
+        } catch (NoSuchAlgorithmException e) {
+            user = null;
+            LOGGER.error(e.getMessage());
+        }
 
         boolean isSuccess = user != null;
-        String message = isSuccess ? "User add success" : "User add failed";
+        message += isSuccess ? "success" : "failed";
         int response = isSuccess ? 1 : 0;
 
         return new MyResponse<>(message, response);

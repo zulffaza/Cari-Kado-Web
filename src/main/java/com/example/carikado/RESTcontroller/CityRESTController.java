@@ -52,6 +52,13 @@ public class CityRESTController {
         return new MyResponse<>(message, cities);
     }
 
+    @GetMapping("/api/city/province/{provinceId}/all")
+    public MyResponse<List> findCities(@PathVariable Integer provinceId) {
+        String message = "Find cities success";
+        ArrayList<City> cities = (ArrayList<City>) mCityService.findAll(provinceId);
+        return new MyResponse<>(message, cities);
+    }
+
     @GetMapping("/api/city")
     public MyResponse<MyPage<List>> findCities(@RequestParam(required = false, defaultValue = "0") Integer page,
                                               @RequestParam(required = false, defaultValue = "10") Integer pageSize,
