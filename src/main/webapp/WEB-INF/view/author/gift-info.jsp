@@ -84,7 +84,12 @@
             <thead>
             <tr>
                 <th>No</th>
-                <th>Nama</th>
+                <th>Judul</th>
+                <th>Deskripsi</th>
+                <th>Esensi</th>
+                <th>Kisaran Umur</th>
+                <th>Kategori Kado</th>
+                <th>Kisaran Harga</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -104,7 +109,22 @@
                                     ${((page - 1) * 10) + each.index + 1}
                             </td>
                             <td>
-                                    ${giftInfo.name}
+                                    ${giftInfo.title}
+                            </td>
+                            <td>
+                                    ${giftInfo.description}
+                            </td>
+                            <td>
+                                    ${giftInfo.essence}
+                            </td>
+                            <td>
+                                    ${giftInfo.giftInfoAge}
+                            </td>
+                            <td>
+                                    ${giftInfo.giftInfoCategories}
+                            </td>
+                            <td>
+                                    ${giftInfo.giftInfoBudget}
                             </td>
                             <td>
                                 <a href="/dashboard/author/gift-info/add/${giftInfo.id}">
