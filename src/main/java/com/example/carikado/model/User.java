@@ -48,7 +48,7 @@ public class User implements Serializable {
     @JoinColumn(name = "user_picture_id")
     private UserPicture userPicture;
 
-    @OneToMany(mappedBy = "user")
+    @Transient
     private List<GiftInfo> giftInfos = new ArrayList<>();
 
     public User() {
