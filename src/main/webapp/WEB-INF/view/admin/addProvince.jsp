@@ -96,11 +96,20 @@
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <c:choose>
-                        <c:when test="${empty province.id}">
-                            <button type="submit" class="btn btn-success">Add</button>
+                        <c:when test="${empty countries}">
+                            <div class="alert alert-warning">
+                                Tidak dapat menambahkan provinsi baru
+                            </div>
                         </c:when>
                         <c:otherwise>
-                            <button type="submit" class="btn btn-success">Edit</button>
+                            <c:choose>
+                                <c:when test="${empty province.id}">
+                                    <button type="submit" class="btn btn-success">Add</button>
+                                </c:when>
+                                <c:otherwise>
+                                    <button type="submit" class="btn btn-success">Edit</button>
+                                </c:otherwise>
+                            </c:choose>
                         </c:otherwise>
                     </c:choose>
                 </div>

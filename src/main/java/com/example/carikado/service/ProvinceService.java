@@ -27,6 +27,10 @@ public class ProvinceService {
         return mProvinceRepository.findAllWithSort();
     }
 
+    public List<Province> findAll(Integer countryId) {
+        return mProvinceRepository.findAllByCountryId(countryId);
+    }
+
     public Page<Province> findAllPageable(Pageable pageable) {
         return mProvinceRepository.findAll(pageable);
     }

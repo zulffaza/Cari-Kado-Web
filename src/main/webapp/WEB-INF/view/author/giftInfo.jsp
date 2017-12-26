@@ -1,15 +1,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
-  User: Faza Zulfika P P
-  Date: 10/17/2017
-  Time: 19:50
+  User: Halimyr8
+  Date: 12/19/2017
+  Time: 11:15 PM
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>
-        <title>Admin - User</title>
+        <title>Author - Gift Info</title>
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -28,7 +28,7 @@
                 <div>
                     <ul class="nav navbar-nav navbar-right">
                         <li style="margin: 4px">
-                            <a href="/dashboard/admin">HOME<span class="glyphicon"></span></a>
+                            <a href="/dashboard/author">HOME<span class="glyphicon"></span></a>
                         </li>
                         <li style="margin: 4px; background-color: #fbcd30;">
                             <a href="/logout">LOGOUT<span class="glyphicon"></span></a>
@@ -44,7 +44,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <p style="font-size: 35px; color: #66060b;">
-                        <b>${user.userName.firstName} ${user.userName.middleName} ${user.userName.lastName} - USER</b>
+                        <b>${user.userName.firstName} ${user.userName.middleName} ${user.userName.lastName} - Gift Info</b>
                     </p>
 
                     <hr>
@@ -57,23 +57,23 @@
 
                     <br>
 
-                    <a href="/dashboard/admin/user/add">
+                    <a href="/dashboard/author/gift-info/add">
                         <button class="btn btn-success btn-xs" style="width: 80px; height: 30px;">
                             <i aria-hidden="true" class="fa fa-plus"></i> Tambah
                         </button>
                     </a>
                 </div>
 
-                <%--<form method="GET" action="#" accept-charset="UTF-8" role="search" class="navbar-form navbar-right">--%>
-                    <%--<div class="input-group">--%>
-                        <%--<input type="text" name="search" placeholder="Search..." value="" class="form-control">--%>
+                <%--<form method="GET" action="#" accept-charset="UTF-8" country="search" class="navbar-form navbar-right">--%>
+                <%--<div class="input-group">--%>
+                <%--<input type="text" name="search" placeholder="Search..." value="" class="form-control">--%>
 
-                        <%--<span class="input-group-btn">--%>
-                            <%--<button type="submit" class="btn btn-default">--%>
-                                <%--<i class="fa fa-search"></i>--%>
-                            <%--</button>--%>
-                        <%--</span>--%>
-                    <%--</div>--%>
+                <%--<span class="input-group-btn">--%>
+                <%--<button type="submit" class="btn btn-default">--%>
+                <%--<i class="fa fa-search"></i>--%>
+                <%--</button>--%>
+                <%--</span>--%>
+                <%--</div>--%>
                 <%--</form>--%>
             </div>
 
@@ -82,46 +82,55 @@
             <div class="table-responsive">
                 <table class="table">
                     <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
+                    <tr>
+                        <th>No</th>
+                        <th>Judul</th>
+                        <th>Deskripsi</th>
+                        <th>Esensi</th>
+                        <th>Author</th>
+                        <th>Created At</th>
+                        <th>Actions</th>
+                    </tr>
                     </thead>
                     <tbody>
                         <c:choose>
-                            <c:when test="${empty users}">
+                            <c:when test="${empty giftInfos}">
                                 <tr>
-                                    <td colspan="6">
+                                    <td colspan="3">
                                         Tidak ada data
                                     </td>
                                 </tr>
                             </c:when>
                             <c:otherwise>
-                                <c:forEach items="${users}" var="user" varStatus="each">
+                                <c:forEach items="${giftInfos}" var="giftInfo" varStatus="each">
                                     <tr>
                                         <td>
-                                                ${((page - 1) * 10) + (each.index + 1)}
+                                                ${((page - 1) * 10) + each.index + 1}
                                         </td>
                                         <td>
-                                                ${user.userName.firstName} ${user.userName.middleName} ${user.userName.lastName}
+                                                ${giftInfo.title}
                                         </td>
                                         <td>
-                                                ${user.email}
+                                                ${giftInfo.description}
                                         </td>
                                         <td>
-                                                ${user.role.name}
+                                                ${giftInfo.essence}
                                         </td>
                                         <td>
-                                                ${user.status}
+                                                ${giftInfo.user.userName.firstName} ${giftInfo.user.userName.middleName} ${giftInfo.user.userName.lastName}
                                         </td>
                                         <td>
-                                            <a href="/dashboard/admin/user/add/${user.id}">
+                                                ${giftInfo.createdAt}
+                                        </td>
+                                        <td>
+                                            <a href="/dashboard/author/gift-info/add/${giftInfo.id}">
                                                 <button class="btn btn-primary btn-xs" style="width: 70px; height: 28px;">
-                                                    <i aria-hidden="true" class="fa fa-info-circle"></i> Detail
+                                                    <i aria-hidden="true" class="fa fa-pencil-square-o"></i> Update
+                                                </button>
+                                            </a>
+                                            <a href="/dashboard/author/gift-info/delete/${giftInfo.id}">
+                                                <button class="btn btn-danger btn-xs" style="width: 70px; height: 28px;">
+                                                    <i aria-hidden="true" class="fa fa-trash-o"></i> Delete
                                                 </button>
                                             </a>
                                         </td>
@@ -136,23 +145,23 @@
             <ul class="pagination">
                 <c:if test="${page != 1}">
                     <li>
-                        <a href="/dashboard/admin/user/1">&laquo; first</a>
+                        <a href="/dashboard/author/gift-info/1">&laquo; first</a>
                     </li>
                     <li>
-                        <a href="/dashboard/admin/user/${page - 1}">&lsaquo; previous</a>
+                        <a href="/dashboard/author/gift-info/${page - 1}">&lsaquo; previous</a>
                     </li>
                 </c:if>
 
                 <li class="active">
-                    <a href="/dashboard/admin/user/${page}">${page}</a>
+                    <a href="/dashboard/author/gift-info/${page}">${page}</a>
                 </li>
 
                 <c:if test="${lastPage != page}">
                     <li>
-                        <a href="/dashboard/admin/user/${page + 1}">next &rsaquo;</a>
+                        <a href="/dashboard/author/gift-info/${page + 1}">next &rsaquo;</a>
                     </li>
                     <li>
-                        <a href="/dashboard/admin/user/${lastPage}">last &raquo;</a>
+                        <a href="/dashboard/author/gift-info/${lastPage}">last &raquo;</a>
                     </li>
                 </c:if>
             </ul>

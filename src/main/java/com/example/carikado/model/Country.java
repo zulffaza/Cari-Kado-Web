@@ -57,4 +57,8 @@ public class Country implements Serializable {
     public List<Province> getProvinces() {
         return provinces;
     }
+
+    public void setProvinces(List<Province> provinces) {
+        this.provinces = provinces;
+    }
 }

@@ -51,6 +51,13 @@ public class ProvinceRESTController {
         return new MyResponse<>(message, provinces);
     }
 
+    @GetMapping("/api/province/country/{countryId}/all")
+    public MyResponse<List> findProvinces(@PathVariable Integer countryId) {
+        String message = "Find provinces success";
+        ArrayList<Province> provinces = (ArrayList<Province>) mProvinceService.findAll(countryId);
+        return new MyResponse<>(message, provinces);
+    }
+
     @GetMapping("/api/province")
     public MyResponse<MyPage<List>> findProvinces(@RequestParam(required = false, defaultValue = "0") Integer page,
                                                  @RequestParam(required = false, defaultValue = "10") Integer pageSize,

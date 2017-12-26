@@ -69,6 +69,24 @@
                 <input name="cityId" type="number" value="${city.id}" hidden="hidden" />
 
                 <div class="form-group">
+                    <label class="control-label col-sm-2" for="countries">Negara :</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="countries" name="countryId" onchange="onCountriesChange(${city.id})">
+                            <c:forEach items="${countries}" var="country" varStatus="each">
+                                <c:choose>
+                                    <c:when test="${countryId == country.id}">
+                                        <option value="${country.id}" selected="selected">${country.name}</option>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <option value="${country.id}">${country.name}</option>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label class="control-label col-sm-2" for="provinces">Provinsi :</label>
                     <div class="col-sm-10">
                         <select class="form-control" id="provinces" name="provinceId">
@@ -96,11 +114,20 @@
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <c:choose>
-                            <c:when test="${empty city.id}">
-                                <button type="submit" class="btn btn-success">Add</button>
+                            <c:when test="${empty countries || empty provinces}">
+                                <div class="alert alert-warning">
+                                    Tidak dapat menambahkan kota baru
+                                </div>
                             </c:when>
                             <c:otherwise>
-                                <button type="submit" class="btn btn-success">Edit</button>
+                                <c:choose>
+                                    <c:when test="${empty city.id}">
+                                        <button type="submit" class="btn btn-success">Add</button>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <button type="submit" class="btn btn-success">Edit</button>
+                                    </c:otherwise>
+                                </c:choose>
                             </c:otherwise>
                         </c:choose>
                     </div>
@@ -110,5 +137,6 @@
 
         <script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
         <script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+        <script src="/js/admin/addCity.js"></script>
     </body>
 </html>

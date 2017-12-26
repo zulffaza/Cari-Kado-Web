@@ -52,8 +52,8 @@ public class GiftInfoCategoryRESTController {
 
     @GetMapping("/api/gift-info-category")
     public MyResponse<MyPage<List>> findGiftInfoCategories(@RequestParam(required = false, defaultValue = "0") Integer page,
-                                                @RequestParam(required = false, defaultValue = "10") Integer pageSize,
-                                                @RequestParam(required = false) Integer sort) {
+                                                           @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                                           @RequestParam(required = false) Integer sort) {
         ArrayList<String> properties = new ArrayList<>();
         List<GiftInfoCategory> giftInfoCategories;
         String message;

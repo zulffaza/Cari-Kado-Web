@@ -10,6 +10,8 @@ import java.util.List;
 @Repository
 public interface SubDistrictRepository extends JpaRepository<SubDistrict, Long> {
 
+    public List<SubDistrict> findAllByDistrictId(Integer districtId);
+
     @Query("select sd from SubDistrict sd order by sd.name")
     public List<SubDistrict> findAllWithSort();
 }

@@ -22,6 +22,10 @@ public class CityService {
 
     public List<City> findAll() { return mCityRepository.findAllWithSort(); }
 
+    public List<City> findAll(Integer provinceId) {
+        return mCityRepository.findAllByProvinceId(provinceId);
+    }
+
     public Page<City> findAllPageable(Pageable pageable) { return mCityRepository.findAll(pageable); }
 
     public City findCity(Integer id) { return mCityRepository.findOne(id); }

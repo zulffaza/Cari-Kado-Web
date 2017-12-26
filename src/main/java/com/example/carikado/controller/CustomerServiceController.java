@@ -21,12 +21,12 @@ public class CustomerServiceController {
         mRestTemplate = new RestTemplate();
     }
 
-    @GetMapping("/dashboard/author")
-    public String dashboardAuthor(HttpSession httpSession) {
+    @GetMapping("/dashboard/customer-service")
+    public String dashboardCustomerService(HttpSession httpSession) {
         User user = (User) httpSession.getAttribute("user");
 
         if (user != null)
-            return user.getRole().getName().equals("Author") ? "author/index" : "redirect:/dashboard";
+            return user.getRole().getName().equals("Customer Service") ? "customer-service/index" : "redirect:/dashboard";
         else
             return "redirect:/login";
     }

@@ -67,13 +67,15 @@
 
             <form:form class="form-horizontal" name="addUser" method="post" action="/dashboard/admin/user/add">
                 <input name="userId" type="number" value="${userModel.id}" hidden="hidden" />
+                <input name="userNameId" type="number" value="${userModel.userName.id}" hidden="hidden" />
+                <input name="userAddressId" type="number" value="${userModel.userAddress.id}" hidden="hidden" />
 
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="user-first-name">First Name :</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="user-first-name" name="userFirstName" placeholder="*Enter user first name" value="${userModel.userName.firstName}"
                             <c:if test="${not empty userModel.id}">
-                                disabled="disabled"
+                                readonly="readonly"
                             </c:if>
                         required="required">
                     </div>
@@ -82,9 +84,9 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="user-middle-name">Middle Name :</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="user-middle-name" name="userMiddleName" placeholder="Enter user middle name" value="${userModel.userName.middle}"
+                        <input type="text" class="form-control" id="user-middle-name" name="userMiddleName" placeholder="Enter user middle name" value="${userModel.userName.middleName}"
                             <c:if test="${not empty userModel.id}">
-                                   disabled="disabled"
+                                   readonly="readonly"
                             </c:if>
                         >
                     </div>
@@ -95,7 +97,7 @@
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="user-last-name" name="userLastName" placeholder="*Enter user last name" value="${userModel.userName.lastName}"
                             <c:if test="${not empty userModel.id}">
-                                   disabled="disabled"
+                                   readonly="readonly"
                             </c:if>
                         required="required">
                     </div>
@@ -106,14 +108,14 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="user-address-country">Negara :</label>
                     <div class="col-sm-10">
-                        <select class="form-control" id="user-address-country" name="userAddressCountryId"
+                        <select class="form-control" id="user-address-country" name="userAddressCountryId" onchange="onCountriesChange(${userModel.id})"
                             <c:if test="${not empty userModel.id}">
-                                disabled="disabled"
+                                readonly="readonly"
                             </c:if>
                         >
                             <c:forEach items="${countries}" var="country" varStatus="each">
                                 <c:choose>
-                                    <c:when test="${userModel.userAddress.country.id == country.id}">
+                                    <c:when test="${countryId == country.id}">
                                         <option value="${country.id}" selected="selected">${country.name}</option>
                                     </c:when>
                                     <c:otherwise>
@@ -128,14 +130,14 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="user-address-province">Provinsi :</label>
                     <div class="col-sm-10">
-                        <select class="form-control" id="user-address-province" name="userAddressProvinceId"
+                        <select class="form-control" id="user-address-province" name="userAddressProvinceId" onchange="onProvincesChange(${userModel.id})"
                             <c:if test="${not empty userModel.id}">
-                                disabled="disabled"
+                                readonly="readonly"
                             </c:if>
                         >
                             <c:forEach items="${provinces}" var="province" varStatus="each">
                                 <c:choose>
-                                    <c:when test="${userModel.userAddress.province.id == province.id}">
+                                    <c:when test="${provinceId == province.id}">
                                         <option value="${province.id}" selected="selected">${province.name}</option>
                                     </c:when>
                                     <c:otherwise>
@@ -150,14 +152,14 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="user-address-city">Kota :</label>
                     <div class="col-sm-10">
-                        <select class="form-control" id="user-address-city" name="userAddressCityId"
+                        <select class="form-control" id="user-address-city" name="userAddressCityId" onchange="onCitiesChange(${userModel.id})"
                             <c:if test="${not empty userModel.id}">
-                                disabled="disabled"
+                                readonly="readonly"
                             </c:if>
                         >
                             <c:forEach items="${cities}" var="city" varStatus="each">
                                 <c:choose>
-                                    <c:when test="${userModel.userAddress.city.id == city.id}">
+                                    <c:when test="${cityId == city.id}">
                                         <option value="${city.id}" selected="selected">${city.name}</option>
                                     </c:when>
                                     <c:otherwise>
@@ -172,14 +174,14 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="user-address-district">Kecamatan :</label>
                     <div class="col-sm-10">
-                        <select class="form-control" id="user-address-district" name="userAddressDistrictId"
+                        <select class="form-control" id="user-address-district" name="userAddressDistrictId" onchange="onDistrictsChange(${userModel.id})"
                             <c:if test="${not empty userModel.id}">
-                                disabled="disabled"
+                                readonly="readonly"
                             </c:if>
                         >
                             <c:forEach items="${districts}" var="district" varStatus="each">
                                 <c:choose>
-                                    <c:when test="${userModel.userAddress.district.id == district.id}">
+                                    <c:when test="${districtId == district.id}">
                                         <option value="${district.id}" selected="selected">${district.name}</option>
                                     </c:when>
                                     <c:otherwise>
@@ -196,7 +198,7 @@
                     <div class="col-sm-10">
                         <select class="form-control" id="user-address-sub-district" name="userAddressSubDistrictId"
                             <c:if test="${not empty userModel.id}">
-                                disabled="disabled"
+                                readonly="readonly"
                             </c:if>
                         >
                             <c:forEach items="${subDistricts}" var="subDistrict" varStatus="each">
@@ -218,7 +220,7 @@
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="user-address-street" name="userAddressStreet" placeholder="*Enter user address street" value="${userModel.userAddress.street}"
                             <c:if test="${not empty userModel.id}">
-                                disabled="disabled"
+                                readonly="readonly"
                             </c:if>
                         required="required">
                     </div>
@@ -227,9 +229,9 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="user-address-hamlet">RW :</label>
                     <div class="col-sm-10">
-                        <input type="number" class="form-control" id="user-address-hamlet" name="userAddressHamlet" placeholder="Enter user address hamlet" value="${userModel.userAddress.hamlet}"
+                        <input type="number" min="1" class="form-control" id="user-address-hamlet" name="userAddressHamlet" placeholder="Enter user address hamlet" value="${userModel.userAddress.hamlet}"
                             <c:if test="${not empty userModel.id}">
-                                disabled="disabled"
+                                readonly="readonly"
                             </c:if>
                         >
                     </div>
@@ -238,9 +240,9 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="user-address-neighbourhood">RT :</label>
                     <div class="col-sm-10">
-                        <input type="number" class="form-control" id="user-address-neighbourhood" name="userAddressNeighbourhood" placeholder="Enter user address neighbourhood" value="${userModel.userAddress.neighbourhood}"
+                        <input type="number" min="1" class="form-control" id="user-address-neighbourhood" name="userAddressNeighbourhood" placeholder="Enter user address neighbourhood" value="${userModel.userAddress.neighbourhood}"
                             <c:if test="${not empty userModel.id}">
-                                disabled="disabled"
+                                readonly="readonly"
                             </c:if>
                         >
                     </div>
@@ -253,7 +255,7 @@
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="user-email" name="userEmail" placeholder="*Enter user email" value="${userModel.email}"
                             <c:if test="${not empty userModel.id}">
-                                   disabled="disabled"
+                                   readonly="readonly"
                             </c:if>
                         required="required">
                     </div>
@@ -264,7 +266,7 @@
                     <div class="col-sm-10">
                         <input type="password" class="form-control" id="user-password" name="userPassword" placeholder="*Enter user password" value="${userModel.password}"
                             <c:if test="${not empty userModel.id}">
-                               disabled="disabled"
+                               readonly="readonly"
                             </c:if>
                         required="required">
                     </div>
@@ -273,9 +275,9 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="user-phone">Phone :</label>
                     <div class="col-sm-10">
-                        <input type="number" class="form-control" id="user-phone" name="userPhone" placeholder="*Enter user phone" value="${userModel.phone}"
+                        <input type="number" min="0" class="form-control" id="user-phone" name="userPhone" placeholder="*Enter user phone" value="${userModel.phone}"
                             <c:if test="${not empty userModel.id}">
-                               disabled="disabled"
+                               readonly="readonly"
                             </c:if>
                         required="required">
                     </div>
@@ -322,11 +324,21 @@
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <c:choose>
-                            <c:when test="${empty userModel.id}">
-                                <button type="submit" class="btn btn-success">Add</button>
+                            <c:when test="${empty countries || empty provinces || empty cities || empty districts
+                             || empty subDistricts || empty roles || empty userStatuses}">
+                                <div class="alert alert-warning">
+                                    Tidak dapat menambahkan user baru
+                                </div>
                             </c:when>
                             <c:otherwise>
-                                <button type="submit" class="btn btn-success">Edit</button>
+                                <c:choose>
+                                    <c:when test="${empty userModel.id}">
+                                        <button type="submit" class="btn btn-success">Add</button>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <button type="submit" class="btn btn-success">Edit</button>
+                                    </c:otherwise>
+                                </c:choose>
                             </c:otherwise>
                         </c:choose>
                     </div>
@@ -336,5 +348,6 @@
 
         <script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
         <script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+        <script src="/js/admin/addUser.js"></script>
     </body>
 </html>

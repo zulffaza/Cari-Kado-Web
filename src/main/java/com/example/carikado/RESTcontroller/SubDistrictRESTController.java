@@ -55,6 +55,13 @@ public class SubDistrictRESTController {
         return new MyResponse<>(message, subdistricts);
     }
 
+    @GetMapping("/api/sub-district/district/{districtId}/all")
+    public MyResponse<List> findCities(@PathVariable Integer districtId) {
+        String message = "Find sub districts success";
+        ArrayList<SubDistrict> subDistricts = (ArrayList<SubDistrict>) mSubDistrictService.findAll(districtId);
+        return new MyResponse<>(message, subDistricts);
+    }
+
     @GetMapping("/api/sub-district")
     public MyResponse<MyPage<List>> findSubDistricts(@RequestParam(required = false, defaultValue = "0") Integer page,
                                                   @RequestParam(required = false, defaultValue = "10") Integer pageSize,

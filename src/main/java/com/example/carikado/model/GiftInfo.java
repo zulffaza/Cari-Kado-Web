@@ -1,5 +1,7 @@
 package com.example.carikado.model;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,9 +21,11 @@ public class GiftInfo implements Serializable {
     private String title;
 
     @Column(name = "gift_info_description", nullable = false)
+    @Type(type = "text")
     private String description;
 
     @Column(name = "gift_info_essence", nullable = false)
+    @Type(type = "text")
     private String essence;
 
     @Column(name = "gift_info_created_at", nullable = false)

@@ -24,6 +24,10 @@ public class DistrictService {
 
     public List<District> findAll() { return mDistrictRepository.findAllWithSort(); }
 
+    public List<District> findAll(Integer cityId) {
+        return mDistrictRepository.findAllByCityId(cityId);
+    }
+
     public Page<District> findAllPageable(Pageable pageable) { return mDistrictRepository.findAll(pageable); }
 
     public District findDistrict(Integer id) { return mDistrictRepository.findOne(id); }

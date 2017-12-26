@@ -14,7 +14,7 @@ public class GiftInfoCategory implements Serializable {
     @Column(name = "gift_info_category_id", nullable = false)
     private Integer id;
 
-    @Column(name = "gift_info_category_name", nullable = false)
+    @Column(name = "gift_info_category_name", nullable = false, unique = true)
     private String name;
 
     public GiftInfoCategory() {
@@ -39,5 +39,15 @@ public class GiftInfoCategory implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof GiftInfoCategory) {
+            GiftInfoCategory giftInfoCategory = (GiftInfoCategory) obj;
+
+            return id.equals(giftInfoCategory.getId());
+        } else
+            return false;
     }
 }
