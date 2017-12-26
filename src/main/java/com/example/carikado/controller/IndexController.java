@@ -144,7 +144,7 @@ public class IndexController {
                     break;
             }
 
-            return isFind ? "redirect:/dashboard/" + userRole.getName().replaceAll("\\s", "")
+            return isFind ? "redirect:/dashboard/" + userRole.getName().replaceAll("\\s", "-")
                     .toLowerCase() : "redirect:/error404";
         } else
             return "redirect:/login";

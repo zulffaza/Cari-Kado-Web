@@ -229,7 +229,7 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="user-address-hamlet">RW :</label>
                     <div class="col-sm-10">
-                        <input type="number" class="form-control" id="user-address-hamlet" name="userAddressHamlet" placeholder="Enter user address hamlet" value="${userModel.userAddress.hamlet}"
+                        <input type="number" min="1" class="form-control" id="user-address-hamlet" name="userAddressHamlet" placeholder="Enter user address hamlet" value="${userModel.userAddress.hamlet}"
                             <c:if test="${not empty userModel.id}">
                                 readonly="readonly"
                             </c:if>
@@ -240,7 +240,7 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="user-address-neighbourhood">RT :</label>
                     <div class="col-sm-10">
-                        <input type="number" class="form-control" id="user-address-neighbourhood" name="userAddressNeighbourhood" placeholder="Enter user address neighbourhood" value="${userModel.userAddress.neighbourhood}"
+                        <input type="number" min="1" class="form-control" id="user-address-neighbourhood" name="userAddressNeighbourhood" placeholder="Enter user address neighbourhood" value="${userModel.userAddress.neighbourhood}"
                             <c:if test="${not empty userModel.id}">
                                 readonly="readonly"
                             </c:if>
@@ -275,7 +275,7 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="user-phone">Phone :</label>
                     <div class="col-sm-10">
-                        <input type="number" class="form-control" id="user-phone" name="userPhone" placeholder="*Enter user phone" value="${userModel.phone}"
+                        <input type="number" min="0" class="form-control" id="user-phone" name="userPhone" placeholder="*Enter user phone" value="${userModel.phone}"
                             <c:if test="${not empty userModel.id}">
                                readonly="readonly"
                             </c:if>

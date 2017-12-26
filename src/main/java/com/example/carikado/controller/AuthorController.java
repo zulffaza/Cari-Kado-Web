@@ -17,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 @Controller
 public class AuthorController {
@@ -111,7 +112,7 @@ public class AuthorController {
                 modelMap.addAttribute("sort", myPage.getSort());
                 modelMap.addAttribute("giftInfoCategories", giftInfoCategories);
 
-                return "author/gift-info-category";
+                return "author/giftInfoCategory";
             } else
                 return "redirect:/dashboard";
         } else
@@ -120,11 +121,11 @@ public class AuthorController {
 
     @GetMapping("/dashboard/author/gift-info/{page}")
     public String dashboardAuthorGiftInfo(@PathVariable Integer page,
-                                                  @RequestParam(required = false, defaultValue = "10") Integer pageSize,
-                                                  @RequestParam(required = false, defaultValue = "1") Integer sort,
-                                                  @ModelAttribute("message") String message,
-                                                  HttpSession httpSession,
-                                                  ModelMap modelMap) {
+                                          @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                          @RequestParam(required = false, defaultValue = "1") Integer sort,
+                                          @ModelAttribute("message") String message,
+                                          HttpSession httpSession,
+                                          ModelMap modelMap) {
         String url = BASE_URL + "gift-info";
         User user = (User) httpSession.getAttribute("user");
 
@@ -166,7 +167,7 @@ public class AuthorController {
                 modelMap.addAttribute("sort", myPage.getSort());
                 modelMap.addAttribute("giftInfos", giftInfos);
 
-                return "author/gift-info";
+                return "author/giftInfo";
             } else
                 return "redirect:/dashboard";
         } else
@@ -192,13 +193,26 @@ public class AuthorController {
 
     @GetMapping("/dashboard/author/gift-info/add")
     public String dashboardAuthorAddGiftInfo(@ModelAttribute("message") String message,
-                                                     @ModelAttribute("giftInfo") GiftInfoCategory giftInfo,
+                                                     @ModelAttribute("giftInfo") GiftInfo giftInfo,
                                                      HttpSession httpSession, ModelMap modelMap) {
+        String url = BASE_URL + "gift-info-category/all";
         User user = (User) httpSession.getAttribute("user");
 
         if (user != null) {
+            ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+            MyResponse<ArrayList<GiftInfoCategory>> myResponse;
+            ArrayList<GiftInfoCategory> giftInfoCategories = null;
+
+            try {
+                myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<GiftInfoCategory>>>() {});
+                giftInfoCategories = myResponse.getData();
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage());
+            }
+
             modelMap.addAttribute("user", user);
             modelMap.addAttribute("message", message);
+            modelMap.addAttribute("giftInfoCategories", giftInfoCategories);
             modelMap.addAttribute("giftInfo", giftInfo);
 
             return user.getRole().getName().equals("Author") ? "author/addGiftInfo" : "redirect:/dashboard";
@@ -277,8 +291,22 @@ public class AuthorController {
                     }
 
                     if (giftInfo != null) {
+                        url = BASE_URL + "gift-info-category/all";
+
+                        response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
+                        MyResponse<ArrayList<GiftInfoCategory>> myResponseGiftInfoCategory;
+                        ArrayList<GiftInfoCategory> giftInfoCategories = null;
+
+                        try {
+                            myResponseGiftInfoCategory = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<GiftInfoCategory>>>() {});
+                            giftInfoCategories = myResponseGiftInfoCategory.getData();
+                        } catch (IOException e) {
+                            LOGGER.error(e.getMessage());
+                        }
+
                         modelMap.addAttribute("user", user);
                         modelMap.addAttribute("message", message);
+                        modelMap.addAttribute("giftInfoCategories", giftInfoCategories);
                         modelMap.addAttribute("giftInfo", giftInfo);
 
                         return "author/addGiftInfo";
@@ -291,7 +319,6 @@ public class AuthorController {
         } else
             return "redirect:/login";
     }
-
 
     @PostMapping("/dashboard/author/gift-info-category/add")
     public String dashboardAuthorAddGiftInfoCategory(@RequestParam(name = "giftInfoCategoryId", required = false) Integer giftInfoCategoryId,
@@ -346,8 +373,6 @@ public class AuthorController {
                     else
                         message = myResponse.getMessage();
 
-                    giftInfoCategory = new GiftInfoCategory(giftInfoCategoryName);
-
                     redirectAttributes.addAttribute("message", message);
                     redirectAttributes.addAttribute("giftInfoCategory", giftInfoCategory);
                 }
@@ -366,9 +391,18 @@ public class AuthorController {
 
     @PostMapping("/dashboard/author/gift-info/add")
     public String dashboardAuthorAddGiftInfo(@RequestParam(name = "giftInfoId", required = false) Integer giftInfoId,
-                                                     @RequestParam("giftInfoName") String giftInfoTitle,
-                                                     HttpSession httpSession,
-                                                     RedirectAttributes redirectAttributes) {
+                                             @RequestParam(name = "giftInfoAgeId", required = false) Integer giftInfoAgeId,
+                                             @RequestParam(name = "giftInfoBudgetId", required = false) Integer giftInfoBudgetId,
+                                             @RequestParam("giftInfoCategoryId") String[] giftInfoCategoryId,
+                                             @RequestParam("giftInfoTitle") String giftInfoTitle,
+                                             @RequestParam("giftInfoDescription") String giftInfoDescription,
+                                             @RequestParam("giftInfoEssence") String giftInfoEssence,
+                                             @RequestParam("giftInfoAgeFrom") String giftInfoAgeFrom,
+                                             @RequestParam("giftInfoAgeTo") String giftInfoAgeTo,
+                                             @RequestParam("giftInfoBudgetFrom") String giftInfoBudgetFrom,
+                                             @RequestParam("giftInfoBudgetTo") String giftInfoBudgetTo,
+                                             HttpSession httpSession,
+                                             RedirectAttributes redirectAttributes) {
         String url = BASE_URL + "gift-info/add";
         User user = (User) httpSession.getAttribute("user");
 
@@ -378,11 +412,36 @@ public class AuthorController {
             if (isAuthor) {
                 boolean isEdit = giftInfoId != null;
 
+                GiftInfoAge giftInfoAge = new GiftInfoAge();
+                giftInfoAge.setFrom(giftInfoAgeFrom);
+                giftInfoAge.setTo(giftInfoAgeTo);
+
+                GiftInfoBudget giftInfoBudget = new GiftInfoBudget();
+                giftInfoBudget.setFrom(giftInfoBudgetFrom);
+                giftInfoBudget.setTo(giftInfoBudgetTo);
+
                 GiftInfo giftInfo = new GiftInfo();
                 giftInfo.setTitle(giftInfoTitle);
+                giftInfo.setDescription(giftInfoDescription);
+                giftInfo.setEssence(giftInfoEssence);
+                giftInfo.setUser(user);
+                giftInfo.setGiftInfoAge(giftInfoAge);
+                giftInfo.setGiftInfoBudget(giftInfoBudget);
 
-                if (isEdit)
+                for (String gicid : giftInfoCategoryId) {
+                    Integer id = Integer.parseInt(gicid);
+
+                    GiftInfoCategory giftInfoCategory = new GiftInfoCategory();
+                    giftInfoCategory.setId(id);
+
+                    giftInfo.addGiftInfoCategory(giftInfoCategory);
+                }
+
+                if (isEdit) {
                     giftInfo.setId(giftInfoId);
+                    giftInfo.getGiftInfoAge().setId(giftInfoAgeId);
+                    giftInfo.getGiftInfoBudget().setId(giftInfoBudgetId);
+                }
 
                 HttpHeaders httpHeaders = new HttpHeaders();
                 httpHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -416,8 +475,6 @@ public class AuthorController {
                         message = "Internal server error";
                     else
                         message = myResponse.getMessage();
-
-                    giftInfo = new GiftInfo(giftInfoTitle);
 
                     redirectAttributes.addAttribute("message", message);
                     redirectAttributes.addAttribute("giftInfo", giftInfo);

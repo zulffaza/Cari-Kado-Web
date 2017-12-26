@@ -1,8 +1,8 @@
 package com.example.carikado.RESTcontroller;
 
-import com.example.carikado.model.GiftInfo;
-import com.example.carikado.model.MyPage;
-import com.example.carikado.model.MyResponse;
+import com.example.carikado.model.*;
+import com.example.carikado.service.GiftInfoAgeService;
+import com.example.carikado.service.GiftInfoBudgetService;
 import com.example.carikado.service.GiftInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,10 +33,15 @@ public class GiftInfoRESTController {
             "desc"
     };
 
+    private GiftInfoAgeService mGiftInfoAgeService;
+    private GiftInfoBudgetService mGiftInfoBudgetService;
     private GiftInfoService mGiftInfoService;
 
     @Autowired
-    public GiftInfoRESTController(GiftInfoService giftInfoService) {
+    public GiftInfoRESTController(GiftInfoAgeService giftInfoAgeService, GiftInfoBudgetService giftInfoBudgetService,
+                                  GiftInfoService giftInfoService) {
+        mGiftInfoAgeService = giftInfoAgeService;
+        mGiftInfoBudgetService = giftInfoBudgetService;
         mGiftInfoService = giftInfoService;
     }
 
@@ -118,20 +123,33 @@ public class GiftInfoRESTController {
 
     @PostMapping("/api/gift-info/add")
     public MyResponse<Integer> addGiftInfo(@RequestBody GiftInfo giftInfo) {
-        String message;
+        if (giftInfo.getCreatedAt() == null)
+            giftInfo.setCreatedAt(new Date());
+
+        boolean isEdit = giftInfo.getId() != null;
+
+        String message = "Gift info " + (isEdit ? "edit " : "add ");
         int response;
 
         try {
+            if (!isEdit) {
+                GiftInfoAge giftInfoAge = mGiftInfoAgeService.addGiftInfoAge(giftInfo.getGiftInfoAge());
+                GiftInfoBudget giftInfoBudget = mGiftInfoBudgetService.addGiftInfoBudget(giftInfo.getGiftInfoBudget());
+
+                giftInfo.setGiftInfoAge(giftInfoAge);
+                giftInfo.setGiftInfoBudget(giftInfoBudget);
+            }
+
             giftInfo = mGiftInfoService.addGiftInfo(giftInfo);
 
             boolean isSuccess = giftInfo != null;
-            message = isSuccess ? "Gift info add success" : "Gift info add failed";
+            message += isSuccess ? "success" : "failed";
             response = isSuccess ? 1 : 0;
         } catch (DataIntegrityViolationException e) {
-            message = "Gift info add failed - Gift info already exists";
+            message += "failed - Gift info already exists";
             response = 0;
         } catch (Exception e) {
-            message = "Gift info add failed - Internal Server Error";
+            message += "failed - Internal Server Error";
             response = 0;
         }
 
