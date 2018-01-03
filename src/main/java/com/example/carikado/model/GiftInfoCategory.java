@@ -12,13 +12,10 @@ public class GiftInfoCategory implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "gift_info_category_id", nullable = false)
-    private int id;
+    private Integer id;
 
-    @Column(name = "gift_info_category_name", nullable = false)
+    @Column(name = "gift_info_category_name", nullable = false, unique = true)
     private String name;
-
-    @ManyToMany(mappedBy = "giftInfoCategories")
-    private List<GiftInfo> giftInfos = new ArrayList<>();
 
     public GiftInfoCategory() {
 
@@ -28,11 +25,11 @@ public class GiftInfoCategory implements Serializable {
         this.name = name;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -44,15 +41,13 @@ public class GiftInfoCategory implements Serializable {
         this.name = name;
     }
 
-    public void addGiftInfo(GiftInfo giftInfo) {
-        giftInfos.add(giftInfo);
-    }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof GiftInfoCategory) {
+            GiftInfoCategory giftInfoCategory = (GiftInfoCategory) obj;
 
-    public void removeGiftInfo(GiftInfo giftInfo) {
-        giftInfos.remove(giftInfo);
-    }
-
-    public List<GiftInfo> getGiftInfos() {
-        return giftInfos;
+            return id.equals(giftInfoCategory.getId());
+        } else
+            return false;
     }
 }

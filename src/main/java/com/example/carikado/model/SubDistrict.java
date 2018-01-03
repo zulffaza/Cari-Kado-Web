@@ -10,32 +10,28 @@ public class SubDistrict implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "sub_district_id", nullable = false)
-    private int id;
+    private Long id;
 
     @Column(name = "sub_district_name", nullable = false)
     private String name;
 
-    @Column(name = "sub_district_postal_code", nullable = false)
-    private String postalCode;
-
-    @ManyToOne
-    @JoinColumn(name = "district_id", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "district_id")
     private District district;
 
     public SubDistrict() {
 
     }
 
-    public SubDistrict(String name, String postalCode) {
+    public SubDistrict(String name) {
         this.name = name;
-        this.postalCode = postalCode;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -45,14 +41,6 @@ public class SubDistrict implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
     }
 
     public District getDistrict() {

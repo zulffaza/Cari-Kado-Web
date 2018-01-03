@@ -3,8 +3,8 @@ package com.example.carikado.controller;
 import com.example.carikado.model.MyResponse;
 import com.example.carikado.model.Role;
 import com.example.carikado.model.User;
+import com.example.carikado.model.UserStatus;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +55,16 @@ public class IndexController {
             return "redirect:/dashboard";
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+
+        if (user != null)
+            httpSession.removeAttribute("user");
+
+        return "redirect:/login";
+    }
+
     @PostMapping("/login")
     public String loginPost(@RequestParam("userEmail") String userEmail,
                             @RequestParam("userPassword") String userPassword,
@@ -69,30 +79,26 @@ public class IndexController {
 
         HttpEntity<HashMap> request = new HttpEntity<>(params);
 
-        ResponseEntity<JsonNode> response = mRestTemplate.exchange(url, HttpMethod.POST, request, JsonNode.class);
+        ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.POST, request, String.class);
         MyResponse<User> myResponse = new MyResponse<>();
         User user = null;
 
         try {
-            JsonNode jsonNode = response.getBody();
-            myResponse = mObjectMapper.readValue(mObjectMapper.treeAsTokens(jsonNode),
-                    new TypeReference<MyResponse<User>>() {
-                    });
-
+            myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<User>>() {});
             user = myResponse.getData();
         } catch (IOException e) {
             myResponse.setMessage("Internal server error");
             LOGGER.error(e.getMessage());
         }
 
-
-        if (user == null) {
-            redirectAttributes.addFlashAttribute("message", myResponse.getMessage());
-            return "redirect:/login";
-        } else {
+        if (user != null && user.getStatus().equals(UserStatus.ACTIVE)) {
             httpSession.setAttribute("user", user);
             return "redirect:/dashboard";
         }
+
+        String message = user != null ? "User is not allowed to login" : myResponse.getMessage();
+        redirectAttributes.addFlashAttribute("message", message);
+        return "redirect:/login";
     }
 
     @GetMapping("/error")
@@ -116,16 +122,12 @@ public class IndexController {
         User user = (User) httpSession.getAttribute("user");
 
         if (user != null) {
-            ResponseEntity<JsonNode> response = mRestTemplate.exchange(url, HttpMethod.POST, null, JsonNode.class);
+            ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.GET, null, String.class);
             MyResponse<ArrayList<Role>> myResponse;
             ArrayList<Role> roles = new ArrayList<>();
 
             try {
-                JsonNode jsonNode = response.getBody();
-                myResponse = mObjectMapper.readValue(mObjectMapper.treeAsTokens(jsonNode),
-                        new TypeReference<MyResponse<ArrayList<Role>>>() {
-                        });
-
+                myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Role>>>() {});
                 roles = myResponse.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
@@ -142,7 +144,7 @@ public class IndexController {
                     break;
             }
 
-            return isFind ? "redirect:/dashboard/" + userRole.getName().replaceAll("\\s", "")
+            return isFind ? "redirect:/dashboard/" + userRole.getName().replaceAll("\\s", "-")
                     .toLowerCase() : "redirect:/error404";
         } else
             return "redirect:/login";

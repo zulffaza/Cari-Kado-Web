@@ -1,15 +1,12 @@
 package com.example.carikado.service;
 
 import com.example.carikado.model.GiftInfo;
-import com.example.carikado.model.GiftInfoCategory;
-import com.example.carikado.model.User;
 import com.example.carikado.repository.GiftInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service("giftInfoService")
@@ -27,14 +24,14 @@ public class GiftInfoService {
     }
 
     public List<GiftInfo> findAll() {
-        return mGiftInfoRepository.findAll();
+        return mGiftInfoRepository.findAllWithSort();
     }
 
     public Page<GiftInfo> findAllPageable(Pageable pageable) {
         return mGiftInfoRepository.findAll(pageable);
     }
 
-    public GiftInfo findGift(Integer id) {
+    public GiftInfo findGiftInfo(Integer id) {
         return mGiftInfoRepository.findOne(id);
     }
 

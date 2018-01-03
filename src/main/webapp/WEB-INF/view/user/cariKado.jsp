@@ -14,13 +14,11 @@
     <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
     <script src="bootstrap-3.3.7-dist/jquery/jquery-3.1.1.min.js"></script>
     <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="index.css">
 </head>
 <body>
 <nav class="navbar navbar-fixed-top" style="background: #A91E31;">
-    <div class="container-fluid">
         <div class="navbar-brand">
-            <img src="assets/ic_icon_logo_cari_kado.png" width="160" height="30">
+            <img src="assets/admin/fullicon1.png" width="160" height="30">
         </div>
         <div>
             <ul class="nav navbar-nav navbar-right">
@@ -28,7 +26,6 @@
                 <li style="margin:4px"><a href="review">REVIEW</a></li>
             </ul>
         </div>
-    </div>
 </nav>
 <div class="container" style="background: #ffffff; margin-top: 100px; margin-left: 150px;">
     <br>
@@ -77,6 +74,5 @@
             </div>
         </div>
     </div>
-
 </body>
 </html>

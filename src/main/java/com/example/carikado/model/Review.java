@@ -11,7 +11,7 @@ public class Review implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "review_id", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "review_name", nullable = false)
     private String name;
@@ -23,7 +23,7 @@ public class Review implements Serializable {
     private String comment;
 
     @Column(name = "review_rating", nullable = false)
-    private int rating;
+    private Integer rating;
 
     @Column(name = "review_created_at", nullable = false)
     private Date createdAt;
@@ -32,18 +32,18 @@ public class Review implements Serializable {
 
     }
 
-    public Review(String name, String email, String comment, int rating) {
+    public Review(String name, String email, String comment, Integer rating) {
         this.name = name;
         this.email = email;
         this.comment = comment;
         this.rating = rating;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -71,11 +71,11 @@ public class Review implements Serializable {
         this.comment = comment;
     }
 
-    public int getRating() {
+    public Integer getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(Integer rating) {
         this.rating = rating;
     }
 

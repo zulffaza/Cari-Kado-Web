@@ -10,7 +10,7 @@ public class UserPicture implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "user_picture_id", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "user_picture_name", nullable = false)
     private String name;
@@ -19,7 +19,7 @@ public class UserPicture implements Serializable {
     private String type;
 
     @Column(name = "user_picture_size", nullable = false)
-    private int size;
+    private Integer size;
 
     @Column(name = "user_picture_url", nullable = false)
     private String url;
@@ -28,18 +28,18 @@ public class UserPicture implements Serializable {
 
     }
 
-    public UserPicture(String name, String type, int size, String url) {
+    public UserPicture(String name, String type, Integer size, String url) {
         this.name = name;
         this.type = type;
         this.size = size;
         this.url = url;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -59,11 +59,11 @@ public class UserPicture implements Serializable {
         this.type = type;
     }
 
-    public int getSize() {
+    public Integer getSize() {
         return size;
     }
 
-    public void setSize(int size) {
+    public void setSize(Integer size) {
         this.size = size;
     }
 

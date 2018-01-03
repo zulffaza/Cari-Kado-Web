@@ -16,17 +16,15 @@
 </head>
 <body>
 <nav class="navbar navbar-fixed-top" style="background: #A91E31;">
-    <div class="container-fluid">
         <div class="navbar-brand">
-            <img src="assets/ic_icon_logo_cari_kado.png" width="176" height="47">
+            <img src="assets/admin/fullicon1.png" width="160" height="30">
         </div>
         <div>
             <ul class="nav navbar-nav navbar-right">
-                <li style="margin:2px"><a href="informasi_kado">INFORMASI KADO <span class="glyphicon glyphicon-upload"></span></a></li>
-                <li style="margin:2px"><a href="review">REVIEW <span class="glyphicon glyphicon-user"></span></a></li>
+                <li style="margin:4px"><a href="#">INFORMASI KADO</a></li>
+                <li style="margin:4px"><a href="#">REVIEW</a></li>
             </ul>
         </div>
-    </div>
 </nav>
 
 <div class="container">
@@ -35,10 +33,10 @@
     <br>
     <div class="row">
         <div class="col-md-6">
-            <a href="login_admin">Login Admin<img src="assets/ic_icon_logo_admin.png" style="width:358px; height:454px;"></a>
+            <a href="login_admin">Login Admin<img src="assets/admin/ic_icon_logo_admin.png" style="width:358px; height:454px;"></a>
         </div>
         <div class="col-md-6">
-            <a href="login_author">Login Author<img src="assets/ic_icon_logo_author.png" style="width:358px; height:454px;"></a>
+            <a href="login_author">Login Author<img src="assets/author/ic_icon_logo_author.png" style="width:358px; height:454px;"></a>
         </div>
     </div>
 </div>

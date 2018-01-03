@@ -18,25 +18,22 @@
 </head>
 <body>
     <nav class="navbar navbar-fixed-top" style="background: #A91E31;">
-        <div class="container-fluid">
             <div class="navbar-brand">
-                <img src="/assets/login/ic_icon_logo_cari_kado.png" width="176" height="47" style="margin-bottom:10px">
+                <img src="/assets/admin/fullicon1.png" width="176" height="47" style="margin-bottom:10px">
             </div>
             <div>
                 <ul class="nav navbar-nav navbar-right">
-                    <li style="margin:2px"><a href="#">INFORMASI KADO</a></li>
-                    <li style="margin:2px"><a href="#">REVIEW</a></li>
+                    <li style="margin:4px"><a href="#">INFORMASI KADO</a></li>
+                    <li style="margin:4px"><a href="#">REVIEW</a></li>
                 </ul>
             </div>
-        </div>
     </nav>
     <div class="container" style="background: #ffffff; margin-top: 100px; margin-left: 150px;">
         <br>
         <br>
-        <br>
         <div class="row">
             <div class="col-md-6">
-                <img src="/assets/login/ic_icon_logo_admin.png" style="width:358px; height:454px;">
+                <img src="/assets/admin/ic_icon_logo_admin.png" style="width:358px; height:454px;">
             </div>
             <div class="col-md-6">
 
@@ -44,15 +41,15 @@
 
                     <div class="carousel-inner">
                         <div class="item active">
-                            <center><img src="/assets/login/ic_icon_login_admin.png" style="width:309px; height:121px;" alt="Login Admin"></center>
+                            <center><img src="/assets/admin/ic_icon_login_admin.png" style="width:309px; height:121px;" alt="Login Admin"></center>
                         </div>
 
                         <div class="item">
-                            <center><img src="/assets/login/ic_icon_login_author.png" style="width:309px; height:121px;" alt="Login Author">
+                            <center><img src="/assets/author/ic_icon_login_author.png" style="width:309px; height:121px;" alt="Login Author">
                         </div>
 
                         <div class="item">
-                            <center><img src="/assets/login/ic_icon_login_author.png" style="width:309px; height:121px;" alt="Login Customer Service">
+                            <center><img src="/assets/cs/ic_icon_login_cs.png" style="width:309px; height:121px;" alt="Login Customer Service">
                         </div>
                     </div>
 
@@ -60,10 +57,6 @@
                     <a class="left carousel-control" href="#myCarousel" data-slide="prev">
                         <span class="glyphicon glyphicon-chevron-left"></span>
                         <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="right carousel-control" href="#myCarousel" data-slide="next">
-                        <span class="glyphicon glyphicon-chevron-right"></span>
-                        <span class="sr-only">Next</span>
                     </a>
                     <a class="right carousel-control" href="#myCarousel" data-slide="next">
                         <span class="glyphicon glyphicon-chevron-right"></span>

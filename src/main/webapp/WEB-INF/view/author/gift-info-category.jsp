@@ -22,7 +22,7 @@
 <body>
 <nav class="navbar navbar-fixed-top" style="background: #A91E31;">
         <div class="navbar-brand">
-            <img src="/assets/admin/fullicon1.png" width="176" height="47" style="margin:1px">
+            <img src="/assets/admin/fullicon1.png" width="160" height="30" style="margin:1px">
         </div>
         <div>
             <ul class="nav navbar-nav navbar-right">

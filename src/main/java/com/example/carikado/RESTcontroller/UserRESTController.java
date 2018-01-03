@@ -1,16 +1,19 @@
 package com.example.carikado.RESTcontroller;
 
-import com.example.carikado.model.MyResponse;
-import com.example.carikado.model.User;
+import com.example.carikado.model.*;
+import com.example.carikado.service.UserAddressService;
+import com.example.carikado.service.UserNameService;
 import com.example.carikado.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,87 +37,73 @@ public class UserRESTController {
             "desc"
     };
 
+    private UserAddressService mUserAddressService;
+    private UserNameService mUserNameService;
     private UserService mUserService;
 
     @Autowired
-    public UserRESTController(UserService userService) {
+    public UserRESTController(UserAddressService userAddressService, UserNameService userNameService,
+                              UserService userService) {
+        mUserAddressService = userAddressService;
+        mUserNameService = userNameService;
         mUserService = userService;
     }
 
-    @PostMapping("/api/user/all")
+    @GetMapping("/api/user/all")
     public MyResponse<List> findUsers() {
         String message = "Find users success";
         ArrayList<User> users = (ArrayList<User>) mUserService.findAll();
         return new MyResponse<>(message, users);
     }
 
-    @PostMapping("/api/user")
-    public MyResponse<List> findUsers(@RequestBody Map<String, String> params) {
-        Integer pageInt = 0;
-        Integer pageSizeInt = 10;
-        Integer sortInt = null;
-
-        String page = params.get("page");
-        String pageSize = params.get("pageSize");
-        String sort = params.get("sort");
-
+    @GetMapping("/api/user")
+    public MyResponse<MyPage<List>> findUsers(@RequestParam(required = false, defaultValue = "0") Integer page,
+                                             @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                             @RequestParam(required = false) Integer sort) {
         ArrayList<String> properties = new ArrayList<>();
-        List<User> users = null;
+        List<User> users;
         String message;
         Sort.Direction direction;
 
-        boolean isValid = true;
+        if (page > 0)
+            page -= 1;
 
-        try {
-            if (page != null)
-                pageInt = Integer.parseInt(page);
+        if (page < 0)
+            page = 0;
 
-            if (pageSize != null)
-                pageSizeInt = Integer.parseInt(pageSize);
+        int propertiesIndex = 0;
+        int directionIndex = 0;
 
-            if (sort != null)
-                sortInt = Integer.parseInt(sort);
+        if (sort != null && sort >= 1 && sort <= 12) {
+            boolean isPrime = sort % 2 == 0;
+            directionIndex = isPrime ? 1 : 0;
 
-            if (pageInt > 0)
-                pageInt -= 1;
-
-            if (pageInt < 0)
-                pageInt = 0;
-        } catch (Exception e) {
-            isValid = false;
-            LOGGER.error(e.getMessage());
+            propertiesIndex = (int) (Math.ceil((double) sort / 2) - 1);
         }
 
-        if (isValid) {
-            int propertiesIndex = 0;
-            int directionIndex = 0;
+        direction = Sort.Direction.fromString(DIRECTION[directionIndex]);
+        properties.add(PROPERTIES[propertiesIndex]);
 
-            if (sortInt != null && sortInt >= 1 && sortInt <= 12) {
-                boolean isPrime = sortInt % 2 == 0;
-                directionIndex = isPrime ? 1 : 0;
+        Sort sortOrder = new Sort(direction, properties);
+        PageRequest pageRequest = new PageRequest(page, pageSize, sortOrder);
+        Page<User> userPage = mUserService.findAllPageable(pageRequest);
 
-                propertiesIndex = (int) (Math.ceil((double) sortInt / 2) - 1);
-            }
+        users = userPage.getContent();
+        message = "Find user success";
 
-            direction = Sort.Direction.fromString(DIRECTION[directionIndex]);
-            properties.add(PROPERTIES[propertiesIndex]);
+        MyPage<List> myPage = new MyPage<>();
 
-            Sort sortOrder = new Sort(direction, properties);
-            PageRequest pageRequest = new PageRequest(pageInt, pageSizeInt, sortOrder);
-            users = mUserService.findAllPageable(pageRequest).getContent();
+        myPage.setPage(++page);
+        myPage.setLastPage(userPage.getTotalPages() == 0 ? 1 : userPage.getTotalPages());
+        myPage.setPageSize(pageSize);
+        myPage.setSort(sort == null ? 1 : sort);
+        myPage.setTotalElement(userPage.getTotalElements());
+        myPage.setData(users);
 
-            message = "Find user success";
-        } else
-            message = "Error parsing parameter";
-
-        LOGGER.info(pageInt + "");
-        LOGGER.info(pageSizeInt + "");
-        LOGGER.info(sortInt + "");
-
-        return new MyResponse<>(message, users);
+        return new MyResponse<>(message, myPage);
     }
 
-    @PostMapping("/api/user/{userId}")
+    @GetMapping("/api/user/{userId}")
     public MyResponse<User> findUser(@PathVariable Integer userId) {
         User user = null;
         String message = "User not found";
@@ -129,15 +118,33 @@ public class UserRESTController {
         return new MyResponse<>(message, user);
     }
 
+    @Transactional
     @PostMapping("/api/user/add")
     public MyResponse<Integer> addUser(@RequestBody User user) {
         if (user.getCreatedAt() == null)
             user.setCreatedAt(new Date());
 
-        user = mUserService.addUser(user);
+        boolean isEdit = user.getId() != null;
+        String message = "User " + (isEdit ? "edit " : "add ");
+
+        try {
+            if (!isEdit) {
+                UserName userName = mUserNameService.addUserName(user.getUserName());
+                UserAddress userAddress = mUserAddressService.addUserAddress(user.getUserAddress());
+
+                user.setUserName(userName);
+                user.setUserAddress(userAddress);
+                user.setPassword(User.passwordEncoder(user.getPassword()));
+            }
+
+            user = mUserService.addUser(user);
+        } catch (NoSuchAlgorithmException e) {
+            user = null;
+            LOGGER.error(e.getMessage());
+        }
 
         boolean isSuccess = user != null;
-        String message = isSuccess ? "User add success" : "User add failed";
+        message += isSuccess ? "success" : "failed";
         int response = isSuccess ? 1 : 0;
 
         return new MyResponse<>(message, response);

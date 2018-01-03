@@ -13,7 +13,7 @@ public class Chats implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "chats_id", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "chats_user_name", nullable = false)
     private String userName;
@@ -28,7 +28,8 @@ public class Chats implements Serializable {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "chats")
+    @OneToMany
+    @JoinColumn(name = "chats_id", nullable = false)
     private List<ChatLines> chatLineses = new ArrayList<>();
 
     public Chats() {
@@ -40,11 +41,11 @@ public class Chats implements Serializable {
         this.userEmail = userEmail;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -82,12 +83,10 @@ public class Chats implements Serializable {
 
     public void addChatLines(ChatLines chatLines) {
         chatLineses.add(chatLines);
-        chatLines.setChats(this);
     }
 
     public void removeChatLines(ChatLines chatLines) {
         chatLineses.remove(chatLines);
-        chatLines.setChats(null);
     }
 
     public List<ChatLines> getChatLineses() {

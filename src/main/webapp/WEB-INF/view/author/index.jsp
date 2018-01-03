@@ -1,12 +1,3 @@
-<html lang="en">
-<body>
-<div>
-    <div>
-        <h2>Hello World</h2>
-    </div>
-</div>
-</body>
-</html>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
     <head>
@@ -22,7 +13,7 @@
     <body>
         <nav class="navbar navbar-fixed-top" style="background: #A91E31;">
                 <div class="navbar-brand">
-                    <img src="/assets/admin/fullicon1.png" width="176" height="47" style="margin:1px">
+                    <img src="/assets/admin/fullicon1.png" width="160" height="30" style="margin:1px">
                 </div>
                 <div>
                     <ul class="nav navbar-nav navbar-right">
@@ -36,7 +27,7 @@
                 </div>
         </nav>
 
-        <div class="container" style="background: #ffffff; margin-top: 80px;">
+        <div class="container" style="background: #ffffff; margin-top: 80px; margin-left: 80px;">
             <br>
             <br>
 

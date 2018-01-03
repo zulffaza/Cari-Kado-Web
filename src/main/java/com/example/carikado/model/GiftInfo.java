@@ -1,5 +1,7 @@
 package com.example.carikado.model;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,15 +15,17 @@ public class GiftInfo implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "gift_info_id", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "gift_info_title", nullable = false)
     private String title;
 
     @Column(name = "gift_info_description", nullable = false)
+    @Type(type = "text")
     private String description;
 
     @Column(name = "gift_info_essence", nullable = false)
+    @Type(type = "text")
     private String essence;
 
     @Column(name = "gift_info_created_at", nullable = false)
@@ -36,6 +40,11 @@ public class GiftInfo implements Serializable {
     private GiftInfoAge giftInfoAge;
 
     @ManyToMany
+    @JoinTable(
+            name = "gift_info_categories",
+            joinColumns = @JoinColumn(name = "gift_info_id"),
+            inverseJoinColumns = @JoinColumn(name = "gift_info_category_id")
+    )
     private List<GiftInfoCategory> giftInfoCategories = new ArrayList<>();
 
     @OneToOne
@@ -52,11 +61,15 @@ public class GiftInfo implements Serializable {
         this.essence = essence;
     }
 
-    public int getId() {
+    public GiftInfo(String giftInfoTitle) {
+    }
+
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

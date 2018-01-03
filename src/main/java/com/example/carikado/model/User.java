@@ -15,7 +15,7 @@ public class User implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "user_id", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "user_email", unique = true, nullable = false)
     private String email;
@@ -23,7 +23,7 @@ public class User implements Serializable {
     @Column(name = "user_password", nullable = false)
     private String password;
 
-    @Column(name = "user_phone")
+    @Column(name = "user_phone", nullable = false)
     private String phone;
 
     @Column(name = "user_created_at", nullable = false)
@@ -41,14 +41,14 @@ public class User implements Serializable {
     private UserName userName;
 
     @OneToOne
-    @JoinColumn(name = "user_address_id")
+    @JoinColumn(name = "user_address_id", nullable = false)
     private UserAddress userAddress;
 
     @OneToOne
-    @JoinColumn(name = "user_picture_id", nullable = false)
+    @JoinColumn(name = "user_picture_id")
     private UserPicture userPicture;
 
-    @OneToMany(mappedBy = "user")
+    @Transient
     private List<GiftInfo> giftInfos = new ArrayList<>();
 
     public User() {
@@ -61,11 +61,11 @@ public class User implements Serializable {
         this.phone = phone;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

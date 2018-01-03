@@ -15,31 +15,29 @@ public class RoleService {
     private RoleRepository mRoleRepository;
 
     @Autowired
-    public RoleService(RoleRepository roleRepository) {
-        mRoleRepository = roleRepository;
-    }
+    public RoleService(RoleRepository roleRepository) { mRoleRepository = roleRepository; }
 
     public Integer count() {
         return (int) mRoleRepository.count();
     }
 
+    public Integer countUsers(Integer roleId) {
+        return mRoleRepository.countUserByRoleId(roleId);
+    }
+
     public List<Role> findAll() {
-        return mRoleRepository.findAll();
+        return mRoleRepository.findAllWithSort();
     }
 
     public Page<Role> findAllPageable(Pageable pageable) {
         return mRoleRepository.findAll(pageable);
     }
 
-    public Role findRole(Integer id) {
-        return mRoleRepository.findOne(id);
-    }
+    public Role findRole(Integer id) { return mRoleRepository.findOne(id); }
 
     public Role addRole(Role role) {
         return mRoleRepository.save(role);
     }
 
-    public void deleteRole(Integer id) {
-        mRoleRepository.delete(id);
-    }
+    public void deleteRole(Integer id) { mRoleRepository.delete(id); }
 }

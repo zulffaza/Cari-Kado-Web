@@ -14,19 +14,18 @@
     <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
     <script src="bootstrap-3.3.7-dist/jquery/jquery-3.1.1.min.js"></script>
     <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="index.css">
 </head>
 <body>
 <nav class="navbar navbar-fixed-top" style="background: #A91E31;">
     <div class="navbar-brand">
-        <img src="/assets/admin/fullicon1.png" width="170" height="40" style="margin-bottom:10px">
+        <img src="/assets/admin/fullicon1.png" width="160" height="30" style="margin-bottom:10px">
     </div>
     <div>
         <ul class="nav navbar-nav navbar-right">
-            <li style="margin: 2px">
+            <li style="margin: 4px">
                 <a href="/dashboard/admin">HOME<span class="glyphicon"></span></a>
             </li>
-            <li style="margin: 2px; background-color: #fbcd30;">
+            <li style="margin: 4px; background-color: #fbcd30;">
                 <a href="/logout">LOGOUT<span class="glyphicon"></span></a>
             </li>
         </ul>
@@ -44,15 +43,15 @@
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
         <div class="item active">
-            <img src="ic_icon_boneka_slider.png">
+            <img src="/assets/user/ic_icon_boneka_slider.png">
         </div>
 
         <div class="item">
-            <img src="ic_icon_boneka_slider3.png">
+            <img src="/assets/user/ic_icon_boneka_slider3.png">
         </div>
 
         <div class="item">
-            <img src="ic_icon_boneka_slider2.png">
+            <img src="/assets/user/ic_icon_boneka_slider2.png">
         </div>
     </div>
 
