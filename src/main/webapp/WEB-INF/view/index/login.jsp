@@ -17,19 +17,17 @@
 
 </head>
 <body>
-    <nav class="navbar navbar-fixed-top" style="background: #A91E31;">
-        <div class="container-fluid">
-            <div class="navbar-brand">
-                <img src="/assets/login/ic_icon_logo_cari_kado.png" width="176" height="47" style="margin-bottom:10px">
-            </div>
-            <div>
-                <ul class="nav navbar-nav navbar-right">
-                    <li style="margin:2px"><a href="#">INFORMASI KADO <span class="glyphicon glyphicon-upload"></span></a></li>
-                    <li style="margin:2px"><a href="#">REVIEW <span class="glyphicon glyphicon-user"></span></a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+<nav class="navbar navbar-fixed-top" style="background: #A91E31;">
+    <div class="navbar-brand">
+        <img src="/assets/admin/fullicon1.png" width="176" height="47" style="margin-bottom:10px">
+    </div>
+    <div>
+        <ul class="nav navbar-nav navbar-right">
+            <li style="margin:4px"><a href="#">INFORMASI KADO</a></li>
+            <li style="margin:4px"><a href="#">REVIEW</a></li>
+        </ul>
+    </div>
+</nav>
     <div class="container" style="background: #ffffff; margin-top: 100px; margin-left: 150px;">
         <br>
         <br>
