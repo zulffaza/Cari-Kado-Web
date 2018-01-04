@@ -55,54 +55,6 @@
                 <b>${user.userName.firstName} ${user.userName.middleName} ${user.userName.lastName} - <a href="/dashboard/author/gift-info/1">GIFT INFO</a></b>
             </p>
 
-<<<<<<< HEAD
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="role-name">Name :</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="role-name" name="giftInfoName" placeholder="Enter GiftInfo name" value="${giftInfo.name}" required="required">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="role-name">Name :</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="role-name" name="giftInfoName" placeholder="Enter GiftInfo name" value="${giftInfo.name}" required="required">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="role-name">Name :</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="role-name" name="giftInfoName" placeholder="Enter GiftInfo name" value="${giftInfo.name}" required="required">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="role-name">Name :</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="role-name" name="giftInfoName" placeholder="Enter GiftInfo name" value="${giftInfo.name}" required="required">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="role-name">Name :</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="role-name" name="giftInfoName" placeholder="Enter GiftInfo name" value="${giftInfo.name}" required="required">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <c:choose>
-                    <c:when test="${empty giftInfo.id}">
-                        <button type="submit" class="btn btn-success">Add</button>
-                    </c:when>
-                    <c:otherwise>
-                        <button type="submit" class="btn btn-success">Edit</button>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-=======
             <hr>
 
             <c:if test="${not empty message}">
@@ -224,7 +176,6 @@
                     </div>
                 </div>
             </form:form>
->>>>>>> 88dd92d1638b36511a841423c4a6cff22b4fd037
         </div>
 
         <script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
