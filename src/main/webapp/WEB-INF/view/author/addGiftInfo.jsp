@@ -119,8 +119,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-sm-2" for="gift-info-age">Umur :</label>
-                    <div id="gift-info-age">
+                    <label class="control-label col-sm-2" for="gift-info-ageFrom">Umur :</label>
+                    <div id="gift-info-ageFrom">
                         <div class="col-sm-4">
                             <input type="number" min="1" class="form-control" name="giftInfoAgeFrom" value="${giftInfo.giftInfoAge.from}" required="required">
                         </div>

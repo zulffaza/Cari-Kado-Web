@@ -17,7 +17,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 
 @Controller
 public class AuthorController {
@@ -397,10 +396,10 @@ public class AuthorController {
                                              @RequestParam("giftInfoTitle") String giftInfoTitle,
                                              @RequestParam("giftInfoDescription") String giftInfoDescription,
                                              @RequestParam("giftInfoEssence") String giftInfoEssence,
-                                             @RequestParam("giftInfoAgeFrom") String giftInfoAgeFrom,
-                                             @RequestParam("giftInfoAgeTo") String giftInfoAgeTo,
-                                             @RequestParam("giftInfoBudgetFrom") String giftInfoBudgetFrom,
-                                             @RequestParam("giftInfoBudgetTo") String giftInfoBudgetTo,
+                                             @RequestParam("giftInfoAgeFrom") Integer giftInfoAgeFrom,
+                                             @RequestParam("giftInfoAgeTo") Integer giftInfoAgeTo,
+                                             @RequestParam("giftInfoBudgetFrom") Integer giftInfoBudgetFrom,
+                                             @RequestParam("giftInfoBudgetTo") Integer giftInfoBudgetTo,
                                              HttpSession httpSession,
                                              RedirectAttributes redirectAttributes) {
         String url = BASE_URL + "gift-info/add";
