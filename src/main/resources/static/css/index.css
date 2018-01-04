@@ -1,8 +1,15 @@
 .container-fluid {
-    background-color: #F18887;
     height: 96px;
 }
 
+<<<<<<< HEAD
+.container{
+    style:background;
+    background-color: #ffffff;
+    margin-top: 100px;
+    margin-left: 150px;
+}
+=======
 .navbar .navbar-nav {
     display: inline-block;
     float: none;
@@ -137,3 +144,4 @@ span.psw {
     width: 500px;
     border-radius: 45px;
 }
+>>>>>>> 88dd92d1638b36511a841423c4a6cff22b4fd037

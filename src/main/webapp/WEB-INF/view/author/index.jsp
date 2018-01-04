@@ -12,9 +12,8 @@
     </head>
     <body>
         <nav class="navbar navbar-fixed-top" style="background: #A91E31;">
-            <div class="container-fluid" style="background: #A91E31;">
                 <div class="navbar-brand">
-                    <img src="/assets/admin/fullicon1.png" width="176" height="47" style="margin:1px">
+                    <img src="/assets/admin/fullicon1.png" width="160" height="30" style="margin:1px">
                 </div>
                 <div>
                     <ul class="nav navbar-nav navbar-right">
@@ -26,21 +25,20 @@
                         </li>
                     </ul>
                 </div>
-            </div>
         </nav>
 
-        <div class="container" style="background: #ffffff; margin-top: 80px;">
-            <br>
+        <div class="container" style="background: #ffffff; margin-top: 80px; margin-left: 80px;">
             <br>
             <br>
 
             <div class="row">
+                <div align="center">
+                    <img src="/assets/author/ic_icon_author_welcome.png" style="width:300px; height:100px;">
+                </div>
                 <br>
-                <br>
-
-                <center>
-                    <img src="/assets/admin/email.png" style="width:160px; height:145px;">
-                </center>
+                <div align="center">
+                    <img src="/assets/author/ic_icon_author.png" style="width:300px; height:350px;">
+                </div>
 
                 <br>
 
