@@ -26,9 +26,8 @@
     </head>
     <body>
         <nav class="navbar navbar-fixed-top" style="background: #A91E31;">
-            <div class="container-fluid" style="background: #A91E31;">
                 <div class="navbar-brand">
-                    <img src="/assets/admin/fullicon1.png" width="176" height="47" style="margin:1px">
+                    <img src="/assets/admin/fullicon1.png" width="160" height="30" style="margin:1px">
                 </div>
                 <div>
                     <ul class="nav navbar-nav navbar-right">
@@ -40,7 +39,6 @@
                         </li>
                     </ul>
                 </div>
-            </div>
         </nav>
 
         <br>
@@ -119,8 +117,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-sm-2" for="gift-info-age">Umur :</label>
-                    <div id="gift-info-age">
+                    <label class="control-label col-sm-2" for="gift-info-ageFrom">Umur :</label>
+                    <div id="gift-info-ageFrom">
                         <div class="col-sm-4">
                             <input type="number" min="1" class="form-control" name="giftInfoAgeFrom" value="${giftInfo.giftInfoAge.from}" required="required">
                         </div>

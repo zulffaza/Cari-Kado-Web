@@ -17,24 +17,25 @@
 
 </head>
 <body>
-<nav class="navbar navbar-fixed-top" style="background: #A91E31;">
-    <div class="navbar-brand">
-        <img src="/assets/admin/fullicon1.png" width="176" height="47" style="margin-bottom:10px">
-    </div>
-    <div>
-        <ul class="nav navbar-nav navbar-right">
-            <li style="margin:4px"><a href="#">INFORMASI KADO</a></li>
-            <li style="margin:4px"><a href="#">REVIEW</a></li>
-        </ul>
-    </div>
-</nav>
+
+    <nav class="navbar navbar-fixed-top" style="background: #A91E31;">
+            <div class="navbar-brand">
+                <img src="/assets/admin/fullicon1.png" width="176" height="47" style="margin-bottom:10px">
+            </div>
+            <div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li style="margin:4px"><a href="#">INFORMASI KADO</a></li>
+                    <li style="margin:4px"><a href="#">REVIEW</a></li>
+                </ul>
+            </div>
+    </nav>
+
     <div class="container" style="background: #ffffff; margin-top: 100px; margin-left: 150px;">
-        <br>
         <br>
         <br>
         <div class="row">
             <div class="col-md-6">
-                <img src="/assets/login/ic_icon_logo_admin.png" style="width:358px; height:454px;">
+                <img src="/assets/admin/ic_icon_logo_admin.png" style="width:358px; height:454px;">
             </div>
             <div class="col-md-6">
 
@@ -42,15 +43,15 @@
 
                     <div class="carousel-inner">
                         <div class="item active">
-                            <center><img src="/assets/login/ic_icon_login_admin.png" style="width:309px; height:121px;" alt="Login Admin"></center>
+                            <center><img src="/assets/admin/ic_icon_login_admin.png" style="width:309px; height:121px;" alt="Login Admin"></center>
                         </div>
 
                         <div class="item">
-                            <center><img src="/assets/login/ic_icon_login_author.png" style="width:309px; height:121px;" alt="Login Author">
+                            <center><img src="/assets/author/ic_icon_login_author.png" style="width:309px; height:121px;" alt="Login Author">
                         </div>
 
                         <div class="item">
-                            <center><img src="/assets/login/ic_icon_login_author.png" style="width:309px; height:121px;" alt="Login Customer Service">
+                            <center><img src="/assets/cs/ic_icon_login_cs.png" style="width:309px; height:121px;" alt="Login Customer Service">
                         </div>
                     </div>
 

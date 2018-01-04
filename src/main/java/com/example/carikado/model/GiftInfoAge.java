@@ -13,16 +13,16 @@ public class GiftInfoAge implements Serializable {
     private Integer id;
 
     @Column(name = "gift_info_age_from", nullable = false)
-    private String from;
+    private Integer from;
 
     @Column(name = "gift_info_age_to", nullable = false)
-    private String to;
+    private Integer to;
 
     public GiftInfoAge() {
 
     }
 
-    public GiftInfoAge(String from, String to) {
+    public GiftInfoAge(Integer from, Integer to) {
         this.from = from;
         this.to = to;
     }
@@ -35,19 +35,19 @@ public class GiftInfoAge implements Serializable {
         this.id = id;
     }
 
-    public String getFrom() {
+    public Integer getFrom() {
         return from;
     }
 
-    public void setFrom(String from) {
+    public void setFrom(Integer from) {
         this.from = from;
     }
 
-    public String getTo() {
+    public Integer getTo() {
         return to;
     }
 
-    public void setTo(String to) {
+    public void setTo(Integer to) {
         this.to = to;
     }
 }

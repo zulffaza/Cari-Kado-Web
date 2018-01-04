@@ -21,7 +21,6 @@
     </head>
     <body>
         <nav class="navbar navbar-fixed-top" style="background: #A91E31;">
-            <div class="container-fluid" style="background: #A91E31;">
                 <div class="navbar-brand">
                     <img src="/assets/admin/fullicon1.png" width="176" height="47" style="margin:1px">
                 </div>
@@ -35,7 +34,6 @@
                         </li>
                     </ul>
                 </div>
-            </div>
         </nav>
 
         <br>

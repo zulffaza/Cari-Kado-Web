@@ -61,10 +61,6 @@ public class GiftInfo implements Serializable {
         this.essence = essence;
     }
 
-    public GiftInfo(String giftInfoTitle) {
-    }
-
-
     public Integer getId() {
         return id;
     }

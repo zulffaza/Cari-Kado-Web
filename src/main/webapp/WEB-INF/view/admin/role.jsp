@@ -13,7 +13,6 @@
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
         <link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" />
         <link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap-theme.min.css" />
         <link rel="stylesheet" href="/webjars/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -21,9 +20,8 @@
     </head>
     <body>
         <nav class="navbar navbar-fixed-top" style="background: #A91E31;">
-            <div class="container-fluid" style="background: #A91E31;">
                 <div class="navbar-brand">
-                    <img src="/assets/admin/fullicon1.png" width="176" height="47" style="margin:1px">
+                    <img src="/assets/admin/fullicon1.png" width="160" height="30" style="margin:1px">
                 </div>
                 <div>
                     <ul class="nav navbar-nav navbar-right">
@@ -35,7 +33,6 @@
                         </li>
                     </ul>
                 </div>
-            </div>
         </nav>
 
         <br>
