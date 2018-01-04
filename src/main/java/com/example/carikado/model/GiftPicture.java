@@ -1,5 +1,7 @@
 package com.example.carikado.model;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -13,6 +15,7 @@ public class GiftPicture implements Serializable {
     private Integer id;
 
     @Column(name = "gift_picture_url", nullable = false)
+    @Type(type = "text")
     private String url;
 
     public GiftPicture() {

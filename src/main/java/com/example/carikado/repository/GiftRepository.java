@@ -14,7 +14,7 @@ import java.util.List;
 public interface GiftRepository extends JpaRepository<Gift, Integer> {
 
     @Query("select g from Gift g " +
-            "where g.gender = :gender " +
+            "where (g.gender = 'All' or g.gender = :gender) " +
             "and g.ageFrom <= :age " +
             "and g.ageTo >= :age " +
             "and g.price between :budgetFrom and :budgetTo")
@@ -24,7 +24,7 @@ public interface GiftRepository extends JpaRepository<Gift, Integer> {
                                          @Param("budgetTo") Integer budgetTo);
 
     @Query("select g from Gift g " +
-            "where g.gender = :gender " +
+            "where (g.gender = 'All' or g.gender = :gender) " +
             "and g.ageFrom <= :age " +
             "and g.ageTo >= :age " +
             "and g.price between :budgetFrom and :budgetTo")

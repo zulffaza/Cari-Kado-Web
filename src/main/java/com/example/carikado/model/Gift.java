@@ -24,6 +24,7 @@ public class Gift implements Serializable {
     private String description;
 
     @Column(name = "gift_link", nullable = false)
+    @Type(type = "text")
     private String link;
 
     @Column(name = "gift_gender", nullable = false)
@@ -37,6 +38,12 @@ public class Gift implements Serializable {
 
     @Column(name = "gift_price", nullable = false)
     private Integer price;
+
+    @Column(name = "gift_rating", nullable = false)
+    private Integer rating;
+
+    @Column(name = "gift_store", nullable = false)
+    private String store;
 
     @OneToMany
     @JoinColumn(name = "gift_id", nullable = false)
@@ -121,6 +128,22 @@ public class Gift implements Serializable {
 
     public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    public Integer getRating() {
+        return rating;
+    }
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
+    }
+
+    public String getStore() {
+        return store;
+    }
+
+    public void setStore(String store) {
+        this.store = store;
     }
 
     public void addGiftPicture(GiftPicture giftPicture) {
