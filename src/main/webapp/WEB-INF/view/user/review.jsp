@@ -54,7 +54,6 @@
                 <span class="fa fa-star"></span></center>
             <br>
             <center><button class="button" type="submit" style="border-radius: 15px;" class="btn btn-alert"><i>Submit</button></center>
-            <center><button class="button" type="submit" style="border-radius: 15px;" class="btn btn-alert"><a href="Kuisioner author.php"><i>Kuisioner Author</a></button></center>
         </div>
     </div>
 </div>
