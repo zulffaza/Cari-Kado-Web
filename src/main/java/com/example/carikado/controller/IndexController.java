@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,7 +30,6 @@ import java.util.HashMap;
 public class IndexController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IndexController.class);
-    private static final String BASE_URL = "http://localhost:8080/api/";
 
     private ObjectMapper mObjectMapper;
     private RestTemplate mRestTemplate;
@@ -68,18 +68,21 @@ public class IndexController {
     @PostMapping("/login")
     public String loginPost(@RequestParam("userEmail") String userEmail,
                             @RequestParam("userPassword") String userPassword,
+                            HttpServletRequest request,
                             HttpSession httpSession,
                             RedirectAttributes redirectAttributes) {
-        String url = BASE_URL + "user/verifyuser";
+        String baseUrl = String.format("%s://%s:%d/tasks/",
+                request.getScheme(), request.getServerName(), request.getServerPort());
+        String url = baseUrl + "user/verifyuser";
 
         HashMap<String, String> params = new HashMap<>();
 
         params.put("userEmail", userEmail);
         params.put("userPassword", userPassword);
 
-        HttpEntity<HashMap> request = new HttpEntity<>(params);
+        HttpEntity<HashMap> requestParams = new HttpEntity<>(params);
 
-        ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.POST, request, String.class);
+        ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.POST, requestParams, String.class);
         MyResponse<User> myResponse = new MyResponse<>();
         User user = null;
 
@@ -117,8 +120,10 @@ public class IndexController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(HttpSession httpSession) {
-        String url = BASE_URL + "role/all";
+    public String dashboard(HttpServletRequest request, HttpSession httpSession) {
+        String baseUrl = String.format("%s://%s:%d/tasks/",
+                request.getScheme(), request.getServerName(), request.getServerPort());
+        String url = baseUrl + "role/all";
         User user = (User) httpSession.getAttribute("user");
 
         if (user != null) {

@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class AuthorController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthorController.class);
-    private static final String BASE_URL = "http://localhost:8080/api/";
+    private static final String BASE_URL = "http://madamita.ml:8080/cari-kado/api/";
 
     private RestTemplate mRestTemplate;
     private ObjectMapper mObjectMapper;

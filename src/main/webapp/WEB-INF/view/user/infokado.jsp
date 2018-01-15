@@ -17,15 +17,15 @@
 </head>
 <body>
 <nav class="navbar navbar-fixed-top" style="background: #A91E31;">
-        <div class="navbar-brand">
-            <img src="ic_icon_logo_cari_kado.png" width="160" height="30">
-        </div>
-        <div>
-            <ul class="nav navbar-nav navbar-right">
-                <li style="margin:4px"><a href="#">INFORMASI KADO</a></li>
-                <li style="margin:4px"><a href="#">REVIEW</a></li>
-            </ul>
-        </div>
+    <div class="navbar-brand">
+        <img src="ic_icon_logo_cari_kado.png" width="160" height="30">
+    </div>
+    <div>
+        <ul class="nav navbar-nav navbar-right">
+            <li style="margin:4px"><a href="#">INFORMASI KADO</a></li>
+            <li style="margin:4px"><a href="#">REVIEW</a></li>
+        </ul>
+    </div>
 </nav>
 <div class="container" style="background: #ffffff; margin-top: 100px; margin-left: 150px;">
     <br>
@@ -48,7 +48,9 @@
             <br>
             <br>
             <div align="center">
-                <button style="border: #4c1319; border-radius: 10px;" type="submit" class="btn btn-alert" >Beli Sekarang</button>
+                <button style="border: #4c1319; border-radius: 10px;" type="submit" class="btn btn-alert">Beli
+                    Sekarang
+                </button>
             </div>
         </div>
     </div>
