@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -95,7 +96,8 @@ public class AuthorController {
 
                 try {
                     myResponse = mObjectMapper.readValue(response.getBody(),
-                            new TypeReference<MyResponse<MyPage<ArrayList<GiftInfoCategory>>>>() {});
+                            new TypeReference<MyResponse<MyPage<ArrayList<GiftInfoCategory>>>>() {
+                            });
 
                     myPage = myResponse.getData();
                     giftInfoCategories = myPage.getData();
@@ -150,7 +152,8 @@ public class AuthorController {
 
                 try {
                     myResponse = mObjectMapper.readValue(response.getBody(),
-                            new TypeReference<MyResponse<MyPage<ArrayList<GiftInfo>>>>() {});
+                            new TypeReference<MyResponse<MyPage<ArrayList<GiftInfo>>>>() {
+                            });
 
                     myPage = myResponse.getData();
                     giftInfos = myPage.getData();
@@ -192,8 +195,8 @@ public class AuthorController {
 
     @GetMapping("/dashboard/author/gift-info/add")
     public String dashboardAuthorAddGiftInfo(@ModelAttribute("message") String message,
-                                                     @ModelAttribute("giftInfo") GiftInfo giftInfo,
-                                                     HttpSession httpSession, ModelMap modelMap) {
+                                             @ModelAttribute("giftInfo") GiftInfo giftInfo,
+                                             HttpSession httpSession, ModelMap modelMap) {
         String url = BASE_URL + "gift-info-category/all";
         User user = (User) httpSession.getAttribute("user");
 
@@ -203,7 +206,8 @@ public class AuthorController {
             ArrayList<GiftInfoCategory> giftInfoCategories = null;
 
             try {
-                myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<GiftInfoCategory>>>() {});
+                myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<GiftInfoCategory>>>() {
+                });
                 giftInfoCategories = myResponse.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
@@ -221,9 +225,9 @@ public class AuthorController {
 
     @GetMapping("/dashboard/author/gift-info-category/add/{giftInfoCategoryId}")
     public String dashboardAuthorAddGiftInfoCategory(@PathVariable(required = false) Integer giftInfoCategoryId,
-                                                    @ModelAttribute("message") String message,
-                                                    HttpSession httpSession,
-                                                    ModelMap modelMap) {
+                                                     @ModelAttribute("message") String message,
+                                                     HttpSession httpSession,
+                                                     ModelMap modelMap) {
         String url = BASE_URL + "gift-info-category";
         User user = (User) httpSession.getAttribute("user");
 
@@ -240,7 +244,8 @@ public class AuthorController {
                     GiftInfoCategory giftInfoCategory = null;
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<GiftInfoCategory>>() {});
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<GiftInfoCategory>>() {
+                        });
                         giftInfoCategory = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());
@@ -264,9 +269,9 @@ public class AuthorController {
 
     @GetMapping("/dashboard/author/gift-info/add/{giftInfoId}")
     public String dashboardAuthorAddGiftInfo(@PathVariable(required = false) Integer giftInfoId,
-                                                     @ModelAttribute("message") String message,
-                                                     HttpSession httpSession,
-                                                     ModelMap modelMap) {
+                                             @ModelAttribute("message") String message,
+                                             HttpSession httpSession,
+                                             ModelMap modelMap) {
         String url = BASE_URL + "gift-info";
         User user = (User) httpSession.getAttribute("user");
 
@@ -283,7 +288,8 @@ public class AuthorController {
                     GiftInfo giftInfo = null;
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<GiftInfo>>() {});
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<GiftInfo>>() {
+                        });
                         giftInfo = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());
@@ -297,7 +303,8 @@ public class AuthorController {
                         ArrayList<GiftInfoCategory> giftInfoCategories = null;
 
                         try {
-                            myResponseGiftInfoCategory = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<GiftInfoCategory>>>() {});
+                            myResponseGiftInfoCategory = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<GiftInfoCategory>>>() {
+                            });
                             giftInfoCategories = myResponseGiftInfoCategory.getData();
                         } catch (IOException e) {
                             LOGGER.error(e.getMessage());
@@ -321,9 +328,9 @@ public class AuthorController {
 
     @PostMapping("/dashboard/author/gift-info-category/add")
     public String dashboardAuthorAddGiftInfoCategory(@RequestParam(name = "giftInfoCategoryId", required = false) Integer giftInfoCategoryId,
-                                        @RequestParam("giftInfoCategoryName") String giftInfoCategoryName,
-                                        HttpSession httpSession,
-                                        RedirectAttributes redirectAttributes) {
+                                                     @RequestParam("giftInfoCategoryName") String giftInfoCategoryName,
+                                                     HttpSession httpSession,
+                                                     RedirectAttributes redirectAttributes) {
         String url = BASE_URL + "gift-info-category/add";
         User user = (User) httpSession.getAttribute("user");
 
@@ -358,7 +365,8 @@ public class AuthorController {
                 String message;
 
                 try {
-                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {
+                    });
                     responseInt = myResponse.getData();
                 } catch (IOException e) {
                     LOGGER.error(e.getMessage());
@@ -400,6 +408,7 @@ public class AuthorController {
                                              @RequestParam("giftInfoAgeTo") Integer giftInfoAgeTo,
                                              @RequestParam("giftInfoBudgetFrom") Integer giftInfoBudgetFrom,
                                              @RequestParam("giftInfoBudgetTo") Integer giftInfoBudgetTo,
+                                             @RequestParam(value = "giftInfoPictures", required = false) MultipartFile[] multipartFiles,
                                              HttpSession httpSession,
                                              RedirectAttributes redirectAttributes) {
         String url = BASE_URL + "gift-info/add";
@@ -461,7 +470,8 @@ public class AuthorController {
                 String message;
 
                 try {
-                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {
+                    });
                     responseInt = myResponse.getData();
                 } catch (IOException e) {
                     LOGGER.error(e.getMessage());
@@ -493,8 +503,8 @@ public class AuthorController {
 
     @GetMapping("/dashboard/author/gift-info-category/delete/{giftInfoCategoryId}")
     public String dashboardAuthorDeleteGiftInfoCategory(@PathVariable Integer giftInfoCategoryId,
-                                           HttpSession httpSession,
-                                           RedirectAttributes redirectAttributes) {
+                                                        HttpSession httpSession,
+                                                        RedirectAttributes redirectAttributes) {
         String url = BASE_URL + "gift-info-category/";
         User user = (User) httpSession.getAttribute("user");
 
@@ -510,7 +520,8 @@ public class AuthorController {
                     Integer responseInt = null;
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {
+                        });
                         responseInt = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());
@@ -530,8 +541,8 @@ public class AuthorController {
 
     @GetMapping("/dashboard/author/gift-info/delete/{giftInfoId}")
     public String dashboardAuthorDeleteGiftInfo(@PathVariable Integer giftInfoId,
-                                                        HttpSession httpSession,
-                                                        RedirectAttributes redirectAttributes) {
+                                                HttpSession httpSession,
+                                                RedirectAttributes redirectAttributes) {
         String url = BASE_URL + "gift-info/";
         User user = (User) httpSession.getAttribute("user");
 
@@ -547,7 +558,8 @@ public class AuthorController {
                     Integer responseInt = null;
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {
+                        });
                         responseInt = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());

@@ -24,10 +24,6 @@ public class GiftInfoPicture implements Serializable {
     @Column(name = "gift_info_picture_url", nullable = false)
     private String url;
 
-    @ManyToOne
-    @JoinColumn(name = "gift_info_id", nullable = false)
-    private GiftInfo giftInfo;
-
     public GiftInfoPicture() {
 
     }
@@ -77,13 +73,5 @@ public class GiftInfoPicture implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public GiftInfo getGiftInfo() {
-        return giftInfo;
-    }
-
-    public void setGiftInfo(GiftInfo giftInfo) {
-        this.giftInfo = giftInfo;
     }
 }

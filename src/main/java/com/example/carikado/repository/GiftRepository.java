@@ -14,23 +14,60 @@ import java.util.List;
 public interface GiftRepository extends JpaRepository<Gift, Integer> {
 
     @Query("select g from Gift g " +
+            "inner join g.giftInfoCategories gic " +
             "where (g.gender = 'All' or g.gender = :gender) " +
             "and g.ageFrom <= :age " +
             "and g.ageTo >= :age " +
-            "and g.price between :budgetFrom and :budgetTo")
+            "and g.price between :budgetFrom and :budgetTo " +
+            "and gic.name = :category")
     public List<Gift> findGiftSuggestion(@Param("gender") String gender,
                                          @Param("age") Integer age,
                                          @Param("budgetFrom") Integer budgetFrom,
-                                         @Param("budgetTo") Integer budgetTo);
+                                         @Param("budgetTo") Integer budgetTo,
+                                         @Param("category") String category);
 
     @Query("select g from Gift g " +
+            "inner join g.giftInfoCategories gic " +
+            "where g.name like %:name% " +
+            "and (g.gender = 'All' or g.gender = :gender) " +
+            "and g.ageFrom <= :age " +
+            "and g.ageTo >= :age " +
+            "and g.price between :budgetFrom and :budgetTo " +
+            "and gic.name = :category")
+    public List<Gift> findGiftSuggestion(@Param("gender") String gender,
+                                         @Param("age") Integer age,
+                                         @Param("budgetFrom") Integer budgetFrom,
+                                         @Param("budgetTo") Integer budgetTo,
+                                         @Param("category") String category,
+                                         @Param("name") String  name);
+
+    @Query("select g from Gift g " +
+            "inner join g.giftInfoCategories gic " +
             "where (g.gender = 'All' or g.gender = :gender) " +
             "and g.ageFrom <= :age " +
             "and g.ageTo >= :age " +
-            "and g.price between :budgetFrom and :budgetTo")
+            "and g.price between :budgetFrom and :budgetTo " +
+            "and gic.name = :category")
     public Page<Gift> findGiftSuggestion(@Param("gender") String gender,
                                          @Param("age") Integer age,
                                          @Param("budgetFrom") Integer budgetFrom,
                                          @Param("budgetTo") Integer budgetTo,
+                                         @Param("category") String category,
+                                         Pageable pageable);
+
+    @Query("select g from Gift g " +
+            "inner join g.giftInfoCategories gic " +
+            "where g.name like %:name% " +
+            "and (g.gender = 'All' or g.gender = :gender) " +
+            "and g.ageFrom <= :age " +
+            "and g.ageTo >= :age " +
+            "and g.price between :budgetFrom and :budgetTo " +
+            "and gic.name = :category")
+    public Page<Gift> findGiftSuggestion(@Param("gender") String gender,
+                                         @Param("age") Integer age,
+                                         @Param("budgetFrom") Integer budgetFrom,
+                                         @Param("budgetTo") Integer budgetTo,
+                                         @Param("category") String category,
+                                         @Param("name") String name,
                                          Pageable pageable);
 }

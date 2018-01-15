@@ -24,7 +24,7 @@ import java.util.Date;
 public class AdminController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
-    private static final String BASE_URL = "http://madamita.ml:8080/capi/";
+    private static final String BASE_URL = "http://madamita.ml:8080/cari-kado/api/";
 
     private ObjectMapper mObjectMapper;
     private RestTemplate mRestTemplate;

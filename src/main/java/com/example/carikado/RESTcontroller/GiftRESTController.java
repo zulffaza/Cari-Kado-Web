@@ -22,7 +22,11 @@ public class GiftRESTController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GiftRESTController.class);
     private static final String[] PROPERTIES = {
-            "name"
+            "name",
+            "ageFrom",
+            "ageTo",
+            "price",
+            "rating"
     };
     private static final String[] DIRECTION = {
             "asc",
@@ -55,9 +59,16 @@ public class GiftRESTController {
                                                 @RequestParam Integer age,
                                                 @RequestParam Integer budgetFrom,
                                                 @RequestParam Integer budgetTo,
-                                                @RequestParam String category) {
+                                                @RequestParam String category,
+                                                @RequestParam(required = false) String name) {
         String message = "Find gift suggestions success";
-        ArrayList<Gift> gifts = (ArrayList<Gift>) mGiftService.findAllSuggestion(gender, age, budgetFrom, budgetTo, category);
+        ArrayList<Gift> gifts;
+
+        if (name == null)
+            gifts = (ArrayList<Gift>) mGiftService.findAllSuggestion(gender, age, budgetFrom, budgetTo, category);
+        else
+            gifts = (ArrayList<Gift>) mGiftService.findAllSuggestion(gender, age, budgetFrom, budgetTo, category, name);
+
         return new MyResponse<>(message, gifts);
     }
 
@@ -79,8 +90,12 @@ public class GiftRESTController {
         int propertiesIndex = 0;
         int directionIndex = 0;
 
-        if (sort != null && sort >= 1 && sort <= 2)
-            directionIndex = sort - 1;
+        if (sort != null && sort >= 1 && sort <= 10) {
+            boolean isPrime = sort % 2 == 0;
+            directionIndex = isPrime ? 1 : 0;
+
+            propertiesIndex = (int) (Math.ceil((double) sort / 2) - 1);
+        }
 
         direction = Sort.Direction.fromString(DIRECTION[directionIndex]);
         properties.add(PROPERTIES[propertiesIndex]);
@@ -112,7 +127,8 @@ public class GiftRESTController {
                                               @RequestParam Integer age,
                                               @RequestParam Integer budgetFrom,
                                               @RequestParam Integer budgetTo,
-                                              @RequestParam String category) {
+                                              @RequestParam String category,
+                                              @RequestParam(required = false) String name) {
         ArrayList<String> properties = new ArrayList<>();
         List<Gift> gifts;
         String message;
@@ -135,7 +151,12 @@ public class GiftRESTController {
 
         Sort sortOrder = new Sort(direction, properties);
         PageRequest pageRequest = new PageRequest(page, pageSize, sortOrder);
-        Page<Gift> giftPage = mGiftService.findAllSuggestionPageable(gender, age, budgetFrom, budgetTo, category, pageRequest);
+        Page<Gift> giftPage;
+
+        if (name == null)
+            giftPage = mGiftService.findAllSuggestionPageable(gender, age, budgetFrom, budgetTo, category, pageRequest);
+        else
+            giftPage = mGiftService.findAllSuggestionPageable(gender, age, budgetFrom, budgetTo, category, name, pageRequest);
 
         gifts = giftPage.getContent();
         message = "Find gift suggestion success";

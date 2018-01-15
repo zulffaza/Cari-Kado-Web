@@ -26,7 +26,9 @@ public class GiftInfoRESTController {
             "createdAt",
             "title",
             "giftInfoAge.from",
+            "giftInfoAge.to",
             "giftInfoBudget.from",
+            "giftInfoBudget.to"
     };
     private static final String[] DIRECTION = {
             "asc",
@@ -61,8 +63,8 @@ public class GiftInfoRESTController {
 
     @GetMapping("/api/gift-info")
     public MyResponse<MyPage<List>> findGiftInfos(@RequestParam(required = false, defaultValue = "0") Integer page,
-                                                           @RequestParam(required = false, defaultValue = "10") Integer pageSize,
-                                                           @RequestParam(required = false) Integer sort) {
+                                                  @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                                  @RequestParam(required = false) Integer sort) {
         ArrayList<String> properties = new ArrayList<>();
         List<GiftInfo> giftInfos;
         String message;
@@ -77,7 +79,7 @@ public class GiftInfoRESTController {
         int propertiesIndex = 0;
         int directionIndex = 0;
 
-        if (sort != null && sort >= 1 && sort <= 8) {
+        if (sort != null && sort >= 1 && sort <= 12) {
             boolean isPrime = sort % 2 == 0;
             directionIndex = isPrime ? 1 : 0;
 

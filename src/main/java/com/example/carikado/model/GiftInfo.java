@@ -51,6 +51,10 @@ public class GiftInfo implements Serializable {
     @JoinColumn(name = "gift_info_budget_id", nullable = false)
     private GiftInfoBudget giftInfoBudget;
 
+    @OneToMany
+    @JoinColumn(name = "gift_info_id", nullable = false)
+    private List<GiftInfoPicture> giftInfoPictures = new ArrayList<>();
+
     public GiftInfo() {
 
     }
@@ -135,5 +139,17 @@ public class GiftInfo implements Serializable {
 
     public void setGiftInfoBudget(GiftInfoBudget giftInfoBudget) {
         this.giftInfoBudget = giftInfoBudget;
+    }
+
+    public void addGiftInfoPicture(GiftInfoPicture giftInfoPicture) {
+        giftInfoPictures.add(giftInfoPicture);
+    }
+
+    public void removeGiftInfoPicture(GiftInfoPicture giftInfoPicture) {
+        giftInfoPictures.remove(giftInfoPicture);
+    }
+
+    public List<GiftInfoPicture> getGiftInfoPictures() {
+        return giftInfoPictures;
     }
 }
