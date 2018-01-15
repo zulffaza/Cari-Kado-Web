@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: nindy ilhami
@@ -10,20 +11,20 @@
 <head>
     <title>Info Kado</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
-    <script src="bootstrap-3.3.7-dist/jquery/jquery-3.1.1.min.js"></script>
-    <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="<c:url value="/bootstrap-3.3.7-dist/css/bootstrap.min.css"/>">
+    <link rel="stylesheet" href="<c:url value="/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css"/>">
+    <script src="<c:url value="/bootstrap-3.3.7-dist/jquery/jquery-3.1.1.min.js"/>"></script>
+    <script src="<c:url value="/bootstrap-3.3.7-dist/js/bootstrap.min.js"/>"></script>
 </head>
 <body>
 <nav class="navbar navbar-fixed-top" style="background: #A91E31;">
     <div class="navbar-brand">
-        <img src="ic_icon_logo_cari_kado.png" width="160" height="30">
+        <img src="<c:url value="/assets/admin/fullicon1.png"/>" width="160" height="30">
     </div>
     <div>
         <ul class="nav navbar-nav navbar-right">
-            <li style="margin:4px"><a href="#">INFORMASI KADO</a></li>
-            <li style="margin:4px"><a href="#">REVIEW</a></li>
+            <li style="margin:4px"><a href="<c:url value="/informasi_kado"/>">INFORMASI KADO</a></li>
+            <li style="margin:4px"><a href="<c:url value="/review"/>">REVIEW</a></li>
         </ul>
     </div>
 </nav>
@@ -33,7 +34,7 @@
     <br>
     <div class="row">
         <div class="col-md-6">
-            <img src=".png" style="width:358px; height:454px;">
+            <img src="<c:url value=".png"/>" style="width:358px; height:454px;">
         </div>
         <div class="col-md-6">
             <center><img src=".png" style="width:409px; height:121px;"></center>

@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: nindy ilhami
@@ -10,10 +11,10 @@
 <head>
     <title>Cari Kado User</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
-    <script src="bootstrap-3.3.7-dist/jquery/jquery-3.1.1.min.js"></script>
-    <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="<c:url value="/bootstrap-3.3.7-dist/css/bootstrap.min.css"/>">
+    <link rel="stylesheet" href="<c:url value="/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css"/>">
+    <script src="<c:url value="/bootstrap-3.3.7-dist/jquery/jquery-3.1.1.min.js"/>"></script>
+    <script src="<c:url value="/bootstrap-3.3.7-dist/js/bootstrap.min.js"/>"></script>
 </head>
 <body>
 <nav class="navbar navbar-fixed-top" style="background: #A91E31;">
@@ -23,10 +24,10 @@
     <div>
         <ul class="nav navbar-nav navbar-right">
             <li style="margin: 4px">
-                <a href="/dashboard/admin">HOME<span class="glyphicon"></span></a>
+                <a href="<c:url value="/dashboard/admin"/>">HOME<span class="glyphicon"></span></a>
             </li>
             <li style="margin: 4px; background-color: #fbcd30;">
-                <a href="/logout">LOGOUT<span class="glyphicon"></span></a>
+                <a href="<c:url value="/logout"/>">LOGOUT<span class="glyphicon"></span></a>
             </li>
         </ul>
     </div>
@@ -43,15 +44,14 @@
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
         <div class="item active">
-            <img src="/assets/user/ic_icon_boneka_slider.png">
+            <img src="<c:url value="/assets/user/ic_icon_boneka_slider.png"/>">
+        </div>
+        <div class="item">
+            <img src="<c:url value="/assets/user/ic_icon_boneka_slider3.png"/>">
         </div>
 
         <div class="item">
-            <img src="/assets/user/ic_icon_boneka_slider3.png">
-        </div>
-
-        <div class="item">
-            <img src="/assets/user/ic_icon_boneka_slider2.png">
+            <img src="<c:url value="/assets/user/ic_icon_boneka_slider2.png"/>">
         </div>
     </div>
 

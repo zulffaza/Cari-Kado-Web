@@ -14,27 +14,27 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap-theme.min.css" />
-        <link rel="stylesheet" href="/webjars/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="/css/index.css" />
+        <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"/>">
+        <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.7-1/css/bootstrap-theme.min.css"/>">
+        <link rel="stylesheet" href="<c:url value="/webjars/font-awesome/4.7.0/css/font-awesome.min.css"/>">
+        <link rel="stylesheet" href="<c:url value="/css/index.css"/>">
     </head>
     <body>
-        <nav class="navbar navbar-fixed-top" style="background: #A91E31;">
-                <div class="navbar-brand">
-                    <img src="/assets/admin/fullicon1.png" width="160" height="30" style="margin:1px">
-                </div>
-                <div>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li style="margin: 4px">
-                            <a href="/dashboard/admin">HOME<span class="glyphicon"></span></a>
-                        </li>
-                        <li style="margin: 4px; background-color: #fbcd30;">
-                            <a href="/logout">LOGOUT<span class="glyphicon"></span></a>
-                        </li>
-                    </ul>
-                </div>
-        </nav>
+    <nav class="navbar navbar-fixed-top" style="background: #A91E31;">
+        <div class="navbar-brand">
+            <img src="<c:url value="/assets/admin/fullicon1.png"/>" width="160" height="30" style="margin:1px">
+        </div>
+        <div>
+            <ul class="nav navbar-nav navbar-right">
+                <li style="margin: 4px">
+                    <a href="<c:url value="/dashboard/admin"/>">HOME<span class="glyphicon"></span></a>
+                </li>
+                <li style="margin: 4px; background-color: #fbcd30;">
+                    <a href="<c:url value="/logout"/>">LOGOUT<span class="glyphicon"></span></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
         <br>
 
@@ -55,7 +55,7 @@
 
                     <br>
 
-                    <a href="/dashboard/admin/city/add">
+                    <a href="<c:url value="/dashboard/admin/city/add"/>">
                         <button class="btn btn-success btn-xs" style="width: 80px; height: 30px;">
                             <i aria-hidden="true" class="fa fa-plus"></i> Tambah
                         </button>
@@ -109,12 +109,12 @@
                                                 ${district.name}
                                         </td>
                                         <td>
-                                            <a href="/dashboard/admin/city/add/${district.id}">
+                                            <a href="<c:url value="/dashboard/admin/city/add/${district.id}"/>">
                                                 <button class="btn btn-primary btn-xs" style="width: 70px; height: 28px;">
                                                     <i aria-hidden="true" class="fa fa-pencil-square-o"></i> Update
                                                 </button>
                                             </a>
-                                            <a href="/dashboard/admin/city/delete/${district.id}">
+                                            <a href="<c:url value="/dashboard/admin/city/delete/${district.id}"/>">
                                                 <button class="btn btn-danger btn-xs" style="width: 70px; height: 28px;">
                                                     <i aria-hidden="true" class="fa fa-trash-o"></i> Delete
                                                 </button>
@@ -131,23 +131,23 @@
             <ul class="pagination">
                 <c:if test="${page != 1}">
                     <li>
-                        <a href="/dashboard/admin/city/1">&laquo; first</a>
+                        <a href="<c:url value="/dashboard/admin/city/1"/>">&laquo; first</a>
                     </li>
                     <li>
-                        <a href="/dashboard/admin/city/${page - 1}">&lsaquo; previous</a>
+                        <a href="<c:url value="/dashboard/admin/city/${page - 1}"/>">&lsaquo; previous</a>
                     </li>
                 </c:if>
 
                 <li class="active">
-                    <a href="/dashboard/admin/city/${page}">${page}</a>
+                    <a href="<c:url value="/dashboard/admin/city/${page}"/>">${page}</a>
                 </li>
 
                 <c:if test="${lastPage != page}">
                     <li>
-                        <a href="/dashboard/admin/city/${page + 1}">next &rsaquo;</a>
+                        <a href="<c:url value="/dashboard/admin/city/${page + 1}"/>">next &rsaquo;</a>
                     </li>
                     <li>
-                        <a href="/dashboard/admin/city/${lastPage}">last &raquo;</a>
+                        <a href="<c:url value="/dashboard/admin/city/${lastPage}"/>">last &raquo;</a>
                     </li>
                 </c:if>
             </ul>

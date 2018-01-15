@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="en">
 
 <head>
@@ -8,23 +9,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap-theme.min.css" />
-    <link rel="stylesheet" href="/css/index.css" />
+    <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"/>">
+    <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.7-1/css/bootstrap-theme.min.css"/>">
+    <link rel="stylesheet" href="<c:url value="/css/index.css"/>">
 </head>
 
 <body>
 <nav class="navbar navbar-fixed-top" style="background: #A91E31;">
     <div class="navbar-brand">
-        <img src="/assets/admin/fullicon1.png" width="160" height="30" style="margin:1px">
+        <img src="<c:url value="/assets/admin/fullicon1.png"/>" width="160" height="30" style="margin:1px">
     </div>
     <div>
         <ul class="nav navbar-nav navbar-right">
             <li style="margin: 4px">
-                <a href="/dashboard/author">HOME<span class="glyphicon"></span></a>
+                <a href="<c:url value="/dashboard/author"/>">HOME<span class="glyphicon"></span></a>
             </li>
             <li style="margin: 4px; background-color: #fbcd30;">
-                <a href="/logout">LOGOUT<span class="glyphicon"></span></a>
+                <a href="<c:url value="/logout"/>">LOGOUT<span class="glyphicon"></span></a>
             </li>
         </ul>
     </div>
@@ -36,29 +37,28 @@
 
     <div class="row">
         <div align="center">
-            <img src="/assets/cs/ic_icon_cs_welcome.png" style="width:300px; height:100px;">
+            <img src="<c:url value="/assets/cs/ic_icon_cs_welcome.png"/>" style="width:300px; height:100px;">
         </div>
         <br>
         <div align="center">
-            <img src="/assets/cs/ic_icon_cs.png" style="width:300px; height:350px;">
+            <img src="<c:url value="/assets/cs/ic_icon_cs.png"/>" style="width:300px; height:350px;">
         </div>
 
         <br>
 
         <center>
-            <a href="/dashboard/author/gift-info-category/1">
+            <a href="<c:url value="/dashboard/author/gift-info-category/1"/>">
                 <button class="button btn btn-alert menu-dashboard">GIFT INFO CATEGORY</button>
             </a>
         </center>
         <center>
-            <a href="/dashboard/author/gift-info/1">
+            <a href="<c:url value="/dashboard/author/gift-info/1"/>">
                 <button class="button btn btn-alert menu-dashboard">GIFT INFO</button>
             </a>
         </center>
     </div>
 </div>
-
-    <script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
-    <script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+    <script src="<c:url value="/webjars/jquery/1.11.1/jquery.min.js"/>"></script>
+    <script src="<c:url value="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"/>"></script>
 </body>
 </html>

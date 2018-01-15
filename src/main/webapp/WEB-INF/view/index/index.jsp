@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: Faza Zulfika P P
@@ -10,19 +11,19 @@
 <head>
     <title>CariKado</title>
 
-    <link rel="stylesheet" href="webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="webjars/bootstrap/3.3.7-1/css/bootstrap-theme.min.css"/>
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"/>">
+    <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.7-1/css/bootstrap-theme.min.css"/>">
+    <link rel="stylesheet" href="<c:url value="/css/index.css"/>">
 </head>
 <body>
 <nav class="navbar navbar-fixed-top" style="background: #A91E31;">
         <div class="navbar-brand">
-            <img src="assets/admin/fullicon1.png" width="160" height="30">
+            <img src="<c:url value="/assets/admin/fullicon1.png"/>" width="160" height="30">
         </div>
         <div>
             <ul class="nav navbar-nav navbar-right">
-                <li style="margin:4px"><a href="#">INFORMASI KADO</a></li>
-                <li style="margin:4px"><a href="#">REVIEW</a></li>
+                <li style="margin:4px"><a href="<c:url value="#"/>">INFORMASI KADO</a></li>
+                <li style="margin:4px"><a href="<c:url value="#"/>">REVIEW</a></li>
             </ul>
         </div>
 </nav>
@@ -33,16 +34,16 @@
     <br>
     <div class="row">
         <div class="col-md-6">
-            <a href="login_admin">Login Admin<img src="assets/admin/ic_icon_logo_admin.png" style="width:358px; height:454px;"></a>
+            <a href="<c:url value="/login_admin"/>">Login Admin<img src="<c:url value="/assets/admin/ic_icon_logo_admin.png"/>" style="width:358px; height:454px;"></a>
         </div>
         <div class="col-md-6">
-            <a href="login_author">Login Author<img src="assets/author/ic_icon_logo_author.png" style="width:358px; height:454px;"></a>
+            <a href="<c:url value="/login_author"/>">Login Author<img src="<c:url value="/assets/author/ic_icon_logo_author.png"/>" style="width:358px; height:454px;"></a>
         </div>
     </div>
 </div>
 
-    <script src="webjars/jquery/1.11.1/jquery.min.js"></script>
-    <script src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
-    <script src="js/index.js"></script>
+    <script src="<c:url value="/webjars/jquery/1.11.1/jquery.min.js"/>"></script>
+    <script src="<c:url value="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"/>"></script>
+    <script src="<c:url value="/js/index.js"/>"></script>
 </body>
 </html>

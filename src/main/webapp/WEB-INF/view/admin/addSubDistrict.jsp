@@ -19,26 +19,26 @@
             </c:otherwise>
         </c:choose>
 
-        <link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap-theme.min.css" />
-        <link rel="stylesheet" href="/webjars/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="/css/index.css" />
+            <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"/>">
+            <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.7-1/css/bootstrap-theme.min.css"/>">
+            <link rel="stylesheet" href="<c:url value="/webjars/font-awesome/4.7.0/css/font-awesome.min.css"/>">
+            <link rel="stylesheet" href="<c:url value="/css/index.css" />
     </head>
     <body>
         <nav class="navbar navbar-fixed-top" style="background: #A91E31;">
-                <div class="navbar-brand">
-                    <img src="/assets/admin/fullicon1.png" width="160" height="30" style="margin:1px">
-                </div>
-                <div>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li style="margin: 4px">
-                            <a href="/dashboard/admin">HOME<span class="glyphicon"></span></a>
-                        </li>
-                        <li style="margin: 4px; background-color: #fbcd30;">
-                            <a href="/logout">LOGOUT<span class="glyphicon"></span></a>
-                        </li>
-                    </ul>
-                </div>
+            <div class="navbar-brand">
+                <img src="<c:url value="/assets/admin/fullicon1.png"/>" width="160" height="30" style="margin:1px">
+            </div>
+            <div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li style="margin: 4px">
+                        <a href="<c:url value="/dashboard/admin"/>">HOME<span class="glyphicon"></span></a>
+                    </li>
+                    <li style="margin: 4px; background-color: #fbcd30;">
+                        <a href="<c:url value="/logout"/>">LOGOUT<span class="glyphicon"></span></a>
+                    </li>
+                </ul>
+            </div>
         </nav>
 
         <br>
@@ -50,7 +50,7 @@
 
         <div class="container">
             <p style="font-size: 35px; color: #66060b;">
-                <b>${user.userName.firstName} ${user.userName.middleName} ${user.userName.lastName} - <a href="/dashboard/admin/sub-district/1">SUB DISTRICT</a></b>
+                <b>${user.userName.firstName} ${user.userName.middleName} ${user.userName.lastName} - <a href="<c:url value="/dashboard/admin/sub-district/1"/>">SUB DISTRICT</a></b>
             </p>
 
             <hr>
@@ -63,7 +63,7 @@
 
             <br>
 
-            <form:form class="form-horizontal" name="addSubDistrict" method="post" action="/dashboard/admin/sub-district/add">
+            <form:form class="form-horizontal" name="addSubDistrict" method="post" action="<c:url value="/dashboard/admin/sub-district/add"/>">
                 <input name="subDistrictId" type="number" value="${subDistrict.id}" hidden="hidden" />
 
                 <div class="form-group">
@@ -169,8 +169,8 @@
             </form:form>
         </div>
 
-        <script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
-        <script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
-        <script src="/js/admin/addSubDistrict.js"></script>
+            <script src="<c:url value="/webjars/jquery/1.11.1/jquery.min.js"/>"></script>
+            <script src="<c:url value="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"/>"></script>
+            <script src="<c:url value="/js/admin/addSubDistrict.js"/>"></script>
     </body>
 </html>
