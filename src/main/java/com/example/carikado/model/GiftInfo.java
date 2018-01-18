@@ -51,7 +51,7 @@ public class GiftInfo implements Serializable {
     @JoinColumn(name = "gift_info_budget_id", nullable = false)
     private GiftInfoBudget giftInfoBudget;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "gift_info_id", nullable = false)
     private List<GiftInfoPicture> giftInfoPictures = new ArrayList<>();
 

@@ -19,6 +19,8 @@
             </c:otherwise>
         </c:choose>
 
+            <c:url var="form_action" value="/dashboard/admin/district/add"/>
+
             <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"/>">
             <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.7-1/css/bootstrap-theme.min.css"/>">
             <link rel="stylesheet" href="<c:url value="/webjars/font-awesome/4.7.0/css/font-awesome.min.css"/>">
@@ -64,7 +66,7 @@
 
             <br>
 
-            <form:form class="form-horizontal" name="addDistrict" method="post" action="<c:url value="/dashboard/admin/district/add"/>">
+            <form:form class="form-horizontal" name="addDistrict" method="post" action="${form_action}">
                 <input name="districtId" type="number" value="${district.id}" hidden="hidden" />
 
                 <div class="form-group">

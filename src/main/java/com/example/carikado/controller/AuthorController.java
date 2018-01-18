@@ -17,13 +17,20 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.regex.Pattern;
 
 @Controller
 public class AuthorController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthorController.class);
     private static final String BASE_URL = "http://madamita.ml:8080/cari-kado/api/";
+//    private static final String BASE_URL = "http://localhost:8080/api/";
 
     private RestTemplate mRestTemplate;
     private ObjectMapper mObjectMapper;
@@ -408,7 +415,7 @@ public class AuthorController {
                                              @RequestParam("giftInfoAgeTo") Integer giftInfoAgeTo,
                                              @RequestParam("giftInfoBudgetFrom") Integer giftInfoBudgetFrom,
                                              @RequestParam("giftInfoBudgetTo") Integer giftInfoBudgetTo,
-                                             @RequestParam(value = "giftInfoPictures", required = false) MultipartFile[] multipartFiles,
+//                                             @RequestParam(value = "giftInfoPictures", required = false) MultipartFile[] multipartFiles,
                                              HttpSession httpSession,
                                              RedirectAttributes redirectAttributes) {
         String url = BASE_URL + "gift-info/add";
@@ -418,7 +425,13 @@ public class AuthorController {
             boolean isAuthor = user.getRole().getName().equals("Author");
 
             if (isAuthor) {
+                ArrayList<Path> paths = new ArrayList<>();
+                MyResponse<Integer> myResponse = null;
+                Integer responseInt = null;
+                String message;
+
                 boolean isEdit = giftInfoId != null;
+                boolean isUploaded = true;
 
                 GiftInfoAge giftInfoAge = new GiftInfoAge();
                 giftInfoAge.setFrom(giftInfoAgeFrom);
@@ -436,48 +449,98 @@ public class AuthorController {
                 giftInfo.setGiftInfoAge(giftInfoAge);
                 giftInfo.setGiftInfoBudget(giftInfoBudget);
 
-                for (String gicid : giftInfoCategoryId) {
-                    Integer id = Integer.parseInt(gicid);
+//                LOGGER.info(multipartFiles.length + "");
+//
+//                for (MultipartFile file : multipartFiles) {
+//                    if (file.isEmpty()) {
+//                        isUploaded = false;
+//                        break;
+//                    }
+//
+//                    String[] imgName = file.getOriginalFilename().split(Pattern.quote("."));
+//
+//                    String type = imgName[imgName.length - 1];
+//                    StringBuilder name = new StringBuilder();
+//
+//                    for (int i = 0; i < (imgName.length - 1); i++)
+//                        name.append(imgName[i]);
+//
+//                    try {
+//                        byte[] bytes = file.getBytes();
+//                        String nameEncoded = Base64.getEncoder().encodeToString(name.toString().getBytes());
+//                        String urlFiles = nameEncoded + "." + type;
+//
+//                        Path path = Paths.get("/var/www/html/bryan/cari-kado/images/gift-info/" + urlFiles);
+//
+//                        LOGGER.info(path.toString());
+//                        LOGGER.info(path.toAbsolutePath().toString());
+//                        LOGGER.info(path.toUri().toString());
+//
+//                        Files.write(path, bytes);
+//
+//                        paths.add(path);
+//
+//                        GiftInfoPicture giftInfoPicture = new GiftInfoPicture(nameEncoded,
+//                                type, file.getSize(), urlFiles);
+//                        giftInfo.addGiftInfoPicture(giftInfoPicture);
+//                    } catch (IOException e) {
+//                        LOGGER.info(e.getMessage());
+//
+//                        isUploaded = false;
+//                        break;
+//                    }
+//                }
 
-                    GiftInfoCategory giftInfoCategory = new GiftInfoCategory();
-                    giftInfoCategory.setId(id);
+                if (isUploaded) {
+                    for (String gicid : giftInfoCategoryId) {
+                        Integer id = Integer.parseInt(gicid);
 
-                    giftInfo.addGiftInfoCategory(giftInfoCategory);
+                        GiftInfoCategory giftInfoCategory = new GiftInfoCategory();
+                        giftInfoCategory.setId(id);
+
+                        giftInfo.addGiftInfoCategory(giftInfoCategory);
+                    }
+
+                    if (isEdit) {
+                        giftInfo.setId(giftInfoId);
+                        giftInfo.getGiftInfoAge().setId(giftInfoAgeId);
+                        giftInfo.getGiftInfoBudget().setId(giftInfoBudgetId);
+                    }
+
+                    HttpHeaders httpHeaders = new HttpHeaders();
+                    httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+                    String requestJson = "";
+
+                    try {
+                        requestJson = mObjectMapper.writeValueAsString(giftInfo);
+                    } catch (JsonProcessingException e) {
+                        LOGGER.error(e.getMessage());
+                    }
+
+                    HttpEntity<String> request = new HttpEntity<>(requestJson, httpHeaders);
+
+                    ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.POST, request, String.class);
+
+                    try {
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {
+                        });
+                        responseInt = myResponse.getData();
+                    } catch (IOException e) {
+                        LOGGER.error(e.getMessage());
+                    }
+                } else {
+                    try {
+                        for (Path path : paths)
+                            Files.delete(path);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    giftInfo.getGiftInfoPictures().clear();
                 }
 
-                if (isEdit) {
-                    giftInfo.setId(giftInfoId);
-                    giftInfo.getGiftInfoAge().setId(giftInfoAgeId);
-                    giftInfo.getGiftInfoBudget().setId(giftInfoBudgetId);
-                }
-
-                HttpHeaders httpHeaders = new HttpHeaders();
-                httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-
-                String requestJson = "";
-
-                try {
-                    requestJson = mObjectMapper.writeValueAsString(giftInfo);
-                } catch (JsonProcessingException e) {
-                    LOGGER.error(e.getMessage());
-                }
-
-                HttpEntity<String> request = new HttpEntity<>(requestJson, httpHeaders);
-
-                ResponseEntity<String> response = mRestTemplate.exchange(url, HttpMethod.POST, request, String.class);
-                MyResponse<Integer> myResponse = null;
-                Integer responseInt = null;
-                String message;
-
-                try {
-                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {
-                    });
-                    responseInt = myResponse.getData();
-                } catch (IOException e) {
-                    LOGGER.error(e.getMessage());
-                }
-
-                if (responseInt != null && responseInt == 1) {
+                if (responseInt != null && responseInt == 1 && isUploaded) {
                     redirectAttributes.addAttribute("message", myResponse.getMessage());
                 } else {
                     if (responseInt == null)

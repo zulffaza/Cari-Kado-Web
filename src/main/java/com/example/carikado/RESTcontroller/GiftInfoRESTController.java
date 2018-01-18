@@ -3,6 +3,7 @@ package com.example.carikado.RESTcontroller;
 import com.example.carikado.model.*;
 import com.example.carikado.service.GiftInfoAgeService;
 import com.example.carikado.service.GiftInfoBudgetService;
+import com.example.carikado.service.GiftInfoPictureService;
 import com.example.carikado.service.GiftInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,13 +38,15 @@ public class GiftInfoRESTController {
 
     private GiftInfoAgeService mGiftInfoAgeService;
     private GiftInfoBudgetService mGiftInfoBudgetService;
+    private GiftInfoPictureService mGiftInfoPictureService;
     private GiftInfoService mGiftInfoService;
 
     @Autowired
     public GiftInfoRESTController(GiftInfoAgeService giftInfoAgeService, GiftInfoBudgetService giftInfoBudgetService,
-                                  GiftInfoService giftInfoService) {
+                                  GiftInfoPictureService giftInfoPictureService, GiftInfoService giftInfoService) {
         mGiftInfoAgeService = giftInfoAgeService;
         mGiftInfoBudgetService = giftInfoBudgetService;
+        mGiftInfoPictureService = giftInfoPictureService;
         mGiftInfoService = giftInfoService;
     }
 
@@ -151,6 +154,8 @@ public class GiftInfoRESTController {
             message += "failed - Gift info already exists";
             response = 0;
         } catch (Exception e) {
+            e.printStackTrace();
+
             message += "failed - Internal Server Error";
             response = 0;
         }

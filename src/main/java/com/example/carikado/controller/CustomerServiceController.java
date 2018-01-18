@@ -14,6 +14,7 @@ public class CustomerServiceController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomerServiceController.class);
     private static final String BASE_URL = "http://madamita.ml:8080/cari-kado/api/";
+//    private static final String BASE_URL = "http://localhost:8080/api/";
 
     private RestTemplate mRestTemplate;
 

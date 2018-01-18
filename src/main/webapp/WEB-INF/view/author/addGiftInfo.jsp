@@ -19,6 +19,8 @@
             </c:otherwise>
         </c:choose>
 
+        <c:url var="form_action" value="/dashboard/author/gift-info/add"/>
+
         <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"/>">
         <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.7-1/css/bootstrap-theme.min.css"/>">
         <link rel="stylesheet" href="<c:url value="/webjars/font-awesome/4.7.0/css/font-awesome.min.css"/>">
@@ -63,7 +65,7 @@
 
             <br>
 
-            <form:form class="form-horizontal" name="addGiftInfo" method="post" action="<c:url value="/dashboard/author/gift-info/add"/>">
+            <form:form class="form-horizontal" name="addGiftInfo" method="post" action="${form_action}">
                 <input name="giftInfoId" type="number" value="${giftInfo.id}" hidden="hidden" />
                 <input name="giftInfoAgeId" type="number" value="${giftInfo.giftInfoAge.id}" hidden="hidden" />
                 <input name="giftInfoBudgetId" type="number" value="${giftInfo.giftInfoBudget.id}" hidden="hidden" />
@@ -101,6 +103,13 @@
                         <input type="text" class="form-control" id="gift-info-title" name="giftInfoTitle" placeholder="Enter gift info title" value="${giftInfo.title}" required="required">
                     </div>
                 </div>
+
+                <%--<div class="form-group">--%>
+                    <%--<label class="control-label col-sm-2" for="gift-info-image">Gambar :</label>--%>
+                    <%--<div class="col-sm-10">--%>
+                        <%--<input type="file" class="form-control" id="gift-info-image" name="giftInfoPictures" accept="image/*">--%>
+                    <%--</div>--%>
+                <%--</div>--%>
 
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="gift-info-description">Deskripsi :</label>

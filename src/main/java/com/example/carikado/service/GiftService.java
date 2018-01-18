@@ -36,7 +36,8 @@ public class GiftService {
                                         Integer budgetFrom,
                                         Integer budgetTo,
                                         String category) {
-        return mGiftRepository.findGiftSuggestion(gender, age, budgetFrom, budgetTo, category);
+        return gender.equals("All") ? mGiftRepository.findGiftSuggestion(age, budgetFrom, budgetTo, category) :
+                mGiftRepository.findGiftSuggestion(gender, age, budgetFrom, budgetTo, category);
     }
 
     public List<Gift> findAllSuggestion(String gender,
@@ -45,7 +46,8 @@ public class GiftService {
                                         Integer budgetTo,
                                         String category,
                                         String name) {
-        return mGiftRepository.findGiftSuggestion(gender, age, budgetFrom, budgetTo, category, name);
+        return gender.equals("All") ? mGiftRepository.findGiftSuggestion(age, budgetFrom, budgetTo, category, name) :
+                mGiftRepository.findGiftSuggestion(gender, age, budgetFrom, budgetTo, category, name);
     }
 
     public Page<Gift> findAllSuggestionPageable(String gender,
@@ -54,7 +56,8 @@ public class GiftService {
                                                 Integer budgetTo,
                                                 String category,
                                                 Pageable pageable) {
-        return mGiftRepository.findGiftSuggestion(gender, age, budgetFrom, budgetTo, category, pageable);
+        return gender.equals("All") ? mGiftRepository.findGiftSuggestion(age, budgetFrom, budgetTo, category, pageable) :
+                mGiftRepository.findGiftSuggestion(gender, age, budgetFrom, budgetTo, category, pageable);
     }
 
     public Page<Gift> findAllSuggestionPageable(String gender,
@@ -64,7 +67,8 @@ public class GiftService {
                                                 String category,
                                                 String name,
                                                 Pageable pageable) {
-        return mGiftRepository.findGiftSuggestion(gender, age, budgetFrom, budgetTo, category, name, pageable);
+        return gender.equals("All") ? mGiftRepository.findGiftSuggestion(age, budgetFrom, budgetTo, category, name, pageable) :
+                mGiftRepository.findGiftSuggestion(gender, age, budgetFrom, budgetTo, category, name, pageable);
     }
 
     public Gift findGift(Integer id) {

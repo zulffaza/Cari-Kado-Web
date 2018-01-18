@@ -19,6 +19,8 @@
             </c:otherwise>
         </c:choose>
 
+            <c:url var="form_action" value="/dashboard/admin/user/add"/>
+
             <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"/>">
             <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.7-1/css/bootstrap-theme.min.css"/>">
             <link rel="stylesheet" href="<c:url value="/webjars/font-awesome/4.7.0/css/font-awesome.min.css"/>">
@@ -63,7 +65,7 @@
 
             <br>
 
-            <form:form class="form-horizontal" name="addUser" method="post" action="<c:url value="/dashboard/admin/user/add"/>">
+            <form:form class="form-horizontal" name="addUser" method="post" action="${form_action}">
                 <input name="userId" type="number" value="${userModel.id}" hidden="hidden" />
                 <input name="userNameId" type="number" value="${userModel.userName.id}" hidden="hidden" />
                 <input name="userAddressId" type="number" value="${userModel.userAddress.id}" hidden="hidden" />

@@ -19,7 +19,7 @@ public class GiftInfoPicture implements Serializable {
     private String type;
 
     @Column(name = "gift_info_picture_size", nullable = false)
-    private Integer size;
+    private Long size;
 
     @Column(name = "gift_info_picture_url", nullable = false)
     private String url;
@@ -28,7 +28,7 @@ public class GiftInfoPicture implements Serializable {
 
     }
 
-    public GiftInfoPicture(String name, String type, Integer size, String url) {
+    public GiftInfoPicture(String name, String type, Long size, String url) {
         this.name = name;
         this.type = type;
         this.size = size;
@@ -59,11 +59,11 @@ public class GiftInfoPicture implements Serializable {
         this.type = type;
     }
 
-    public Integer getSize() {
+    public Long getSize() {
         return size;
     }
 
-    public void setSize(Integer size) {
+    public void setSize(Long size) {
         this.size = size;
     }
 

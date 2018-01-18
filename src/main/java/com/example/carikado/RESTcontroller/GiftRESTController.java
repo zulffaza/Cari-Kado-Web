@@ -143,8 +143,12 @@ public class GiftRESTController {
         int propertiesIndex = 0;
         int directionIndex = 0;
 
-        if (sort != null && sort >= 1 && sort <= 2)
-            directionIndex = sort - 1;
+        if (sort != null && sort >= 1 && sort <= 10) {
+            boolean isPrime = sort % 2 == 0;
+            directionIndex = isPrime ? 1 : 0;
+
+            propertiesIndex = (int) (Math.ceil((double) sort / 2) - 1);
+        }
 
         direction = Sort.Direction.fromString(DIRECTION[directionIndex]);
         properties.add(PROPERTIES[propertiesIndex]);

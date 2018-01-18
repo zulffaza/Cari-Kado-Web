@@ -25,6 +25,7 @@ public class AdminController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
     private static final String BASE_URL = "http://madamita.ml:8080/cari-kado/api/";
+//    private static final String BASE_URL = "http://localhost:8080/api/";
 
     private ObjectMapper mObjectMapper;
     private RestTemplate mRestTemplate;
@@ -64,7 +65,7 @@ public class AdminController {
             return "redirect:/login";
     }
 
-   @GetMapping("/dashboard/admin/province")
+    @GetMapping("/dashboard/admin/province")
     public String dashboardAdminProvince(HttpSession httpSession) {
         User user = (User) httpSession.getAttribute("user");
 
@@ -74,7 +75,7 @@ public class AdminController {
             return "redirect:/login";
     }
 
-   @GetMapping("/dashboard/admin/city")
+    @GetMapping("/dashboard/admin/city")
     public String dashboardAdminCity(HttpSession httpSession) {
         User user = (User) httpSession.getAttribute("user");
 
@@ -147,7 +148,8 @@ public class AdminController {
 
                 try {
                     myResponse = mObjectMapper.readValue(response.getBody(),
-                            new TypeReference<MyResponse<MyPage<ArrayList<Role>>>>() {});
+                            new TypeReference<MyResponse<MyPage<ArrayList<Role>>>>() {
+                            });
 
                     myPage = myResponse.getData();
                     roles = myPage.getData();
@@ -172,11 +174,11 @@ public class AdminController {
 
     @GetMapping("/dashboard/admin/country/{page}")
     public String dashboardAdminCountry(@PathVariable Integer page,
-                                     @RequestParam(required = false, defaultValue = "10") Integer pageSize,
-                                     @RequestParam(required = false, defaultValue = "1") Integer sort,
-                                     @ModelAttribute("message") String message,
-                                     HttpSession httpSession,
-                                     ModelMap modelMap) {
+                                        @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                        @RequestParam(required = false, defaultValue = "1") Integer sort,
+                                        @ModelAttribute("message") String message,
+                                        HttpSession httpSession,
+                                        ModelMap modelMap) {
         String url = BASE_URL + "country";
         User user = (User) httpSession.getAttribute("user");
 
@@ -202,7 +204,8 @@ public class AdminController {
 
                 try {
                     myResponse = mObjectMapper.readValue(response.getBody(),
-                            new TypeReference<MyResponse<MyPage<ArrayList<Country>>>>() {});
+                            new TypeReference<MyResponse<MyPage<ArrayList<Country>>>>() {
+                            });
 
                     myPage = myResponse.getData();
                     countries = myPage.getData();
@@ -257,7 +260,8 @@ public class AdminController {
 
                 try {
                     myResponse = mObjectMapper.readValue(response.getBody(),
-                            new TypeReference<MyResponse<MyPage<ArrayList<Province>>>>() {});
+                            new TypeReference<MyResponse<MyPage<ArrayList<Province>>>>() {
+                            });
 
                     myPage = myResponse.getData();
                     provinces = myPage.getData();
@@ -282,11 +286,11 @@ public class AdminController {
 
     @GetMapping("/dashboard/admin/city/{page}")
     public String dashboardAdminCity(@PathVariable Integer page,
-                                         @RequestParam(required = false, defaultValue = "10") Integer pageSize,
-                                         @RequestParam(required = false, defaultValue = "1") Integer sort,
-                                         @ModelAttribute("message") String message,
-                                         HttpSession httpSession,
-                                         ModelMap modelMap) {
+                                     @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                     @RequestParam(required = false, defaultValue = "1") Integer sort,
+                                     @ModelAttribute("message") String message,
+                                     HttpSession httpSession,
+                                     ModelMap modelMap) {
         String url = BASE_URL + "city";
         User user = (User) httpSession.getAttribute("user");
 
@@ -312,7 +316,8 @@ public class AdminController {
 
                 try {
                     myResponse = mObjectMapper.readValue(response.getBody(),
-                            new TypeReference<MyResponse<MyPage<ArrayList<City>>>>() {});
+                            new TypeReference<MyResponse<MyPage<ArrayList<City>>>>() {
+                            });
 
                     myPage = myResponse.getData();
                     cities = myPage.getData();
@@ -337,11 +342,11 @@ public class AdminController {
 
     @GetMapping("/dashboard/admin/district/{page}")
     public String dashboardAdminDistrict(@PathVariable Integer page,
-                                     @RequestParam(required = false, defaultValue = "10") Integer pageSize,
-                                     @RequestParam(required = false, defaultValue = "1") Integer sort,
-                                     @ModelAttribute("message") String message,
-                                     HttpSession httpSession,
-                                     ModelMap modelMap) {
+                                         @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                         @RequestParam(required = false, defaultValue = "1") Integer sort,
+                                         @ModelAttribute("message") String message,
+                                         HttpSession httpSession,
+                                         ModelMap modelMap) {
         String url = BASE_URL + "district";
         User user = (User) httpSession.getAttribute("user");
 
@@ -367,7 +372,8 @@ public class AdminController {
 
                 try {
                     myResponse = mObjectMapper.readValue(response.getBody(),
-                            new TypeReference<MyResponse<MyPage<ArrayList<District>>>>() {});
+                            new TypeReference<MyResponse<MyPage<ArrayList<District>>>>() {
+                            });
 
                     myPage = myResponse.getData();
                     districts = myPage.getData();
@@ -392,11 +398,11 @@ public class AdminController {
 
     @GetMapping("/dashboard/admin/sub-district/{page}")
     public String dashboardAdminSubDistrict(@PathVariable Integer page,
-                                         @RequestParam(required = false, defaultValue = "10") Integer pageSize,
-                                         @RequestParam(required = false, defaultValue = "1") Integer sort,
-                                         @ModelAttribute("message") String message,
-                                         HttpSession httpSession,
-                                         ModelMap modelMap) {
+                                            @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                            @RequestParam(required = false, defaultValue = "1") Integer sort,
+                                            @ModelAttribute("message") String message,
+                                            HttpSession httpSession,
+                                            ModelMap modelMap) {
         String url = BASE_URL + "sub-district";
         User user = (User) httpSession.getAttribute("user");
 
@@ -422,7 +428,8 @@ public class AdminController {
 
                 try {
                     myResponse = mObjectMapper.readValue(response.getBody(),
-                            new TypeReference<MyResponse<MyPage<ArrayList<SubDistrict>>>>() {});
+                            new TypeReference<MyResponse<MyPage<ArrayList<SubDistrict>>>>() {
+                            });
 
                     myPage = myResponse.getData();
                     subDistricts = myPage.getData();
@@ -478,7 +485,8 @@ public class AdminController {
 
                 try {
                     myResponse = mObjectMapper.readValue(response.getBody(),
-                            new TypeReference<MyResponse<MyPage<ArrayList<User>>>>() {});
+                            new TypeReference<MyResponse<MyPage<ArrayList<User>>>>() {
+                            });
 
                     myPage = myResponse.getData();
                     users = myPage.getData();
@@ -503,11 +511,11 @@ public class AdminController {
 
     @GetMapping("/dashboard/admin/review/{page}")
     public String dashboardAdminReview(@PathVariable Integer page,
-                                     @RequestParam(required = false) Integer pageSize,
-                                     @RequestParam(required = false) Integer sort,
-                                     @ModelAttribute("message") String message,
-                                     HttpSession httpSession,
-                                     ModelMap modelMap) {
+                                       @RequestParam(required = false) Integer pageSize,
+                                       @RequestParam(required = false) Integer sort,
+                                       @ModelAttribute("message") String message,
+                                       HttpSession httpSession,
+                                       ModelMap modelMap) {
         String url = BASE_URL + "review";
         User user = (User) httpSession.getAttribute("user");
 
@@ -533,7 +541,8 @@ public class AdminController {
 
                 try {
                     myResponse = mObjectMapper.readValue(response.getBody(),
-                            new TypeReference<MyResponse<MyPage<ArrayList<Review>>>>() {});
+                            new TypeReference<MyResponse<MyPage<ArrayList<Review>>>>() {
+                            });
 
                     myPage = myResponse.getData();
                     reviews = myPage.getData();
@@ -574,8 +583,8 @@ public class AdminController {
 
     @GetMapping("/dashboard/admin/country/add")
     public String dashboardAdminAddCountry(@ModelAttribute("message") String message,
-                                        @ModelAttribute("country") Country country,
-                                        HttpSession httpSession, ModelMap modelMap) {
+                                           @ModelAttribute("country") Country country,
+                                           HttpSession httpSession, ModelMap modelMap) {
         User user = (User) httpSession.getAttribute("user");
 
         if (user != null) {
@@ -590,8 +599,8 @@ public class AdminController {
 
     @GetMapping("/dashboard/admin/province/add")
     public String dashboardAdminAddProvince(@ModelAttribute("message") String message,
-                                           @ModelAttribute("province") Province province,
-                                           HttpSession httpSession, ModelMap modelMap) {
+                                            @ModelAttribute("province") Province province,
+                                            HttpSession httpSession, ModelMap modelMap) {
         String url = BASE_URL + "country/all";
         User user = (User) httpSession.getAttribute("user");
 
@@ -602,7 +611,8 @@ public class AdminController {
             ArrayList<Country> countries = new ArrayList<>();
 
             try {
-                myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {});
+                myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {
+                });
                 countries = myResponse.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
@@ -635,7 +645,8 @@ public class AdminController {
             ArrayList<Country> countries = new ArrayList<>();
 
             try {
-                myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {});
+                myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {
+                });
                 countries = myResponseCountry.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
@@ -649,7 +660,8 @@ public class AdminController {
             ArrayList<Province> provinces = new ArrayList<>();
 
             try {
-                myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {});
+                myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {
+                });
                 provinces = myResponseProvince.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
@@ -685,7 +697,8 @@ public class AdminController {
             ArrayList<Country> countries = new ArrayList<>();
 
             try {
-                myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {});
+                myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {
+                });
                 countries = myResponseCountry.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
@@ -699,7 +712,8 @@ public class AdminController {
             ArrayList<Province> provinces = new ArrayList<>();
 
             try {
-                myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {});
+                myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {
+                });
                 provinces = myResponseProvince.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
@@ -716,7 +730,8 @@ public class AdminController {
             ArrayList<City> cities = new ArrayList<>();
 
             try {
-                myResponseCity = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<City>>>() {});
+                myResponseCity = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<City>>>() {
+                });
                 cities = myResponseCity.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
@@ -755,7 +770,8 @@ public class AdminController {
             ArrayList<Country> countries = new ArrayList<>();
 
             try {
-                myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {});
+                myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {
+                });
                 countries = myResponseCountry.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
@@ -769,7 +785,8 @@ public class AdminController {
             ArrayList<Province> provinces = new ArrayList<>();
 
             try {
-                myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {});
+                myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {
+                });
                 provinces = myResponseProvince.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
@@ -786,7 +803,8 @@ public class AdminController {
             ArrayList<City> cities = new ArrayList<>();
 
             try {
-                myResponseCity = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<City>>>() {});
+                myResponseCity = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<City>>>() {
+                });
                 cities = myResponseCity.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
@@ -803,7 +821,8 @@ public class AdminController {
             ArrayList<District> districts = new ArrayList<>();
 
             try {
-                myResponseDistrict = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<District>>>() {});
+                myResponseDistrict = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<District>>>() {
+                });
                 districts = myResponseDistrict.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
@@ -847,7 +866,8 @@ public class AdminController {
             ArrayList<Country> countries = new ArrayList<>();
 
             try {
-                myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {});
+                myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {
+                });
                 countries = myResponseCountry.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
@@ -861,7 +881,8 @@ public class AdminController {
             ArrayList<Province> provinces = new ArrayList<>();
 
             try {
-                myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {});
+                myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {
+                });
                 provinces = myResponseProvince.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
@@ -878,7 +899,8 @@ public class AdminController {
             ArrayList<City> cities = new ArrayList<>();
 
             try {
-                myResponseCity = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<City>>>() {});
+                myResponseCity = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<City>>>() {
+                });
                 cities = myResponseCity.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
@@ -895,7 +917,8 @@ public class AdminController {
             ArrayList<District> districts = new ArrayList<>();
 
             try {
-                myResponseDistrict = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<District>>>() {});
+                myResponseDistrict = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<District>>>() {
+                });
                 districts = myResponseDistrict.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
@@ -912,7 +935,8 @@ public class AdminController {
             ArrayList<SubDistrict> subDistricts = new ArrayList<>();
 
             try {
-                myResponseSubDistrict = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<SubDistrict>>>() {});
+                myResponseSubDistrict = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<SubDistrict>>>() {
+                });
                 subDistricts = myResponseSubDistrict.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
@@ -926,7 +950,8 @@ public class AdminController {
             ArrayList<Role> roles = new ArrayList<>();
 
             try {
-                myResponseRole = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Role>>>() {});
+                myResponseRole = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Role>>>() {
+                });
                 roles = myResponseRole.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
@@ -976,7 +1001,8 @@ public class AdminController {
                     Role role = null;
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Role>>() {});
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Role>>() {
+                        });
                         role = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());
@@ -1000,9 +1026,9 @@ public class AdminController {
 
     @GetMapping("/dashboard/admin/country/add/{countryId}")
     public String dashboardAdminAddCountry(@PathVariable(required = false) Integer countryId,
-                                        @ModelAttribute("message") String message,
-                                        HttpSession httpSession,
-                                        ModelMap modelMap) {
+                                           @ModelAttribute("message") String message,
+                                           HttpSession httpSession,
+                                           ModelMap modelMap) {
         String url = BASE_URL + "country";
         User user = (User) httpSession.getAttribute("user");
 
@@ -1019,7 +1045,8 @@ public class AdminController {
                     Country country = null;
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Country>>() {});
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Country>>() {
+                        });
                         country = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());
@@ -1043,9 +1070,9 @@ public class AdminController {
 
     @GetMapping("/dashboard/admin/province/add/{provinceId}")
     public String dashboardAdminAddProvince(@PathVariable(required = false) Integer provinceId,
-                                        @ModelAttribute("message") String message,
-                                        HttpSession httpSession,
-                                        ModelMap modelMap) {
+                                            @ModelAttribute("message") String message,
+                                            HttpSession httpSession,
+                                            ModelMap modelMap) {
         String url = BASE_URL + "province";
         User user = (User) httpSession.getAttribute("user");
 
@@ -1061,7 +1088,8 @@ public class AdminController {
                     Province province = null;
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Province>>() {});
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Province>>() {
+                        });
                         province = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());
@@ -1076,7 +1104,8 @@ public class AdminController {
                         ArrayList<Country> countries = new ArrayList<>();
 
                         try {
-                            myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {});
+                            myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {
+                            });
                             countries = myResponseCountry.getData();
                         } catch (IOException e) {
                             LOGGER.error(e.getMessage());
@@ -1121,7 +1150,8 @@ public class AdminController {
                     City city = null;
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<City>>() {});
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<City>>() {
+                        });
                         city = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());
@@ -1135,7 +1165,8 @@ public class AdminController {
                         ArrayList<Country> countries = new ArrayList<>();
 
                         try {
-                            myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {});
+                            myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {
+                            });
                             countries = myResponseCountry.getData();
                         } catch (IOException e) {
                             LOGGER.error(e.getMessage());
@@ -1152,7 +1183,8 @@ public class AdminController {
                         ArrayList<Province> provinces = new ArrayList<>();
 
                         try {
-                            myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {});
+                            myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {
+                            });
                             provinces = myResponseProvince.getData();
                         } catch (IOException e) {
                             LOGGER.error(e.getMessage());
@@ -1200,7 +1232,8 @@ public class AdminController {
                     District district = null;
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<District>>() {});
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<District>>() {
+                        });
                         district = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());
@@ -1214,7 +1247,8 @@ public class AdminController {
                         ArrayList<Country> countries = new ArrayList<>();
 
                         try {
-                            myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {});
+                            myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {
+                            });
                             countries = myResponseCountry.getData();
                         } catch (IOException e) {
                             LOGGER.error(e.getMessage());
@@ -1231,7 +1265,8 @@ public class AdminController {
                         ArrayList<Province> provinces = new ArrayList<>();
 
                         try {
-                            myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {});
+                            myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {
+                            });
                             provinces = myResponseProvince.getData();
                         } catch (IOException e) {
                             LOGGER.error(e.getMessage());
@@ -1251,7 +1286,8 @@ public class AdminController {
                         ArrayList<City> cities = new ArrayList<>();
 
                         try {
-                            myResponseCity = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<City>>>() {});
+                            myResponseCity = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<City>>>() {
+                            });
                             cities = myResponseCity.getData();
                         } catch (IOException e) {
                             LOGGER.error(e.getMessage());
@@ -1302,7 +1338,8 @@ public class AdminController {
                     SubDistrict subDistrict = null;
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<SubDistrict>>() {});
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<SubDistrict>>() {
+                        });
                         subDistrict = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());
@@ -1316,7 +1353,8 @@ public class AdminController {
                         ArrayList<Country> countries = new ArrayList<>();
 
                         try {
-                            myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {});
+                            myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {
+                            });
                             countries = myResponseCountry.getData();
                         } catch (IOException e) {
                             LOGGER.error(e.getMessage());
@@ -1333,7 +1371,8 @@ public class AdminController {
                         ArrayList<Province> provinces = new ArrayList<>();
 
                         try {
-                            myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {});
+                            myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {
+                            });
                             provinces = myResponseProvince.getData();
                         } catch (IOException e) {
                             LOGGER.error(e.getMessage());
@@ -1353,7 +1392,8 @@ public class AdminController {
                         ArrayList<City> cities = new ArrayList<>();
 
                         try {
-                            myResponseCity = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<City>>>() {});
+                            myResponseCity = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<City>>>() {
+                            });
                             cities = myResponseCity.getData();
                         } catch (IOException e) {
                             LOGGER.error(e.getMessage());
@@ -1373,7 +1413,8 @@ public class AdminController {
                         ArrayList<District> districts = new ArrayList<>();
 
                         try {
-                            myResponseDistrict = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<District>>>() {});
+                            myResponseDistrict = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<District>>>() {
+                            });
                             districts = myResponseDistrict.getData();
                         } catch (IOException e) {
                             LOGGER.error(e.getMessage());
@@ -1427,7 +1468,8 @@ public class AdminController {
                     User userModel = null;
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<User>>() {});
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<User>>() {
+                        });
                         userModel = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());
@@ -1441,7 +1483,8 @@ public class AdminController {
                         ArrayList<Country> countries = new ArrayList<>();
 
                         try {
-                            myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {});
+                            myResponseCountry = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Country>>>() {
+                            });
                             countries = myResponseCountry.getData();
                         } catch (IOException e) {
                             LOGGER.error(e.getMessage());
@@ -1458,7 +1501,8 @@ public class AdminController {
                         ArrayList<Province> provinces = new ArrayList<>();
 
                         try {
-                            myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {});
+                            myResponseProvince = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Province>>>() {
+                            });
                             provinces = myResponseProvince.getData();
                         } catch (IOException e) {
                             LOGGER.error(e.getMessage());
@@ -1475,7 +1519,8 @@ public class AdminController {
                         ArrayList<City> cities = new ArrayList<>();
 
                         try {
-                            myResponseCity = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<City>>>() {});
+                            myResponseCity = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<City>>>() {
+                            });
                             cities = myResponseCity.getData();
                         } catch (IOException e) {
                             LOGGER.error(e.getMessage());
@@ -1492,7 +1537,8 @@ public class AdminController {
                         ArrayList<District> districts = new ArrayList<>();
 
                         try {
-                            myResponseDistrict = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<District>>>() {});
+                            myResponseDistrict = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<District>>>() {
+                            });
                             districts = myResponseDistrict.getData();
                         } catch (IOException e) {
                             LOGGER.error(e.getMessage());
@@ -1509,7 +1555,8 @@ public class AdminController {
                         ArrayList<SubDistrict> subDistricts = new ArrayList<>();
 
                         try {
-                            myResponseSubDistrict = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<SubDistrict>>>() {});
+                            myResponseSubDistrict = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<SubDistrict>>>() {
+                            });
                             subDistricts = myResponseSubDistrict.getData();
                         } catch (IOException e) {
                             LOGGER.error(e.getMessage());
@@ -1523,7 +1570,8 @@ public class AdminController {
                         ArrayList<Role> roles = new ArrayList<>();
 
                         try {
-                            myResponseRole = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Role>>>() {});
+                            myResponseRole = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Role>>>() {
+                            });
                             roles = myResponseRole.getData();
                         } catch (IOException e) {
                             LOGGER.error(e.getMessage());
@@ -1597,7 +1645,8 @@ public class AdminController {
                 String message;
 
                 try {
-                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {
+                    });
                     responseInt = myResponse.getData();
                 } catch (IOException e) {
                     LOGGER.error(e.getMessage());
@@ -1629,9 +1678,9 @@ public class AdminController {
 
     @PostMapping("/dashboard/admin/country/add")
     public String dashboardAdminAddCountry(@RequestParam(name = "countryId", required = false) Integer countryId,
-                                        @RequestParam("countryName") String countryName,
-                                        HttpSession httpSession,
-                                        RedirectAttributes redirectAttributes) {
+                                           @RequestParam("countryName") String countryName,
+                                           HttpSession httpSession,
+                                           RedirectAttributes redirectAttributes) {
         String url = BASE_URL + "country/add";
         User user = (User) httpSession.getAttribute("user");
 
@@ -1666,7 +1715,8 @@ public class AdminController {
                 String message;
 
                 try {
-                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {
+                    });
                     responseInt = myResponse.getData();
                 } catch (IOException e) {
                     LOGGER.error(e.getMessage());
@@ -1698,10 +1748,10 @@ public class AdminController {
 
     @PostMapping("/dashboard/admin/province/add")
     public String dashboardAdminAddProvince(@RequestParam(name = "provinceId", required = false) Integer provinceId,
-                                        @RequestParam("countryId") Integer countryId,
-                                        @RequestParam("provinceName") String provinceName,
-                                        HttpSession httpSession,
-                                        RedirectAttributes redirectAttributes) {
+                                            @RequestParam("countryId") Integer countryId,
+                                            @RequestParam("provinceName") String provinceName,
+                                            HttpSession httpSession,
+                                            RedirectAttributes redirectAttributes) {
         String url = BASE_URL + "province/add";
         User user = (User) httpSession.getAttribute("user");
 
@@ -1740,7 +1790,8 @@ public class AdminController {
                 String message = isEdit ? "Edit " : "Add ";
 
                 try {
-                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {
+                    });
                     responseInt = myResponse.getData();
                 } catch (IOException e) {
                     LOGGER.error(e.getMessage());
@@ -1816,7 +1867,8 @@ public class AdminController {
                 String message = isEdit ? "Edit " : "Add ";
 
                 try {
-                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {
+                    });
                     responseInt = myResponse.getData();
                 } catch (IOException e) {
                     LOGGER.error(e.getMessage());
@@ -1850,10 +1902,10 @@ public class AdminController {
 
     @PostMapping("/dashboard/admin/district/add")
     public String dashboardAdminAddDistrict(@RequestParam(name = "districtId", required = false) Integer districtId,
-                                        @RequestParam("cityId") Integer cityId,
-                                        @RequestParam("districtName") String districtName,
-                                        HttpSession httpSession,
-                                        RedirectAttributes redirectAttributes) {
+                                            @RequestParam("cityId") Integer cityId,
+                                            @RequestParam("districtName") String districtName,
+                                            HttpSession httpSession,
+                                            RedirectAttributes redirectAttributes) {
         String url = BASE_URL + "district/add";
         User user = (User) httpSession.getAttribute("user");
 
@@ -1892,7 +1944,8 @@ public class AdminController {
                 String message = isEdit ? "Edit " : "Add ";
 
                 try {
-                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {
+                    });
                     responseInt = myResponse.getData();
                 } catch (IOException e) {
                     LOGGER.error(e.getMessage());
@@ -1927,10 +1980,10 @@ public class AdminController {
 
     @PostMapping("/dashboard/admin/sub-district/add")
     public String dashboardAdminAddSubDistrict(@RequestParam(name = "subDistrictId", required = false) Long subDistrictId,
-                                            @RequestParam("districtId") Integer districtId,
-                                            @RequestParam("subDistrictName") String subDistrictName,
-                                            HttpSession httpSession,
-                                            RedirectAttributes redirectAttributes) {
+                                               @RequestParam("districtId") Integer districtId,
+                                               @RequestParam("subDistrictName") String subDistrictName,
+                                               HttpSession httpSession,
+                                               RedirectAttributes redirectAttributes) {
         String url = BASE_URL + "sub-district/add";
         User user = (User) httpSession.getAttribute("user");
 
@@ -1969,7 +2022,8 @@ public class AdminController {
                 String message = isEdit ? "Edit " : "Add ";
 
                 try {
-                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {
+                    });
                     responseInt = myResponse.getData();
                 } catch (IOException e) {
                     LOGGER.error(e.getMessage());
@@ -2106,7 +2160,8 @@ public class AdminController {
                 String message;
 
                 try {
-                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                    myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {
+                    });
                     responseInt = myResponse.getData();
                 } catch (IOException e) {
                     LOGGER.error(e.getMessage());
@@ -2155,7 +2210,8 @@ public class AdminController {
                     Integer responseInt = null;
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {
+                        });
                         responseInt = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());
@@ -2175,8 +2231,8 @@ public class AdminController {
 
     @GetMapping("/dashboard/admin/country/delete/{countryId}")
     public String dashboardAdminDeleteCountry(@PathVariable Integer countryId,
-                                           HttpSession httpSession,
-                                           RedirectAttributes redirectAttributes) {
+                                              HttpSession httpSession,
+                                              RedirectAttributes redirectAttributes) {
         String url = BASE_URL + "country/";
         User user = (User) httpSession.getAttribute("user");
 
@@ -2192,7 +2248,8 @@ public class AdminController {
                     Integer responseInt = null;
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {
+                        });
                         responseInt = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());
@@ -2212,8 +2269,8 @@ public class AdminController {
 
     @GetMapping("/dashboard/admin/province/delete/{provinceId}")
     public String dashboardAdminDeleteProvince(@PathVariable Integer provinceId,
-                                           HttpSession httpSession,
-                                           RedirectAttributes redirectAttributes) {
+                                               HttpSession httpSession,
+                                               RedirectAttributes redirectAttributes) {
         String url = BASE_URL + "province/";
         User user = (User) httpSession.getAttribute("user");
 
@@ -2229,7 +2286,8 @@ public class AdminController {
                     Integer responseInt = null;
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {
+                        });
                         responseInt = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());
@@ -2266,7 +2324,8 @@ public class AdminController {
                     Integer responseInt = null;
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {
+                        });
                         responseInt = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());
@@ -2286,8 +2345,8 @@ public class AdminController {
 
     @GetMapping("/dashboard/admin/district/delete/{districtId}")
     public String dashboardAdminDeleteDistrict(@PathVariable Integer districtId,
-                                           HttpSession httpSession,
-                                           RedirectAttributes redirectAttributes) {
+                                               HttpSession httpSession,
+                                               RedirectAttributes redirectAttributes) {
         String url = BASE_URL + "district/";
         User user = (User) httpSession.getAttribute("user");
 
@@ -2303,7 +2362,8 @@ public class AdminController {
                     Integer responseInt = null;
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {
+                        });
                         responseInt = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());
@@ -2324,8 +2384,8 @@ public class AdminController {
 
     @GetMapping("/dashboard/admin/sub-district/delete/{subDistrictId}")
     public String dashboardAdminDeleteSubDistrict(@PathVariable String subDistrictId,
-                                               HttpSession httpSession,
-                                               RedirectAttributes redirectAttributes) {
+                                                  HttpSession httpSession,
+                                                  RedirectAttributes redirectAttributes) {
         String url = BASE_URL + "sub-district/";
         User user = (User) httpSession.getAttribute("user");
 
@@ -2341,7 +2401,8 @@ public class AdminController {
                     Integer responseInt = null;
 
                     try {
-                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {});
+                        myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<Integer>>() {
+                        });
                         responseInt = myResponse.getData();
                     } catch (IOException e) {
                         LOGGER.error(e.getMessage());

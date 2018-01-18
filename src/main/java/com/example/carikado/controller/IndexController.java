@@ -30,6 +30,7 @@ public class IndexController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IndexController.class);
     private static final String BASE_URL = "http://madamita.ml:8080/cari-kado/api/";
+//    private static final String BASE_URL = "http://localhost:8080/api/";
 
     private ObjectMapper mObjectMapper;
     private RestTemplate mRestTemplate;
@@ -84,7 +85,8 @@ public class IndexController {
         User user = null;
 
         try {
-            myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<User>>() {});
+            myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<User>>() {
+            });
             user = myResponse.getData();
         } catch (IOException e) {
             myResponse.setMessage("Internal server error");
@@ -127,7 +129,8 @@ public class IndexController {
             ArrayList<Role> roles = new ArrayList<>();
 
             try {
-                myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Role>>>() {});
+                myResponse = mObjectMapper.readValue(response.getBody(), new TypeReference<MyResponse<ArrayList<Role>>>() {
+                });
                 roles = myResponse.getData();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
